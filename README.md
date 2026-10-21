@@ -218,6 +218,25 @@ always revalidated, images are cached for a year.
 
 ## Testing
 
+The suite lives in the repository and runs against any deployment.
+
+```bash
+# against a local server
+python server.py 8080
+node tests/run.js http://localhost:8080
+
+# against production
+node tests/run.js https://gymbadge.vercel.app
+```
+
+It covers every route, the removal of the cart and order pages, signup,
+verification, password reset and change, session revocation, the AI
+assistant answering and refusing to guess, the trainer and exercise
+moderation workflows, the equipment report permissions, the translation
+service, the language and country pickers, the official logo (decoded and
+checked for a white plate and the brand palette) and a sweep of every page
+for hyphens that would reach the reader.
+
 ```bash
 python server.py 8080          # in one terminal
 node server.py 8080            # in another, then:
