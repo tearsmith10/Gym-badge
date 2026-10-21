@@ -17,9 +17,15 @@ order basket and no billing screen anywhere in the codebase.
 app/            The installable PWA (Workout · Exercise · Library · Progress · You)
 web/            The marketing site (19 pages)
 assets/         Shared runtime: auth, i18n, music OAuth, password helper, theme, people
-server.py       The API + static server (accounts, tokens, Mailgun email)
-vercel.json     Deployment config with clean URLs
+gymbadge_core.py  Accounts, tokens, Mailgun email and the JSON API (shared)
+server.py       Standalone HTTP server: serves the site + the API in one process
+api/index.py    The same API as a Vercel serverless function
+vercel.json     Deployment config: clean URLs, function route, cache headers
 ```
+
+The API lives in `gymbadge_core.py` and is used by **both** `server.py` (local
+and self-hosted) and `api/index.py` (Vercel), so the two can never drift
+apart.
 
 ### The six features
 
@@ -135,22 +141,46 @@ on purpose. It serves the whole site **and** the JSON API from one process.
 | `GYMBADGE_SMTP_HOST` | default `smtp.mailgun.org` |
 | `GYMBADGE_SMTP_PORT` | default `587` |
 | `GYMBADGE_SITE_URL` | Public base URL used in email links |
+| `GYMBADGE_SECRET` | Secret used to sign session tokens (required in production) |
 | `GYMBADGE_DATA_DIR` | Where `users.json` lives (default `./data`) |
 | `SPOTIFY_CLIENT_ID` | Enables the Spotify music connection |
 | `GOOGLE_CLIENT_ID` | Enables the YouTube Music connection |
 | `AUDIOMACK_CLIENT_ID` | Enables the Audiomack music connection |
+| `UPSTASH_REDIS_REST_URL` | Optional — enables durable account storage |
+| `UPSTASH_REDIS_REST_TOKEN` | Optional — enables durable account storage |
 
 ```bash
 # Windows
 set GYMBADGE_DOMAIN=mg.gymbadge.app
 set MAILGUN_API_KEY=key-xxxxxxxx
+set GYMBADGE_SECRET=<a long random string>
 set SPOTIFY_CLIENT_ID=your-spotify-id
 python server.py 8080
 
 # macOS / Linux
 export GYMBADGE_DOMAIN=mg.gymbadge.app
 export MAILGUN_API_KEY=key-xxxxxxxx
+export GYMBADGE_SECRET=$(python -c "import secrets;print(secrets.token_hex(32))")
 python server.py 8080
+```
+
+### Sessions and durable storage
+
+Session tokens are **signed and self-contained** (HMAC-SHA256), so a signed-in
+member is recognised on any serverless instance without a shared database.
+Signing out adds the token to a revocation list, so a signed-out session stops
+working immediately.
+
+Accounts themselves are stored in `users.json`. On a normal host that is
+permanent. On a serverless platform the filesystem is temporary, so set
+`UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` to an Upstash
+database and the accounts, sessions and tokens persist for real.
+
+```bash
+vercel env add GYMBADGE_SECRET production --sensitive
+vercel env add GYMBADGE_DOMAIN production
+vercel env add MAILGUN_API_KEY production --sensitive
+vercel env add SPOTIFY_CLIENT_ID production
 ```
 
 ### Static only
