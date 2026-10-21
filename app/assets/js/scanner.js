@@ -1,7 +1,7 @@
 /* ==========================================================================
    GYM BADGE — food scanner
 
-   The scanner in the Nutrition Guide. Photograph a plate and it works out
+   The scanner in My Plate Truth. Photograph a plate and it works out
    what is most likely on it, then opens the full food guide for it.
 
    How the recognition works

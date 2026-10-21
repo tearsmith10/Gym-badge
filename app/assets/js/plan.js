@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GYM BADGE — My Plan
+   GYM BADGE — My Routine
 
    The plan is the member's own week, not a fixed two day template. It is
    organised by day, week, month or a longer block, and the member can add
@@ -118,7 +118,7 @@
 
     if (!current) {
       node.appendChild(h('<p class="sub">No training days yet. Add one to start your plan.</p>'));
-      shell("workout", "My Plan", node);
+      shell("workout", "My Routine", node);
       return;
     }
 
@@ -180,7 +180,7 @@
 
     node.appendChild(h('<p class="faint small mt center">Everything you add here is saved to your account and syncs across your devices.</p>'));
 
-    shell("workout", "My Plan", node);
+    shell("workout", "My Routine", node);
   }
 
   /* Which days are in view for the chosen range. */

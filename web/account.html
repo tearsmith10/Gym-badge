@@ -100,12 +100,12 @@
       "</div>";
   }
 
-  /* ---- Your Trainer: who you train with and what is coming up ---------- */
+  /* ---- My Trainer: who you train with and what is coming up ---------- */
   var trainerSection =
     '<div class="card" style="margin-bottom:20px">' +
-      '<div class="eyebrow" style="margin-bottom:12px">Your Trainer</div>' +
+      '<div class="eyebrow" style="margin-bottom:12px">My Trainer</div>' +
       '<div id="yourTrainerHost"></div>' +
-      '<a class="btn btn-outline" href="/coaches" style="width:100%;margin-top:14px">Find a Trainer</a>' +
+      '<a class="btn btn-outline" href="/coaches" style="width:100%;margin-top:14px">Browse Trainers</a>' +
     "</div>";
 
   wrap.innerHTML = journey + trainerSection +
@@ -197,7 +197,7 @@
       "</div>" +
     "</div>";
 
-  /* Your Trainer — who the member is booked with, what is next, what came
+  /* My Trainer — who the member is booked with, what is next, what came
      before, and the actions they can take. */
   (function () {
     var host = document.getElementById("yourTrainerHost");

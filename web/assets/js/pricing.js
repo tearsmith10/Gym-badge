@@ -64,11 +64,11 @@
       ngn: 0,
       blurb: "Everything you need to start building the habit.",
       features: [
-        ["One More logging · unlimited while we test", true],
-        ["Tap In equipment status · free to try", true],
-        ["Plate Truth food scan · free to try", true],
-        ["Tomorrow You projections · free to try", true],
-        ["Your Floor gym locator & bookings", true],
+        ["My Workout Log · unlimited while we test", true],
+        ["Gym Equipment status · free to try", true],
+        ["My Plate Truth food scan · free to try", true],
+        ["Body Goals projections · free to try", true],
+        ["Find a Gym locator & bookings", true],
         ["Streaks & progress badges", true],
         ["Full history & wearable sync", false]
       ]
@@ -80,10 +80,10 @@
       featured: true,
       blurb: "The full training + nutrition engine. Cancel anytime.",
       features: [
-        ["Unlimited One More logging & full history", true],
+        ["Unlimited My Workout Log & full history", true],
         ["NFC / QR equipment tap & live status", true],
-        ["AI food & diet scan — unlimited", true],
-        ["AI body goal projections — unlimited", true],
+        ["My Plate Truth food scan — unlimited", true],
+        ["Body Goals projections — unlimited", true],
         ["Smart rest day & meal reminders", true],
         ["Wearable sync (HealthKit / Health Connect)", true],
         ["Priority support", true],

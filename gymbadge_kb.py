@@ -42,23 +42,23 @@ KNOWLEDGE: list[tuple[str, list[str], str]] = [
      "email button on the sign up page or in Settings. The link expires 24 hours after it is sent, and a fresh "
      "one can be requested at any time."),
 
-    ("My Plan", ["my plan", "plan", "workout plan", "schedule", "training week", "add day", "add exercise"],
-     "My Plan is your own training week. Use the Day, Week, Month and 12 weeks buttons to move between ranges, "
-     "then use Add Exercise to put movements from the Workout Library into a day. You can set sets, reps, rest "
+    ("My Routine", ["my routine", "my plan", "plan", "workout plan", "schedule", "training week", "add day", "add exercise"],
+     "My Routine is your own training week. Use the Day, Week, Month and 12 weeks buttons to move between ranges, "
+     "then use Add Exercise to put movements from The Guides into a day. You can set sets, reps, rest "
      "and your own notes, edit or remove anything, and mark a session done when you finish it. If you create a "
      "brand new exercise it stays private to you. You can send it to the shared library for review, and it only "
      "appears for everyone once the Gym Badge team has approved it."),
 
-    ("Workout Library", ["library", "exercise library", "how to do", "exercise instructions", "form", "technique"],
-     "The Workout Library holds every movement with a full guide: what the exercise is for, which muscles it "
+    ("The Guides", ["the guides", "library", "exercise library", "how to do", "exercise instructions", "form", "technique"],
+     "The Guides hold every movement with a full guide: what the exercise is for, which muscles it "
      "works, the equipment you need, your starting position, step by step instructions, sets, reps and rest, how "
      "to breathe, the mistakes people usually make, safety notes and easier versions. Every exercise also has a "
      "photo gallery you can swipe through. It is written for beginners, because most people training with Gym "
      "Badge have never had a coach. Progress depends on your own circumstances, your consistency, your recovery "
      "and your nutrition, so start at the level that lets you keep good form."),
 
-    ("Exercise Tracker", ["log", "log a set", "record", "tracker", "beat your best"],
-     "The Exercise Tracker records what you actually did. Open any exercise, enter the number you managed, and "
+    ("My Workout Log", ["my workout log", "log", "log a set", "record", "tracker", "beat your best"],
+     "My Workout Log records what you actually did. Open any exercise, enter the number you managed, and "
      "Gym Badge remembers it. Next session it shows your last number and sets a target to beat, so you always "
      "know exactly what you are aiming for."),
 
@@ -69,20 +69,20 @@ KNOWLEDGE: list[tuple[str, list[str], str]] = [
      "back if that is known, any safety notice, the last update and who is handling it. When the gym has not "
      "given a reason or a return date, we say that rather than making one up."),
 
-    ("Nutrition Guide", ["nutrition", "food", "meal", "calories", "protein", "carbs", "eat"],
-     "The Nutrition Guide explains food in plain language rather than just numbers. For each food you get the "
+    ("My Plate Truth", ["my plate truth", "nutrition", "food", "meal", "calories", "protein", "carbs", "eat"],
+     "My Plate Truth explains food in plain language rather than just numbers. For each food you get the "
      "photograph, the usual ingredients, a portion size, what it is and how it is cooked, what it actually does "
      "for your body, how it fits common goals, practical serving sizes, swaps, allergens, cultural variations and "
      "meal combinations. It is general nutrition education, not a personalised diet plan, and it never claims a "
      "single food causes weight loss or muscle gain. For medical or dietary advice, speak to a qualified "
      "professional."),
 
-    ("Find a Trainer", ["find a trainer", "trainer", "coach", "booking", "book a session", "personal trainer"],
-     "Find a Trainer lists coaches you can book with. Search by name or specialty, filter by in person or online, "
+    ("My Trainer", ["my trainer", "find a trainer", "trainer", "coach", "booking", "book a session", "personal trainer"],
+     "My Trainer lists coaches you can book with. Search by name or specialty, filter by in person or online, "
      "and open a profile to see their qualifications, where they work, how they deliver sessions and what a "
      "session costs. Verified trainers have had their qualifications checked. To book, open a profile, tap Book a "
      "session and pick a time. Your booked trainer, upcoming sessions and earlier sessions all appear in the You "
-     "tab under Your Trainer."),
+     "tab under My Trainer."),
 
     ("Becoming a trainer", ["apply as trainer", "join as trainer", "trainer application", "become a coach"],
      "Trainer sign up asks for more than a member account, because members need to trust the person they are "
@@ -103,7 +103,7 @@ KNOWLEDGE: list[tuple[str, list[str], str]] = [
 
     ("Plans and pricing", ["price", "pricing", "cost", "how much", "premium", "plan", "subscription", "cancel", "refund"],
      "Gym Badge has a free Starter plan that stays free forever, and a Premium plan that unlocks unlimited "
-     "logging and history, the equipment status, unlimited Nutrition Guide scans, unlimited Body Goals "
+     "logging and history, the equipment status, unlimited My Plate Truth scans, unlimited Body Goals "
      "projections, smart reminders and live chat support. You can change or cancel your plan at any time from "
      "your account, and cancelling stops the renewal straight away. The exact amount depends on your country and "
      "the currency you select, so the pricing page is the only place that shows a current figure."),
@@ -133,6 +133,12 @@ KNOWLEDGE: list[tuple[str, list[str], str]] = [
      "Your Gym Badge Journey in the You tab shows how long you have been a member, measured from the day you "
      "created your account. It counts your days, your completed weeks, months and years, and it recalculates every "
      "time you open the app, so it is always accurate."),
+
+    ("Coming soon", ["coming soon", "upcoming", "next release", "roadmap", "planned", "new features", "yoga"],
+     "Two things are on the way. First, going live with other Gymbadgers around the world, with daily, weekly, "
+     "monthly and yearly routines so you can follow what people near you are training. Second, yoga exercises with "
+     "trainers, so you can book a guided session for that as well. Neither is live yet, so there is nothing to open "
+     "today, and I do not have a date for either one."),
 ]
 
 # Topics that need a human being rather than an answer.

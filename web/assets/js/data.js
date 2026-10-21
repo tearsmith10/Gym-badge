@@ -141,7 +141,7 @@
   /* ---- Reviews (star ratings, shown across the site) ---- */
   var REVIEWS = [
     { name: "Chidi E.", avatar: "member-1", rating: 5, where: "Lagos · Premium member", date: "Oct 2026",
-      title: "The Exercise Tracker is unfairly effective",
+      title: "My Workout Log is unfairly effective",
       text: "I've quit four fitness apps. This one just quietly shows me the number to beat and I actually show up. 62-day streak and counting." },
     { name: "Aisha B.", avatar: "member-2", rating: 5, where: "Nairobi · Found 3 gyms", date: "Sep 2026",
       title: "Found my gym in 20 seconds",
@@ -150,7 +150,7 @@
       title: "Booked out my mornings",
       text: "Since listing on Gym Badge my mornings are full. Clients find me by specialty, and the verified badge does the trust building for me." },
     { name: "Priya N.", avatar: "member-3", rating: 4, where: "London · Premium member", date: "Aug 2026",
-      title: "The Nutrition Guide stopped my 9pm slips",
+      title: "My Plate Truth stopped my 9pm slips",
       text: "Seeing the calories before I eat is the only thing that's ever worked. Would love a barcode scanner next." },
     { name: "Tolu A.", avatar: "member-4", rating: 5, where: "Abuja · Elite member", date: "Sep 2026",
       title: "Body Goals got me through the doubt",
@@ -166,7 +166,7 @@
       ["What is Gym Badge?", "Gym Badge is a health and fitness product: a marketing website plus an installable web app for logging workouts, scanning meals, checking equipment status and finding gyms near you."],
       ["Is Gym Badge free?", "Yes — the Starter plan is free forever: generous daily logging, food scans and body projections while we test, and the gym locator with bookings at no cost."],
       ["Do I need to download it from an app store?", "There's no store app. Gym Badge runs in your browser and installs to your home screen from there, on iOS and Android alike."],
-      ["What is in the app?", "My Profile for your details, My Plan for your training week, the Workout Library for every movement explained, the Exercise Tracker for logging what you finish, Gym Equipment for live machine status, the Nutrition Guide for food explained, Body Goals for your goal physique, Find a Gym and Find a Trainer for booking."],
+      ["What is in the app?", "My Profile for your details, My Routine for your training week, The Guides for every movement explained, My Workout Log for logging what you finish, Gym Equipment for live machine status, My Plate Truth for food explained, Body Goals for your goal physique, Find a Gym and My Trainer for booking."],
       ["Does Gym Badge work on iPhone and Android?", "Yes — the same app runs on both through your browser, and your account syncs across them once you sign in."],
       ["Is Gym Badge a medical device?", "No. Gym Badge is a wellness product and doesn't give medical advice — talk to a qualified professional before starting any new program."]
     ]},
@@ -181,23 +181,23 @@
     ]},
     { group: "Using the app", items: [
       ["My Profile", "My Profile is the onboarding step where you pick who you are — an individual member, a gym company or a trainer — so the app sets up the right profile for you. It is also where you change your picture, your plan and your preferences. A photo is always optional."],
-      ["The Nutrition Guide", "The Nutrition Guide is our food education tool. Photograph your plate and it estimates what is on it, then explains it in plain language — what the food is, what it does for you, how it fits your goal, portion sizes, swaps and allergens. Starter includes unlimited scans while we test."],
+      ["My Plate Truth", "My Plate Truth is our food education tool. Photograph your plate and it estimates what is on it, then explains it in plain language — what the food is, what it does for you, how it fits your goal, portion sizes, swaps and allergens. Starter includes unlimited scans while we test."],
       ["What is Body Goals?", "Body Goals projects how your body could look toward a goal you set. Every projection is watermarked 'not a guarantee', and Starter includes unlimited projections while we test."],
       ["What is Find a Gym?", "Find a Gym is the gym locator and booking tool — search gyms around you and reserve a slot. It's free on every plan."],
       ["Does the app work offline?", "Yes — Gym Badge is offline first, so logging keeps working without a connection, and your data syncs once you're back online and signed in."],
       ["Can I use it on more than one device?", "Yes. Sign in on your phone, tablet or laptop and your logs and photos sync across all of them."]
     ]},
     { group: "Training & tracking", items: [
-      ["How does the Exercise Tracker work?", "Log any exercise — push ups, a treadmill run, a lift. Next session Gym Badge shows your last number and nudges you to beat it by one."],
+      ["How does My Workout Log work?", "Log any exercise — push ups, a treadmill run, a lift. Next session Gym Badge shows your last number and nudges you to beat it by one."],
       ["What is Gym Equipment?", "Tap your phone to the NFC tag on a piece of equipment and Gym Equipment shows its live status before you walk over to it, along with a full written report if the machine is not available."],
       ["What do the equipment statuses mean?", "A machine can show as usable, in maintenance, faulty, overused or free, so you know what's ready before you queue."],
       ["How many workouts can I log a day for free?", "Starter includes unlimited workout logs while we test. Premium keeps it that way, forever."],
-      ["What counts as a workout log?", "Any session you record — a strength set, a run, a class. Each entry saves the exercise and your numbers so the Exercise Tracker can compare next time."],
+      ["What counts as a workout log?", "Any session you record — a strength set, a run, a class. Each entry saves the exercise and your numbers so My Workout Log can compare next time."],
       ["Is this a medical device?", "No. Gym Badge is a wellness product, not a medical device, and it doesn't provide medical advice."]
     ]},
     { group: "Premium plan", items: [
       ["How much does Premium cost?", "₦5,000 a month, displayed in your local currency — 16 currencies are supported, including USD, GBP, EUR, GHS, KES, ZAR, EGP, INR and AED, at indicative FX rates."],
-      ["What's included in Premium?", "Unlimited workout logging and history, live Gym Equipment status, unlimited Nutrition Guide scans and Body Goals projections, wearable sync, smart reminders and live chat support."],
+      ["What's included in Premium?", "Unlimited workout logging and history, live Gym Equipment status, unlimited My Plate Truth scans and Body Goals projections, wearable sync, smart reminders and live chat support."],
       ["What's free and what's paid?", "Starter stays free forever with generous logging, food scans and body projections while we test, plus the gym locator and bookings. Premium removes every limit permanently."],
       ["How can I pay?", "Stripe is the main route — credit or debit card, Apple Pay, Google Pay and bank transfer — with Pi Network and USDT/USDC stablecoins as alternatives."],
       ["Are card payments safe?", "Yes. Payments run through Stripe, so your card details never touch Gym Badge's servers. The payment flow is still in test mode until the merchant's live keys are added."],
@@ -209,8 +209,8 @@
       ["Can I run Gym Badge for my gym or company?", "Yes. Corporate seat packages come in 5, 10 and 20+ seats, and scale up as your team grows."],
       ["What's in a corporate package?", "Equipment backend access, NFC kits for Gym Equipment, member bookings, and an admin dashboard for your team."],
       ["I'm a trainer — can I join?", "Yes. Choose Trainer during My Profile and you will need a photograph, your location, the services you offer, whether you train in person, online or both, your qualifications and a booking contact number. Applications are reviewed by our team, so you carry a pending status until you are approved, and only approved trainers show as verified."],
-      ["How do I find a gym near me?", "Find a Gym lists gyms around you and is free on every plan — search, compare and pick one. Find a Trainer does the same for coaches, with a verified badge once their qualifications have been checked."],
-      ["Can I book a gym or a trainer from the app?", "Yes. Gym and trainer bookings are free on Starter and Premium alike, and everything you have booked shows up in your profile under Your Trainer."]
+      ["How do I find a gym near me?", "Find a Gym lists gyms around you and is free on every plan — search, compare and pick one. My Trainer does the same for coaches, with a verified badge once their qualifications have been checked."],
+      ["Can I book a gym or a trainer from the app?", "Yes. Gym and trainer bookings are free on Starter and Premium alike, and everything you have booked shows up in your profile under My Trainer."]
     ]},
     { group: "Photos, data & privacy", items: [
       ["Can I add progress photos?", "Yes — members can add weekly fitness and progress images from the app profile. They appear right away, and you can delete them whenever you like."],

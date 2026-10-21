@@ -1166,14 +1166,14 @@
      Clear, familiar fitness wording instead of abstract names. */
   var FEATURES = {
     profile:  { name: "My Profile",   tagline: "Your goals, your body, your badge" },
-    plan:     { name: "My Plan",      tagline: "Your week, written out" },
-    library:  { name: "Workout Library", tagline: "Every movement, explained" },
-    tracker:  { name: "Exercise Tracker", tagline: "Log it, then beat it" },
+    plan:     { name: "My Routine",   tagline: "Your week, written out" },
+    library:  { name: "The Guides",   tagline: "Every movement, explained" },
+    tracker:  { name: "My Workout Log", tagline: "Log it, then beat it" },
     equipment: { name: "Gym Equipment", tagline: "Know before you queue" },
-    nutrition: { name: "Nutrition Guide", tagline: "Food explained, plainly" },
+    nutrition: { name: "My Plate Truth", tagline: "Food explained, plainly" },
     projection: { name: "Body Goals",  tagline: "Meet the body you're building" },
     find:     { name: "Find a Gym",   tagline: "The gym that's yours" },
-    trainer:  { name: "Find a Trainer", tagline: "Coach, matched to your goal" }
+    trainer:  { name: "My Trainer",   tagline: "Coach, matched to your goal" }
   };
 
   global.GBData = {

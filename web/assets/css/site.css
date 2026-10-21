@@ -364,6 +364,12 @@ h1 .hl,h2 .hl,h3 .hl{font-style:italic}
 .foot-bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:42px;padding-top:26px;border-top:1px solid var(--line);color:var(--faint);font-size:.86rem}
 .foot-bottom a{color:var(--faint)}
 .foot-bottom a:hover{color:var(--accent)}
+.foot-soon{border-top:1px solid var(--line);background:color-mix(in srgb,var(--bg-alt) 74%,transparent);padding:34px 0 40px}
+.foot-soon .soon-h{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+.foot-soon ul{margin:0;padding-left:18px}
+.foot-soon li{color:var(--muted);font-size:.94rem;line-height:1.6;margin-bottom:8px}
+.foot-soon li:last-child{margin-bottom:0}
+.foot-soon li::marker{color:var(--accent)}
 
 /* ---------- Legal prose ---------- */
 .prose{max-width:780px}

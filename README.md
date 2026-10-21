@@ -27,23 +27,51 @@ The API lives in `gymbadge_core.py` and is used by **both** `server.py` (local
 and self-hosted) and `api/index.py` (Vercel), so the two can never drift
 apart.
 
-### The six features
+### The features
 
 | Feature | What it does |
 |---------|--------------|
-| **First Rep** | Two-minute onboarding that builds your badge profile. |
-| **One More** | Logs any set and hands you the number to beat next session. |
-| **Tap In** | NFC/QR equipment status — usable, in maintenance, faulty, overused. |
-| **Plate Truth** | Photo a meal, get carbs, protein, fat and fibre, and what it costs your work. |
-| **Tomorrow You** | Pick a goal physique, get the plan to reach it. |
-| **Your Floor** | Real gyms near you, with slot booking. |
+| **My Profile** | Two-minute onboarding that builds your badge profile. |
+| **My Routine** | Your training week: day, week, month and 12 week views, add and remove movements. |
+| **The Guides** | Every movement explained, with a searchable catalogue and full coaching guides. |
+| **My Workout Log** | Logs any set and hands you the number to beat next session. |
+| **Gym Equipment** | NFC/QR equipment status — usable, in maintenance, faulty, overused. |
+| **My Plate Truth** | Photo a meal, get carbs, protein, fat and fibre, and what it costs your work. |
+| **Body Goals** | Pick a goal physique, get the plan to reach it. |
+| **Find a Gym** | Real gyms near you, with slot booking. |
+| **My Trainer** | Browse verified coaches, book a session, and keep your history. |
 
 ---
 
 ## New in this release
 
+### 🏷️ The features have new names
+The five features now carry plain, personal names, in the app, on the site and
+in every language:
+
+| Before | Now |
+|--------|-----|
+| My Plan | **My Routine** |
+| Workout Library | **The Guides** |
+| Exercise Tracker | **My Workout Log** |
+| Nutrition Guide | **My Plate Truth** |
+| Find a Trainer | **My Trainer** |
+
+The assistant's knowledge base was renamed with them, so it answers using the
+same names you see on screen.
+
+### 🚧 Coming soon
+A short note now sits at the foot of every app screen and under the site
+footer, telling you what is being built next:
+
+- **Going live with other Gymbadgers around the world**, for daily, weekly,
+  monthly and yearly routines.
+- **Yoga exercises with trainers.**
+
+Neither is live yet, so there is nothing to open today.
+
 ### 📷 The food scanner is back
-The Nutrition Guide opens with a scanner again.
+My Plate Truth opens with a scanner again.
 
 - **The camera** opens straight away and takes the photo for you.
 - **A photo from your device** works anywhere the camera cannot, and on a

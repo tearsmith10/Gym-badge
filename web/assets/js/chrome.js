@@ -136,7 +136,14 @@
             "</label>" +
           "</span>" +
         "</div>" +
-      "</div></footer>"
+      "</div></footer>" +
+      '<div class="foot-soon"><div class="wrap">' +
+        '<div class="soon-h">Coming soon</div>' +
+        "<ul>" +
+          "<li>Going live with other Gymbadgers around the world, for daily, weekly, monthly and yearly routines.</li>" +
+          "<li>Yoga exercises with trainers.</li>" +
+        "</ul>" +
+      "</div></div>"
     );
   }
 

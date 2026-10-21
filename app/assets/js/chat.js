@@ -2,8 +2,8 @@
    GYM BADGE — AI support assistant
 
    A live chat panel that answers the questions the FAQ does not cover:
-   account and sign in, password resets, finding your plan, exercise
-   instructions, the nutrition guide, trainer discovery and booking, plans
+   account and sign in, password resets, finding your routine, exercise
+   instructions, My Plate Truth, trainer discovery and booking, plans
    and pricing, language and country settings, and technical problems.
 
    Rules the assistant follows
@@ -85,7 +85,7 @@
       ["How do I reset my password?",
        "How do I find a trainer?",
        "How do I add an exercise to my plan?",
-       "What does the Nutrition Guide show?"].forEach(function (q) {
+       "What does My Plate Truth show?"].forEach(function (q) {
         var b = h('<button class="gb-quick">' + esc(q) + "</button>");
         b.onclick = function () { ask(q); };
         quick.appendChild(b);

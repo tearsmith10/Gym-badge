@@ -189,7 +189,7 @@ function analyseLogo(buf) {
   check("only staff can change a machine status", r.status === 403, r.j);
 
   section("TRANSLATION");
-  r = await api("/api/translate", { lang: "fr", strings: ["Workout Library", "Find a Trainer"] });
+  r = await api("/api/translate", { lang: "fr", strings: ["The Guides", "My Trainer"] });
   check("translate -> 200", r.status === 200 && r.j.ok, r.j);
   check("translate returns a mapping", r.j && r.j.translations && Object.keys(r.j.translations).length >= 1, r.j);
 
@@ -215,10 +215,10 @@ function analyseLogo(buf) {
   check("the scanner matches the photo against the food guide", /signature/.test(scannerSrc) && /rank/.test(scannerSrc));
   check("the scanner always asks the member to confirm", /onPick/.test(scannerSrc));
   const nutrition = (await get("/app/index.html")).text;
-  check("the Nutrition Guide loads the scanner", nutrition.includes("/app/assets/js/scanner.js"));
+  check("My Plate Truth loads the scanner", nutrition.includes("/app/assets/js/scanner.js"));
   const appJs = (await get("/app/assets/js/app.js")).text;
-  check("the Nutrition Guide has a scan button", /Scan my meal/.test(appJs));
-  check("the Nutrition Guide has a photo button", /Use a photo from my device/.test(appJs));
+  check("My Plate Truth has a scan button", /Scan my meal/.test(appJs));
+  check("My Plate Truth has a photo button", /Use a photo from my device/.test(appJs));
 
   section("NO MISSING HELPERS");
   // Every screen file must not call a helper it never defined.
@@ -233,7 +233,7 @@ function analyseLogo(buf) {
   const dialog = (await get("/app/assets/js/dialog.js")).text;
   check("the app has its own dialogs", /GBDialog/.test(dialog));
   const plan = (await get("/app/assets/js/plan.js")).text;
-  check("My Plan can redraw itself", /function render\(\) \{ buildScreen/.test(plan));
+  check("My Routine can redraw itself", /function render\(\) \{ buildScreen/.test(plan));
   check("the app never calls the browser prompt", !/[^.\w]prompt\(/.test(
     [plan, (await get("/app/assets/js/trainers.js")).text, (await get("/app/assets/js/settings.js")).text].join(" ")));
   const chromeSrc = (await get("/web/assets/js/chrome.js")).text;

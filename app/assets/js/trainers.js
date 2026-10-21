@@ -3,8 +3,8 @@
 
    Three things live here:
 
-   1. FIND A TRAINER  — the directory, a trainer profile, and booking.
-   2. YOUR TRAINER    — the member's own trainer section: who they are booked
+   1. THE DIRECTORY  — every coach you can browse, a trainer profile, and booking.
+   2. MY TRAINER     — the member's own trainer section: who they are booked
       with, what is coming up, what has already happened, and the actions
       they can take. It replaces the old cart section in the profile.
    3. YOUR GYM BADGE JOURNEY — how long the member has been with us, worked
@@ -212,7 +212,7 @@
     apply.onclick = function () { applySheet(rerender); };
     node.appendChild(apply);
 
-    shell("exercise", "Find a Trainer", node);
+    shell("exercise", "My Trainer", node);
 
     function rerender() { directory(shell, go); }
 
@@ -414,7 +414,7 @@
     document.body.appendChild(overlay);
   }
 
-  /* ---------------- "Your Trainer" section for the profile ---------------- */
+  /* ---------------- "My Trainer" section for the profile ---------------- */
   function yourTrainerSection() {
     var all = bookings();
     var now = Date.now();
@@ -426,7 +426,7 @@
       wrap.appendChild(h('<div class="row" style="flex-direction:column;align-items:flex-start;gap:6px">' +
         "<b>You have not booked a trainer yet</b>" +
         "<small>Book a coach and your sessions, plans and history all appear here.</small>" +
-        '<a class="btn btn-primary btn-sm" href="#/trainers" style="margin-top:8px">Find a Trainer</a></div>'));
+        '<a class="btn btn-primary btn-sm" href="#/trainers" style="margin-top:8px">Browse Trainers</a></div>'));
       return wrap;
     }
 

@@ -104,19 +104,19 @@ for (const f of FILES) {
     index.indexOf("/app/assets/js/ui.js") < index.indexOf("/app/assets/js/app.js"));
 }
 
-/* --- 6. My Plan can redraw itself --- */
+/* --- 6. My Routine can redraw itself --- */
 {
   const plan = fs.readFileSync(path.join(APP, "plan.js"), "utf8");
-  check("My Plan defines the render it calls", /function render\(\)\s*\{\s*buildScreen/.test(plan));
+  check("My Routine defines the render it calls", /function render\(\)\s*\{\s*buildScreen/.test(plan));
   const renders = (plan.match(/[^.\w]render\(\)/g) || []).length;
-  check("My Plan calls render", renders > 0, String(renders));
+  check("My Routine calls render", renders > 0, String(renders));
 }
 
-/* --- 7. the food scanner is wired into the Nutrition Guide --- */
+/* --- 7. the food scanner is wired into My Plate Truth --- */
 {
   const app = fs.readFileSync(path.join(APP, "app.js"), "utf8");
-  check("the Nutrition Guide offers to scan", /Scan my meal/.test(app));
-  check("the Nutrition Guide offers a photo", /Use a photo from my device/.test(app));
+  check("My Plate Truth offers to scan", /Scan my meal/.test(app));
+  check("My Plate Truth offers a photo", /Use a photo from my device/.test(app));
   const scan = fs.readFileSync(path.join(APP, "scanner.js"), "utf8");
   check("the scanner opens the camera", /getUserMedia/.test(scan));
   check("the scanner accepts a photo from the device", /capture="environment"/.test(scan));

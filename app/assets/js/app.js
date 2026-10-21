@@ -4,8 +4,8 @@
    Dark), real photography, 5-tab shell (Workout · Exercise · Library ·
    Progress · You).
    The six required features stay wired up, all under world class names:
-     My Profile (onboarding) · Exercise Tracker (logging) · Gym Equipment (NFC equipment) ·
-     Nutrition Guide (food scan) · Body Goals (projection) · Find a Gym (gyms).
+     My Profile (onboarding) · My Workout Log (logging) · Gym Equipment (NFC equipment) ·
+     My Plate Truth (food scan) · Body Goals (projection) · Find a Gym (gyms).
    Vanilla JS, offline first, everything persists through GBStore.
    ========================================================================== */
 (function () {
@@ -52,8 +52,8 @@
     profile: '<circle cx="12" cy="8" r="4"/><path d="M4.5 21c0-4 3.4-6 7.5-6s7.5 2 7.5 6"/>'
   };
   var TABS = [
-    { id:"workout",  label:"My Plan" },
-    { id:"exercise", label:"Library" },
+    { id:"workout",  label:"My Routine" },
+    { id:"exercise", label:"The Guides" },
     { id:"library",  label:"Programs" },
     { id:"progress", label:"Progress" },
     { id:"profile",  label:"You" }
@@ -68,6 +68,20 @@
     });
     return nav;
   }
+  /* ---------------- coming soon ----------------
+     A short, honest note at the foot of every screen about what is being
+     built next. It sits under the content and above the tab bar. */
+  var SOON = [
+    "Going live with other Gymbadgers around the world, for daily, weekly, monthly and yearly routines.",
+    "Yoga exercises with trainers."
+  ];
+  function soonBlock() {
+    var box = h('<div class="soon"><div class="soon-h">Coming soon</div><ul class="soon-list"></ul></div>');
+    var ul = box.querySelector(".soon-list");
+    SOON.forEach(function (t) { ul.appendChild(h("<li>" + esc(t) + "</li>")); });
+    return box;
+  }
+
   function shell(active, title, body, opts) {
     opts = opts || {};
     var scr = h('<div class="screen"></div>');
@@ -80,6 +94,7 @@
     }
     if (opts.banner) scr.appendChild(h('<div class="banner">' + opts.banner + "</div>"));
     scr.appendChild(body);
+    if (opts.soon !== false) scr.appendChild(soonBlock());
     root.appendChild(scr);
     root.appendChild(tabbar(active));
   }
@@ -351,12 +366,12 @@
   }
 
   /* =======================================================================
-     MY PLAN  (tab) — your own training week (feature #2)
+     MY ROUTINE  (tab) — your own training week (feature #2)
   ======================================================================= */
     route("workout", function () {
     if (!S.user()) return go("welcome");
     if (window.GBPlan) window.GBPlan.screen(function (a, title, body, opts) { shell(a, title, body, opts); }, go);
-    else shell("workout", "My Plan", h('<p class="sub">Your plan is unavailable.</p>'));
+    else shell("workout", "My Routine", h('<p class="sub">Your plan is unavailable.</p>'));
   });
 
   /* Choose exercise to log */
@@ -370,7 +385,7 @@
       list.appendChild(rowBtn(exIcon(ex.type), ex.name, last ? "Last: " + last.val + " " + ex.unit + " · " + relDay(last.date) : "Not logged yet", function () { go("logdetail", ex.id); }));
     });
     node.appendChild(list);
-    shell("workout", "Exercise Tracker", node, { back: true });
+    shell("workout", "My Workout Log", node, { back: true });
   });
 
   route("logdetail", function (param) {
@@ -412,7 +427,7 @@
       window.GBLibrary.screen(function (a, title, body, opts) { shell(a, title, body, opts); }, go);
       return;
     }
-    shell("exercise", "Workout Library", h('<p class="sub">The library is unavailable.</p>'));
+    shell("exercise", "The Guides", h('<p class="sub">The library is unavailable.</p>'));
   });
 
   /* One exercise in full — instructions, safety and the photo gallery. */
@@ -424,13 +439,13 @@
     go("exercise");
   });
 
-  /* ---------- 3. Find a Trainer ---------- */
+  /* ---------- 3. My Trainer ---------- */
   route("trainers", function () {
     if (window.GBTrainers) {
       window.GBTrainers.directory(function (a, title, body, opts) { shell(a, title, body, opts); }, go);
       return;
     }
-    shell("exercise", "Find a Trainer", h('<p class="sub">The trainer directory is unavailable.</p>'));
+    shell("exercise", "My Trainer", h('<p class="sub">The trainer directory is unavailable.</p>'));
   });
 
   route("trainer", function (param) {
@@ -513,7 +528,7 @@
         var covers = h('<div class="covers"></div>');
         byDays[d].forEach(function (p) {
           var c = h('<div class="cover">' + img(p.img, p.name) + '<div class="ov"><div class="tag ' + p.tag + '">' + esc(p.name) + '</div><div class="sub2">' + esc(p.sub) + "</div></div></div>");
-          c.onclick = function () { toast("Loaded “" + p.name + "” into My Plan"); S.set({ planDay: "Day 1" }); go("workout"); };
+          c.onclick = function () { toast("Loaded “" + p.name + "” into My Routine"); S.set({ planDay: "Day 1" }); go("workout"); };
           covers.appendChild(c);
         });
         grid.appendChild(covers);
@@ -535,9 +550,9 @@
 
     node.appendChild(h('<div class="eyebrow" style="margin:24px 0 12px">Your tools</div>'));
     var tools = h('<div class="list"></div>');
-    tools.appendChild(rowBtn("📈", "Exercise Tracker", "Beat your last number", function () { go("log"); }));
+    tools.appendChild(rowBtn("📈", "My Workout Log", "Beat your last number", function () { go("log"); }));
     tools.appendChild(rowBtn("📲", "Gym Equipment", "Live equipment status", function () { go("exercise"); }));
-    tools.appendChild(rowBtn("🍽️", "Nutrition Guide", "See your plate for what it is", function () { go("plate"); }));
+    tools.appendChild(rowBtn("🍽️", "My Plate Truth", "See your plate for what it is", function () { go("plate"); }));
     tools.appendChild(rowBtn("🪞", "Body Goals", "Meet the body you're building", function () { go("future"); }));
     tools.appendChild(rowBtn("📍", "Find a Gym", "Find a gym and book a slot", function () { go("find"); }));
     tools.appendChild(rowBtn("🎫", "Your Badge ID", "Profile, streak and settings", function () { go("profile"); }));
@@ -546,9 +561,9 @@
     shell("library", "Workout Programs", node);
   });
 
-  /* Nutrition Guide — food scan (feature #4) */
+  /* My Plate Truth — food scan (feature #4) */
   /* =======================================================================
-     NUTRITION GUIDE — food explained, plainly (feature #4)
+     MY PLATE TRUTH — food explained, plainly (feature #4)
    ======================================================================= */
   route("plate", function () {
     var node = h("<div></div>");
@@ -646,7 +661,7 @@
     node.appendChild(h('<p class="faint small mt center">This is general nutrition education, not a personal diet plan. ' +
       "For medical or dietary advice, speak to a qualified professional.</p>"));
 
-    shell("library", "Nutrition Guide", node, { back: true });
+    shell("library", "My Plate Truth", node, { back: true });
 
     /* ---------------- one food, explained ---------------- */
     function openFood(name) {
@@ -820,9 +835,9 @@
         macroBar("Protein", tot.protein, MAXES.protein) + macroBar("Fat", tot.fat, MAXES.fat) +
         macroBar("Fiber", tot.fiber, MAXES.fiber) + "</div>"));
     } else {
-      node.appendChild(h('<div class="card"><h3>No meals scanned yet</h3><p class="sub">Scan a meal with Nutrition Guide to see your macros.</p></div>'));
+      node.appendChild(h('<div class="card"><h3>No meals scanned yet</h3><p class="sub">Scan a meal with My Plate Truth to see your macros.</p></div>'));
     }
-    var pt = h('<button class="btn btn-ghost">Open Nutrition Guide</button>');
+    var pt = h('<button class="btn btn-ghost">Open My Plate Truth</button>');
     pt.onclick = function () { go("plate"); };
     node.appendChild(pt);
 
@@ -933,15 +948,15 @@
       node.appendChild(journey);
     }
 
-    /* ---- Your Trainer: who you train with, what is next, what came before ---- */
-    node.appendChild(h('<div class="eyebrow" style="margin:22px 0 10px">Your Trainer</div>'));
+    /* ---- My Trainer: who you train with, what is next, what came before ---- */
+    node.appendChild(h('<div class="eyebrow" style="margin:22px 0 10px">My Trainer</div>'));
     if (window.GBTrainers) {
       node.appendChild(window.GBTrainers.yourTrainerSection());
       window.GBTrainers.setProfileRerender(function () { render(); });
     } else {
-      node.appendChild(h('<div class="list"><div class="row"><div class="rm"><b>Your Trainer</b><small>Book a coach to see your sessions here</small></div></div></div>'));
+      node.appendChild(h('<div class="list"><div class="row"><div class="rm"><b>My Trainer</b><small>Book a coach to see your sessions here</small></div></div></div>'));
     }
-    var findT = h('<button class="btn btn-ghost mt">Find a Trainer</button>');
+    var findT = h('<button class="btn btn-ghost mt">Browse Trainers</button>');
     findT.onclick = function () { go("trainers"); };
     node.appendChild(findT);
 
@@ -1136,7 +1151,7 @@
     var node = h("<div></div>");
     var list = h('<div class="list"></div>');
     [["How do I scan equipment?", "Tap your phone on the NFC tag or scan the QR by the machine."],
-     ["What is the Exercise Tracker?", "Gym Badge remembers your last number and sets the next target to beat."],
+     ["What is My Workout Log?", "Gym Badge remembers your last number and sets the next target to beat."],
      ["How do projections work?", "Estimates from your goal and body data — never a guarantee."],
      ["Delete my data", "You can export or delete everything from My Profile."]].forEach(function (f) {
       list.appendChild(h('<div class="row" style="flex-direction:column;align-items:flex-start;gap:4px"><b>' + f[0] + '</b><small>' + f[1] + "</small></div>"));
@@ -1210,9 +1225,9 @@
   route("pricing", function () {
     var node = h("<div></div>");
     var cur = S.get().currency || "NGN";
-    node.appendChild(h('<div class="center"><span class="pro-badge">GYMBADGE PRO</span><h2 class="headline mt" style="margin-top:12px">Workouts made <span class="hl">simple</span></h2><p class="sub">Unlock the full engine — the Exercise Tracker, Gym Equipment, Nutrition Guide and Body Goals.</p></div>'));
+    node.appendChild(h('<div class="center"><span class="pro-badge">GYMBADGE PRO</span><h2 class="headline mt" style="margin-top:12px">Workouts made <span class="hl">simple</span></h2><p class="sub">Unlock the full engine — My Workout Log, Gym Equipment, My Plate Truth and Body Goals.</p></div>'));
     node.appendChild(h('<div class="card center mt"><div style="font-size:1.4rem;letter-spacing:.1em">★★★★★</div><p class="sub">Loved by 48k+ active members</p></div>'));
-    node.appendChild(h('<ul class="feat card"><li><i>✓</i> Exercise Tracker · unlimited logging and history</li><li><i>✓</i> Gym Equipment · live NFC equipment status</li><li><i>✓</i> Nutrition Guide · unlimited meal scans</li><li><i>✓</i> Body Goals · unlimited projections</li></ul>'));
+    node.appendChild(h('<ul class="feat card"><li><i>✓</i> My Workout Log · unlimited logging and history</li><li><i>✓</i> Gym Equipment · live NFC equipment status</li><li><i>✓</i> My Plate Truth · unlimited meal scans</li><li><i>✓</i> Body Goals · unlimited projections</li></ul>'));
 
     // Currency
     var curBar = h('<div class="field"><label>Show amounts in</label><select id="curSel"></select></div>');

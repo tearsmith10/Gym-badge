@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GYM BADGE — Workout Library
+   GYM BADGE — The Guides
 
    A searchable, filterable catalogue of every movement, with a full coaching
    guide for each one: purpose, muscles, equipment, starting position, step
@@ -95,7 +95,7 @@
     var state = { q: "", cat: "All", diff: "All" };
     var DIFFS = ["All", "Beginner", "Intermediate", "Advanced"];
 
-    node.appendChild(h('<div class="search">🔍<input id="libQ" placeholder="Search the workout library" autocomplete="off"></div>'));
+    node.appendChild(h('<div class="search">🔍<input id="libQ" placeholder="Search the guides" autocomplete="off"></div>'));
 
     var catRow = h('<div class="chips mb"></div>');
     CATEGORIES.forEach(function (c) {
@@ -172,7 +172,7 @@
       if (q) q.oninput = function () { state.q = this.value.trim(); paint(); };
     }, 0);
 
-    shell("exercise", "Workout Library", node);
+    shell("exercise", "The Guides", node);
     return node;
   }
 
