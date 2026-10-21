@@ -42,6 +42,32 @@ apart.
 
 ## New in this release
 
+### 📷 The food scanner is back
+The Nutrition Guide opens with a scanner again.
+
+- **The camera** opens straight away and takes the photo for you.
+- **A photo from your device** works anywhere the camera cannot, and on a
+  phone it opens the camera roll with the rear camera ready.
+- The photo is reduced to a colour signature and compared against the
+  reference photographs of every food in the guide, which produces a ranked
+  shortlist. The guide is then opened for the food **the member picks**, so
+  it is never a guess they did not accept.
+- If the server has a vision model configured it is asked for a better first
+  guess. Without one the scanner still works completely offline.
+- It never pretends to know. If nothing matches, it says so and lists the
+  foods instead.
+
+### 🪟 The app has its own dialogs
+Nothing in Gym Badge calls the browser's `confirm()` or `prompt()` any more.
+Those are blocked in some embedded browsers and they look nothing like the
+rest of the product. Confirmations and name prompts now use the same in app
+sheet as everything else, and they work the same on every device.
+
+### 🧩 One set of helpers
+`app/assets/js/ui.js` holds the element builder, the escaping and the
+message toast. Every screen file uses them, so a toast can never fail
+because one file forgot to bring its own copy.
+
 ### 🎨 The official logo
 The mark is a running figure carrying across an adidas style three stripe.
 The stripes run from the Ember accent through to the honeybadger tawny and

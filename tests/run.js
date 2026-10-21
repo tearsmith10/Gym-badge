@@ -111,7 +111,9 @@ function analyseLogo(buf) {
     "/faq", "/support", "/account", "/privacy", "/terms", "/app/",
     "/app/oauth.html", "/app/sw.js", "/app/manifest.webmanifest",
     "/assets/i18n.js", "/assets/i18n-ext.js", "/assets/countries.js",
-    "/assets/music.js", "/assets/pw.js", "/assets/shared.css"];
+    "/assets/music.js", "/assets/pw.js", "/assets/shared.css",
+    "/app/assets/js/ui.js", "/app/assets/js/dialog.js", "/app/assets/js/scanner.js",
+    "/app/assets/css/app.css", "/web/assets/css/site.css"];
   for (const p of pages) {
     const r = await get(p);
     check("GET " + p + " -> " + r.status, r.status === 200);
@@ -203,6 +205,40 @@ function analyseLogo(buf) {
     check(label + " carries the honeybadger tawny (" + a.tawny + " px)", a.tawny > 500);
     check(label + " carries the honeybadger cream (" + a.cream + " px)", a.cream > 200);
   }
+
+  section("THE FOOD SCANNER");
+  const scanner = await fetch(BASE + "/app/assets/js/scanner.js");
+  check("the scanner loads", scanner.status === 200);
+  const scannerSrc = scanner.status === 200 ? await scanner.text() : "";
+  check("the scanner opens the camera", /getUserMedia/.test(scannerSrc));
+  check("the scanner falls back to a photo from the device", /capture="environment"/.test(scannerSrc));
+  check("the scanner matches the photo against the food guide", /signature/.test(scannerSrc) && /rank/.test(scannerSrc));
+  check("the scanner always asks the member to confirm", /onPick/.test(scannerSrc));
+  const nutrition = (await get("/app/index.html")).text;
+  check("the Nutrition Guide loads the scanner", nutrition.includes("/app/assets/js/scanner.js"));
+  const appJs = (await get("/app/assets/js/app.js")).text;
+  check("the Nutrition Guide has a scan button", /Scan my meal/.test(appJs));
+  check("the Nutrition Guide has a photo button", /Use a photo from my device/.test(appJs));
+
+  section("NO MISSING HELPERS");
+  // Every screen file must not call a helper it never defined.
+  for (const f of ["app/assets/js/plan.js", "app/assets/js/library.js", "app/assets/js/trainers.js",
+                   "app/assets/js/settings.js", "app/assets/js/scanner.js", "app/assets/js/chat.js",
+                   "app/assets/js/app.js"]) {
+    const src = (await get("/" + f)).text;
+    check(f + " uses the shared helpers", /window\.GBUI/.test(src));
+  }
+  const ui = (await get("/app/assets/js/ui.js")).text;
+  check("the shared helper file exists", ui.length > 100);
+  const dialog = (await get("/app/assets/js/dialog.js")).text;
+  check("the app has its own dialogs", /GBDialog/.test(dialog));
+  const plan = (await get("/app/assets/js/plan.js")).text;
+  check("My Plan can redraw itself", /function render\(\) \{ buildScreen/.test(plan));
+  check("the app never calls the browser prompt", !/[^.\w]prompt\(/.test(
+    [plan, (await get("/app/assets/js/trainers.js")).text, (await get("/app/assets/js/settings.js")).text].join(" ")));
+  const chromeSrc = (await get("/web/assets/js/chrome.js")).text;
+  check("the app never calls the browser confirm", !/[^.\w]confirm\(/.test(
+    [plan, (await get("/app/assets/js/trainers.js")).text, (await get("/app/assets/js/settings.js")).text].join(" ")));
 
   section("LANGUAGE AND COUNTRY PICKERS");
   const i18n = (await get("/assets/i18n.js")).text;

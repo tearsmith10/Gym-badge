@@ -23,9 +23,8 @@
 
   var S = window.GBStore, I = window.GBI18n;
 
-  function h(html) { var t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstChild; }
-  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]; }); }
-  function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+  var h = window.GBUI.h, esc = window.GBUI.esc, $ = window.GBUI.$;
+  var toast = window.GBUI.toast;
 
   /* ---------------- account tenure ----------------
      All counts are measured from the account creation timestamp. Nothing is
@@ -443,7 +442,7 @@
       resched.onclick = function () { rescheduleSheet(b); };
       var cancel = h('<button class="row-del" aria-label="Cancel session">✕</button>');
       cancel.onclick = function () {
-        if (!confirm("Cancel this session?")) return;
+        if (!GBDialog.confirm("Cancel this session?", { title: "Cancel session", okLabel: "Cancel session", danger: true })) return;
         cancelBooking(b.id);
         toast("Session cancelled");
         rerenderProfile();

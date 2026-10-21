@@ -16,9 +16,8 @@
 
   var D = window.GBData, S = window.GBStore, I = window.GBI18n;
 
-  function h(html) { var t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstChild; }
-  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]; }); }
-  function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+  var h = window.GBUI.h, esc = window.GBUI.esc, $ = window.GBUI.$;
+  var toast = window.GBUI.toast;
 
   /* ---------------- image carousel ----------------
      Left and right buttons, touch swipe, keyboard arrows, visible position

@@ -19,12 +19,7 @@
   function h(html) { var t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstChild; }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]; }); }
   function $(sel, ctx) { return (ctx || document).querySelector(sel); }
-  function toast(msg) {
-    var old = $(".toast"); if (old) old.remove();
-    var t = h('<div class="toast">' + esc(msg) + "</div>");
-    document.body.appendChild(t);
-    setTimeout(function () { t.remove(); }, 2300);
-  }
+  var toast = window.GBUI.toast;
   function img(src, alt, cls) { return '<img class="' + (cls || "") + '" src="' + IMG + src + '" alt="' + esc(alt || "") + '" loading="lazy">'; }
 
   /* ---------------- router ---------------- */
@@ -557,7 +552,31 @@
    ======================================================================= */
   route("plate", function () {
     var node = h("<div></div>");
-    node.appendChild(h('<p class="sub mb">Food explained in plain language. Pick something to see what it is, what it does for you, and how it fits your goal.</p>'));
+    node.appendChild(h('<p class="sub mb">Scan a plate or pick a food. Either way you get the same guide: what it is, what it does for you, and how it fits your goal.</p>'));
+
+    /* ---- the scanner ---- */
+    var scanFrame = h('<div class="scanframe scan-food">📷<div class="scanline"></div>' +
+      '<span class="scan-hint">Point the camera at your plate</span></div>');
+    node.appendChild(scanFrame);
+    var scanBtn = h('<button class="btn btn-primary btn-lg">Scan my meal</button>');
+    scanBtn.onclick = function () {
+      if (window.GBScanner) {
+        window.GBScanner.open(function (name) { if (name) openFood(name); else render(); });
+      } else {
+        toast("The scanner is unavailable, pick a food from the list");
+      }
+    };
+    node.appendChild(scanBtn);
+    var photoBtn = h('<button class="btn btn-ghost mt">📁 Use a photo from my device</button>');
+    photoBtn.onclick = function () {
+      if (window.GBScanner) {
+        window.GBScanner.open(function (name) { if (name) openFood(name); else render(); });
+      } else {
+        toast("The scanner is unavailable, pick a food from the list");
+      }
+    };
+    node.appendChild(photoBtn);
+    node.appendChild(h('<div class="eyebrow" style="margin:22px 0 10px">Or pick a food</div>'));
 
     if (!S.isPremium() && S.foodScansLeft() <= 5) {
       node.appendChild(h('<div class="banner">' + S.foodScansLeft() + " free scans left today · <a href=\"#/pricing\">upgrade</a></div>"));
@@ -826,8 +845,15 @@
       list.forEach(function (p) {
         var cell = h('<figure class="prog-cell"><img alt="' + esc(p.week || "Progress photo") + '" src="' + p.dataUrl + '"><figcaption>' + esc(p.week || "") + '<button class="prog-del" type="button" aria-label="Delete">×</button></figcaption></figure>');
         cell.querySelector(".prog-del").onclick = function () {
-          if (!window.confirm("Delete " + (p.week || "this photo") + "?")) return;
-          S.set({ progress: photos().filter(function (x) { return x.id !== p.id; }) }); paint();
+          GBDialog.confirm("Delete " + (p.week || "this photo") + "?", {
+            title: "Delete this photo",
+            okLabel: "Delete",
+            danger: true
+          }).then(function (yes) {
+            if (!yes) return;
+            S.set({ progress: photos().filter(function (x) { return x.id !== p.id; }) });
+            paint();
+          });
         };
         grid.appendChild(cell);
       });

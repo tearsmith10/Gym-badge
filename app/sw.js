@@ -1,5 +1,5 @@
 /* GYM BADGE — service worker (offline first, self-updating) */
-var CACHE = "gymbadge-v14";
+var CACHE = "gymbadge-v15";
 var IMGS = [
   "/app/assets/img/avatar.jpg",
   "/app/assets/img/coach/model-male.jpg",
@@ -45,6 +45,9 @@ var ASSETS = [
   "/app/assets/js/store.js",
   "/app/assets/js/payments.js",
   "/app/assets/js/settings.js",
+  "/app/assets/js/dialog.js",
+  "/app/assets/js/ui.js",
+  "/app/assets/js/scanner.js",
   "/app/assets/js/app.js",
   "/app/assets/img/logo.png",
   "/app/assets/img/icon-192.png",

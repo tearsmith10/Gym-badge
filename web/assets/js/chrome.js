@@ -267,10 +267,6 @@
       note.className = "fn-note ok";
     });
 
-    // Currency selector → keeps prices across the site in one pick.
-    document.addEventListener("change", function (e) {
-    });
-
     // PWA install (footer button) — captures the browser's install prompt.
     // Website pages don't carry a manifest link of their own, so attach the
     // app manifest here: same origin, start_url /app/ — Chrome/Edge then fire

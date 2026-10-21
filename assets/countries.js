@@ -138,6 +138,10 @@
     var wrap = document.createElement("div");
     wrap.className = opts.className || "country-picker";
 
+    var current = document.createElement("div");
+    current.className = "cp-current";
+    wrap.appendChild(current);
+
     var search = document.createElement("input");
     search.type = "search";
     search.className = "cp-search";
@@ -170,6 +174,17 @@
       return out;
     }
 
+    /* The country chosen right now, always visible above the list. */
+    function paintCurrent() {
+      var c = find(selected);
+      current.innerHTML = c
+        ? '<span class="cp-flag">' + c.flag + "</span>" +
+          '<span class="cp-name">' + esc(c.name) + "</span>" +
+          '<span class="cp-code">' + esc(c.code) + "</span>" +
+          '<span class="cp-dial">' + esc(c.dial) + "</span>"
+        : '<span class="cp-name">No country chosen yet</span>';
+    }
+
     function paint(query) {
       list.innerHTML = "";
       var groups = rowsFor(query);
@@ -196,6 +211,13 @@
             '<span class="cp-dial">' + esc(c.dial) + "</span>";
           b.onclick = function () {
             selected = c.code;
+            list.querySelectorAll(".cp-item").forEach(function (x) {
+              x.classList.remove("on");
+              x.setAttribute("aria-selected", "false");
+            });
+            b.classList.add("on");
+            b.setAttribute("aria-selected", "true");
+            paintCurrent();
             if (opts.onChange) opts.onChange(c);
           };
           list.appendChild(b);
@@ -205,6 +227,7 @@
 
     search.oninput = function () { paint(this.value); };
     paint("");
+    paintCurrent();
 
     return wrap;
   }

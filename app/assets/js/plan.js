@@ -19,9 +19,8 @@
 
   var D = window.GBData, S = window.GBStore;
 
-  function h(html) { var t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstChild; }
-  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]; }); }
-  function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+  var h = window.GBUI.h, esc = window.GBUI.esc, $ = window.GBUI.$;
+  var toast = window.GBUI.toast;
   function today() { return S.today(); }
   function dateKey(d) {
     var x = d instanceof Date ? d : new Date(d);
@@ -65,8 +64,15 @@
     return null;
   }
 
-  /* ---------------- screen ---------------- */
+  /* ---------------- screen ----------------
+     The screen is built by buildScreen and rebuilt by render, so every
+     control can go back to the top and redraw the plan. */
   function screen(shell, go) {
+    function render() { buildScreen(shell, go, render); }
+    render();
+  }
+
+  function buildScreen(shell, go, render) {
     var p = plan();
     var node = h("<div></div>");
 
@@ -90,15 +96,19 @@
     });
     var addDay = h('<button class="daypill" style="border-style:dashed">+ Day</button>');
     addDay.onclick = function () {
-      var name = prompt("Name this training day", "Session " + (p.days.length + 1));
-      if (!name) return;
-      var d = new Date();
-      d.setDate(d.getDate() + p.days.length);
-      p.days.push({ id: "d" + Date.now().toString(36), name: name, date: dateKey(d), items: [] });
-      p.currentDay = p.days[p.days.length - 1].id;
-      savePlan(p);
-      toast("Day added");
-      render();
+      GBDialog.prompt("Give this training day a name, so you recognise it on your plan.", "Session " + (p.days.length + 1), {
+        title: "Add a training day",
+        okLabel: "Add day"
+      }).then(function (name) {
+        if (!name) return;
+        var d = new Date();
+        d.setDate(d.getDate() + p.days.length);
+        p.days.push({ id: "d" + Date.now().toString(36), name: name, date: dateKey(d), items: [] });
+        p.currentDay = p.days[p.days.length - 1].id;
+        savePlan(p);
+        toast("Day added");
+        render();
+      });
     };
     dayBar.appendChild(addDay);
     node.appendChild(dayBar);
@@ -139,11 +149,17 @@
       edit.onclick = function () { editItem(p, current, idx, render); };
       var del = h('<button class="row-del" aria-label="Remove">✕</button>');
       del.onclick = function () {
-        if (!confirm("Remove " + name + " from " + current.name + "?")) return;
-        current.items.splice(idx, 1);
-        savePlan(p);
-        toast("Removed");
-        render();
+        GBDialog.confirm("Take " + name + " off " + current.name + "?", {
+          title: "Remove this exercise",
+          okLabel: "Remove",
+          danger: true
+        }).then(function (yes) {
+          if (!yes) return;
+          current.items.splice(idx, 1);
+          savePlan(p);
+          toast("Removed");
+          render();
+        });
       };
       acts.appendChild(done);
       acts.appendChild(edit);

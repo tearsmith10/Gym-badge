@@ -61,6 +61,14 @@
   background:var(--surface-2);color:var(--text);font:inherit;font-size:.9rem;outline:none;
 }
 .cp-search:focus{border-color:var(--accent)}
+.cp-current{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:10px 12px;margin-bottom:8px;border-radius:12px;
+  border:1.5px solid color-mix(in srgb,var(--accent) 45%,transparent);
+  background:color-mix(in srgb,var(--accent) 10%,transparent);
+  color:var(--text);font-size:.88rem;
+}
+.cp-current .cp-name{font-weight:650}
 .cp-list{
   max-height:300px;overflow-y:auto;border:1px solid var(--line);border-radius:12px;
   background:var(--surface);

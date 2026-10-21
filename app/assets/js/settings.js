@@ -26,7 +26,7 @@
   var h = SH.h || function (html) { var t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstChild; };
   var esc = SH.esc || function (s) { return String(s == null ? "" : s); };
   var $ = SH.$ || function (sel, ctx) { return (ctx || document).querySelector(sel); };
-  var toast = SH.toast || function () {};
+  var toast = (window.GBUI && window.GBUI.toast) || SH.toast || function () {};
   var shell = SH.shell || function () {};
   var go = SH.go || function () {};
   /* Re-render the current route through the app router so the screen is
@@ -225,15 +225,24 @@
     forgot.onclick = function () {
       var email = u.email;
       if (typeof GBAuth !== "undefined" && GBAuth.forgot) {
-        var em = email || prompt("Enter the email address on your account");
-        if (!em) return;
-        GBAuth.forgot(em).then(function (res) {
-          if (!res.ok) return toast(res.error || "Could not start recovery");
-          toast(res.devResetLink
-            ? "Reset link ready — open it in a minute"
-            : "Reset link sent to " + em);
-          if (res.devResetLink) showLink(res.devResetLink);
-        }).catch(function () { toast("Network hiccup — try again"); });
+        var send = function (em) {
+          if (!em) return;
+          GBAuth.forgot(em).then(function (res) {
+            if (!res.ok) return toast(res.error || "Could not start recovery");
+            toast(res.devResetLink
+              ? "Reset link ready — open it in a minute"
+              : "Reset link sent to " + em);
+            if (res.devResetLink) showLink(res.devResetLink);
+          }).catch(function () { toast("Network hiccup — try again"); });
+        };
+        if (email) {
+          send(email);
+        } else {
+          GBDialog.prompt("Enter the email address on your account.", "", {
+            title: "Reset your password",
+            okLabel: "Send the link"
+          }).then(send);
+        }
       } else {
         showLink("https://gymbadge.app/forgot");
       }
@@ -456,7 +465,7 @@
     toast("Your data has been exported ✓");
   }
   function deleteData() {
-    if (!confirm("Delete every log, photo and measurement on this device? This cannot be undone.")) return;
+    if (!GBDialog.confirm("Delete every log, photo and measurement on this device? This cannot be undone.", { title: "Delete everything", okLabel: "Delete", danger: true })) return;
     S.set({ logs: [], foodLogs: [], bookings: [], progress: [], reported: [] });
     toast("All your data has been deleted");
     rerender();
