@@ -733,9 +733,6 @@ h1 .hl,h2 .hl,h3 .hl{font-style:italic}
 .fa-copy span{color:var(--muted);font-size:.88rem}
 .fa-actions{display:flex;gap:10px;flex-wrap:wrap}
 .foot-tools{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:flex-end}
-.cur-pick select{background:var(--surface-2);color:var(--ink);border:1px solid var(--line);
-  border-radius:8px;padding:7px 10px;font:inherit;font-size:.82rem;cursor:pointer}
-.cur-pick select:hover{border-color:var(--accent)}
 .pay-tags{display:flex;gap:7px;flex-wrap:wrap}
 .pay-tags span{font-size:.66rem;font-weight:750;letter-spacing:.06em;border:1px solid var(--line);
   border-radius:5px;padding:4px 7px;color:var(--faint)}
@@ -866,11 +863,11 @@ h1 .hl,h2 .hl,h3 .hl{font-style:italic}
 .feat .ic.feat-ic img{width:100%;height:100%;object-fit:cover}
 
 /* the footer language picker, in place of the old currency selector */
-.cur-pick{display:inline-flex;align-items:center;gap:9px}
-.cur-label{font-size:.74rem;color:var(--faint);text-transform:uppercase;letter-spacing:.09em}
+.lang-pick{display:inline-flex;align-items:center;gap:9px}
+.lang-label{font-size:.74rem;color:var(--faint);text-transform:uppercase;letter-spacing:.09em}
 .foot-lang .lang-current{background:transparent;border-color:var(--line);padding:6px 12px}
 @media (max-width:760px){
-  .cur-label{display:none}
+  .lang-label{display:none}
 }
 
 /* the assistant, shared with the app */

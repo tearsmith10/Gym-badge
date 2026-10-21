@@ -31,13 +31,6 @@
     ["/faq", "Help"]
   ];
 
-  var CURRENCIES = [
-    ["USD", "$ US Dollar"], ["NGN", "₦ Naira"], ["GBP", "£ Pound"], ["EUR", "€ Euro"],
-    ["GHS", "₵ Cedi"], ["KES", "KSh Shilling"], ["ZAR", "R Rand"], ["EGP", "E£ Pound"],
-    ["CAD", "C$ Dollar"], ["AUD", "A$ Dollar"], ["INR", "₹ Rupee"], ["AED", "د.إ Dirham"],
-    ["BRL", "R$ Real"], ["MXN", "$ Peso"], ["JPY", "¥ Yen"], ["Other", "More coming soon"]
-  ];
-
   function path() { return (location.pathname || "/").replace(/\/index\.html$/, "/"); }
 
   function isActive(href) {
@@ -96,7 +89,6 @@
       return '<div class="foot-col"><h5>' + title + "</h5>" +
         links.map(function (l) { return '<a href="' + l[0] + '">' + l[1] + "</a>"; }).join("") + "</div>";
     };
-    var cur = (window.GBWeb && GBWeb.getCur()) || "USD";
     var soc = function (name, path) {
       return '<a class="soc" href="https://x.com/gymbadge" target="_blank" rel="noopener" aria-label="' + name + '">' +
         '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' + path + "</svg></a>";
@@ -138,8 +130,8 @@
         '<div class="foot-bottom">' +
           "<span>© 2026 Gym Badge. All rights reserved. Made for every body, everywhere.</span>" +
           '<span class="foot-tools">' +
-            '<label class="cur-pick" aria-label="Language">' +
-              '<span class="cur-label">Language</span>' +
+            '<label class="lang-pick" aria-label="Language">' +
+              '<span class="lang-label">Language</span>' +
               '<span id="langSlotFoot"></span>' +
             "</label>" +
           "</span>" +
@@ -277,7 +269,6 @@
 
     // Currency selector → keeps prices across the site in one pick.
     document.addEventListener("change", function (e) {
-      if (e.target && e.target.id === "curPick" && window.GBWeb) GBWeb.setCur(e.target.value);
     });
 
     // PWA install (footer button) — captures the browser's install prompt.
