@@ -10,6 +10,9 @@
 <link rel="stylesheet" href="/web/assets/css/site.css">
 <link rel="stylesheet" href="/assets/shared.css">
 <script src="/assets/i18n.js"></script>
+<script src="/assets/i18n-ext.js"></script>
+<script src="/assets/countries.js"></script>
+<script src="/app/assets/js/chat.js"></script>
 <script src="/assets/pw.js"></script>
 <script src="/assets/theme.js"></script>
 </head>
@@ -69,7 +72,43 @@
   }
   function featuredKey(name) { return name === "Premium" ? "premium" : name === "Elite" ? "elite" : "free"; }
 
-  wrap.innerHTML =
+  /* ---- Your GymBadge Journey: tenure from the account creation date ---- */
+  var journey = "";
+  if (user.joined) {
+    var start = new Date(user.joined);
+    var now = new Date();
+    var sD = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
+    var tD = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+    var days = Math.max(0, Math.round((tD - sD) / 86400000));
+    var months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+    if (now.getDate() < start.getDate()) months -= 1;
+    months = Math.max(0, months);
+    var years = Math.floor(months / 12);
+    var fmt = function (v) { return GBWeb.__fmt ? GBWeb.__fmt(v) : String(v); };
+    journey =
+      '<div class="card" style="margin-bottom:20px">' +
+        '<div class="eyebrow" style="margin-bottom:12px">Your GymBadge Journey</div>' +
+        '<div class="journey-grid">' +
+          '<div class="jn"><b>' + fmt(days) + "</b><small>days</small></div>" +
+          '<div class="jn"><b>' + fmt(Math.floor(days / 7)) + "</b><small>weeks</small></div>" +
+          '<div class="jn"><b>' + fmt(months) + "</b><small>months</small></div>" +
+          '<div class="jn"><b>' + fmt(years) + "</b><small>years</small></div>" +
+        "</div>" +
+        '<p class="faint small" style="margin:12px 0 0">Member since ' +
+        start.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) +
+        ". This updates every time you open the page.</p>" +
+      "</div>";
+  }
+
+  /* ---- Your Trainer: who you train with and what is coming up ---------- */
+  var trainerSection =
+    '<div class="card" style="margin-bottom:20px">' +
+      '<div class="eyebrow" style="margin-bottom:12px">Your Trainer</div>' +
+      '<div id="yourTrainerHost"></div>' +
+      '<a class="btn btn-outline" href="/coaches" style="width:100%;margin-top:14px">Find a Trainer</a>' +
+    "</div>";
+
+  wrap.innerHTML = journey + trainerSection +
     '<div class="acct-head">' +
       '<div class="big-ava"><div class="ava">' + GBUI.esc(initials) + "</div></div>" +
       '<div class="acct-meta">' +
@@ -102,7 +141,8 @@
               '<div class="field"><label for="pName">Full name</label><input id="pName" type="text" value="' + GBUI.esc(user.name || "") + '"></div>' +
               '<div class="field"><label for="pEmail">Email</label><input id="pEmail" type="email" value="' + GBUI.esc(user.email || "") + '"></div>' +
             "</div>" +
-            '<div class="field"><label for="pCountry">Country</label><input id="pCountry" type="text" value="' + GBUI.esc(user.country || "") + '"></div>' +
+            '<div class="field"><label for="pCountry">Country</label><div id="pCountryPicker"></div>' +
+              '<span class="hint" id="pCountryDial"></span></div>' +
             '<button class="btn btn-primary" id="saveProfile" style="justify-self:start">Save changes</button>' +
           "</div>" +
         "</div>" +
@@ -157,11 +197,73 @@
       "</div>" +
     "</div>";
 
+  /* Your Trainer — who the member is booked with, what is next, what came
+     before, and the actions they can take. */
+  (function () {
+    var host = document.getElementById("yourTrainerHost");
+    if (!host) return;
+    var bookings = (GBWeb.getBookings && GBWeb.getBookings()) || [];
+    if (!bookings.length) {
+      host.innerHTML = '<p class="muted" style="font-size:.92rem">You have not booked a trainer yet. ' +
+        "Book a coach and your sessions, plans and history all appear here.</p>";
+      return;
+    }
+    var now = Date.now();
+    var upcoming = bookings.filter(function (b) { return new Date(b.when).getTime() >= now - 3600000; });
+    var past = bookings.filter(function (b) { return new Date(b.when).getTime() < now - 3600000; });
+    var html = "";
+    if (upcoming.length) {
+      html += '<div class="eyebrow" style="margin:14px 0 8px">Upcoming sessions</div>';
+      upcoming.forEach(function (b) {
+        html += '<div class="row" style="border:1px solid var(--line);border-radius:12px;margin-bottom:8px">' +
+          '<div class="ri">🧑‍🏫</div><div class="rm"><b>' + GBUI.esc(b.trainerName || "Your trainer") + "</b><small>" +
+          GBUI.esc(new Date(b.when).toLocaleString()) + " · " + (b.mode === "online" ? "Online" : "In person") +
+          " · " + GBUI.esc(String(b.status || "confirmed")) + "</small></div>" +
+          '<div class="rr"><button class="btn btn-ghost btn-sm" data-cancel="' + GBUI.esc(b.id) + '">Cancel</button></div></div>';
+      });
+    }
+    if (past.length) {
+      html += '<div class="eyebrow" style="margin:14px 0 8px">Earlier sessions</div>';
+      past.slice(0, 5).forEach(function (b) {
+        html += '<div class="row"><div class="ri">✅</div><div class="rm"><b>' + GBUI.esc(b.trainerName || "Your trainer") +
+          "</b><small>" + GBUI.esc(new Date(b.when).toLocaleString()) + "</small></div></div>";
+      });
+    }
+    host.innerHTML = html;
+    host.querySelectorAll("[data-cancel]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (!confirm("Cancel this session?")) return;
+        if (GBWeb.cancelBooking) { GBWeb.cancelBooking(btn.getAttribute("data-cancel")); location.reload(); }
+      });
+    });
+  })();
+
+  /* Country: searchable, flagged, with the international dialling code. */
+  var countryState = GBWeb.getCountry();
+  if (window.GBCountries) {
+    var cp = GBCountries.picker({
+      value: countryState.code,
+      onChange: function (c) {
+        countryState = { code: c.code, name: c.name, dial: c.dial };
+        GBWeb.setCountry(countryState);
+        document.getElementById("pCountryDial").textContent =
+          "International dialling code " + (c.dial || "not listed");
+      }
+    });
+    document.getElementById("pCountryPicker").appendChild(cp);
+    var cf = GBCountries.find(countryState.code);
+    if (cf) {
+      countryState = { code: cf.code, name: cf.name, dial: cf.dial };
+      document.getElementById("pCountryDial").textContent =
+        "International dialling code " + (cf.dial || "not listed");
+    }
+  }
+
   document.getElementById("saveProfile").addEventListener("click", function () {
     GBWeb.updateUser({
       name: document.getElementById("pName").value.trim(),
       email: document.getElementById("pEmail").value.trim(),
-      country: document.getElementById("pCountry").value.trim()
+      country: countryState.name, countryCode: countryState.code
     });
     this.textContent = "Saved ✓";
     var b = this;

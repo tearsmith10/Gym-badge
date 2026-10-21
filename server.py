@@ -52,6 +52,7 @@ PORT = int(os.environ.get("GYMBADGE_PORT", "8080"))
 # Clean URL -> file map (the same routes Vercel uses).
 ROUTES = {
     "/": "web/index.html",
+    "/index.html": "web/index.html",
     "/login": "web/login.html",
     "/signup": "web/signup.html",
     "/forgot": "web/forgot.html",
@@ -154,7 +155,7 @@ class Handler(BaseHTTPRequestHandler):
         path = urlparse(self.path).path
 
         if path.startswith("/api/") or path == "/healthz":
-            status, payload = core.api_dispatch("GET", path, {}, self.headers)
+            status, payload = core.api_dispatch("GET", path, {}, self.headers, self.env())
             return self.json_out(status, payload)
 
         target = resolve(path)
@@ -171,8 +172,17 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         path = urlparse(self.path).path
         body = self.read_json()
-        status, payload = core.api_dispatch("POST", path, body, self.headers)
+        status, payload = core.api_dispatch("POST", path, body, self.headers, self.env())
         self.json_out(status, payload)
+
+    def env(self) -> dict:
+        """A small WSGI-like view of the request, for the content endpoints."""
+        return {
+            "REQUEST_METHOD": self.command,
+            "PATH_INFO": urlparse(self.path).path,
+            "REMOTE_ADDR": self.client_address[0] if self.client_address else "",
+            "HTTP_AUTHORIZATION": self.headers.get("Authorization", ""),
+        }
 
     def serve_file(self, target: str, head_only: bool = False) -> None:
         ctype, _ = mimetypes.guess_type(target)

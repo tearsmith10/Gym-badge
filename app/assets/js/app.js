@@ -4,8 +4,8 @@
    Dark), real photography, 5-tab shell (Workout · Exercise · Library ·
    Progress · You).
    The six required features stay wired up, all under world class names:
-     First Rep (onboarding) · One More (logging) · Tap In (NFC equipment) ·
-     Plate Truth (food scan) · Tomorrow You (projection) · Your Floor (gyms).
+     My Profile (onboarding) · Exercise Tracker (logging) · Gym Equipment (NFC equipment) ·
+     Nutrition Guide (food scan) · Body Goals (projection) · Find a Gym (gyms).
    Vanilla JS, offline first, everything persists through GBStore.
    ========================================================================== */
 (function () {
@@ -57,9 +57,9 @@
     profile: '<circle cx="12" cy="8" r="4"/><path d="M4.5 21c0-4 3.4-6 7.5-6s7.5 2 7.5 6"/>'
   };
   var TABS = [
-    { id:"workout",  label:"Workout" },
-    { id:"exercise", label:"Exercise" },
-    { id:"library",  label:"Library" },
+    { id:"workout",  label:"My Plan" },
+    { id:"exercise", label:"Library" },
+    { id:"library",  label:"Programs" },
     { id:"progress", label:"Progress" },
     { id:"profile",  label:"You" }
   ];
@@ -158,6 +158,33 @@
   function exName(id) { var e = exById(id); return e ? e.name : id; }
   function exUnit(id) { var e = exById(id); return e ? e.unit : ""; }
   function exIcon(t) { return t === "time" ? "⏱️" : t === "weight" ? "🏋️" : "💪"; }
+
+  /* Gender-aware imagery.
+     A member who told us how they present sees pictures that match, and
+     anyone who did not tell us sees inclusive imagery. This only changes
+     which photograph is shown - never the instruction, the exercise or
+     what the member should be able to do. */
+  function memberGender() {
+    var u = S.user() || {};
+    var g = String(u.gender || "").toLowerCase();
+    if (g === "female" || g === "woman" || g === "women") return "female";
+    if (g === "male" || g === "man" || g === "men") return "male";
+    return "any";
+  }
+  function modelImage(kind) {
+    var g = memberGender();
+    if (g === "female") return "coach/model-female.jpg";
+    if (g === "male") return "coach/model-male.jpg";
+    // No preference given: use the inclusive placeholder, and pick a
+    // different model per surface so the same photo is not everywhere.
+    return kind === "welcome" ? "coach/model-female.jpg" : "coach/model-male.jpg";
+  }
+  function modelAlt() {
+    var g = memberGender();
+    if (g === "female") return "Female athlete training";
+    if (g === "male") return "Male athlete training";
+    return "Athlete training";
+  }
   function relDay(d) {
     var t = S.today();
     if (d === t) return "Today";
@@ -218,9 +245,9 @@
     w.appendChild(h('<img class="logo" src="/assets/img/logo.png" alt="Gym Badge">'));
     w.appendChild(h('<div class="brandbig">Gymbadge</div><p class="tagline">Train · Track · Triumph</p>'));
     w.appendChild(h('<div class="hero-photos" style="margin-top:26px">' +
-      '<div class="ph">' + img("coach/model-male.jpg", "Athlete") + "</div>" +
+      '<div class="ph">' + img(modelImage("welcome"), modelAlt()) + "</div>" +
       '<div class="ph">' + img("ex/goblet-squat.jpg", "Training") + "</div>" +
-      '<div class="ph">' + img("coach/model-female.jpg", "Athlete") + "</div></div>"));
+      '<div class="ph">' + img(modelImage("welcome2"), modelAlt()) + "</div></div>"));
     var start = h('<button class="btn btn-primary btn-lg">Get started</button>');
     start.onclick = function () { go("ob", "0"); };
     var have = h('<button class="btn btn-ghost" style="margin-top:10px">I already have an account</button>');
@@ -258,7 +285,7 @@
     var top = h('<div class="obbar"><button class="back" id="obBack" aria-label="Back">‹</button><button class="skip" id="obSkip">Skip</button></div>');
     s.appendChild(top);
     s.appendChild(h('<div class="track"><i style="width:' + Math.round(((i + 1) / OB.length) * 100) + '%"></i></div>'));
-    s.appendChild(h('<div class="stepsline"><span>Step ' + (i + 1) + " of " + OB.length + "</span><span>" + esc(step.k === "acctype" ? "Almost there" : "First Rep") + "</span></div>"));
+    s.appendChild(h('<div class="stepsline"><span>Step ' + (i + 1) + " of " + OB.length + "</span><span>" + esc(step.k === "acctype" ? "Almost there" : "My Profile") + "</span></div>"));
     s.appendChild(h('<h1 class="headline">' + step.q + "</h1>"));
     s.appendChild(h('<p class="sub" style="margin:10px 0 22px">' + esc(step.s) + "</p>"));
 
@@ -329,60 +356,12 @@
   }
 
   /* =======================================================================
-     WORKOUT  (tab) — "My Plan" + One More logging (feature #2)
+     MY PLAN  (tab) — your own training week (feature #2)
   ======================================================================= */
-  route("workout", function () {
+    route("workout", function () {
     if (!S.user()) return go("welcome");
-    var u = S.user();
-    var day = S.get().planDay || "Day 1";
-    var p = PLAN[day];
-    var node = h("<div></div>");
-
-    var bar = h('<div class="topbar"><div class="tt">My Plan ⌄</div><div class="sp"></div></div>');
-    var gear = iconBtn("⚙", function () { go("profile"); });
-    bar.appendChild(gear);
-    node.appendChild(bar);
-
-    var days = h('<div class="days"></div>');
-    Object.keys(PLAN).forEach(function (d) {
-      var b = h('<button class="daypill' + (d === day ? " on" : "") + '">' + d + "</button>");
-      b.onclick = function () { S.set({ planDay: d }); render(); };
-      days.appendChild(b);
-    });
-    days.appendChild(h('<span class="chev" style="margin-left:auto">›</span>'));
-    node.appendChild(days);
-    node.appendChild(h('<div class="sub" style="margin-bottom:18px">' + esc(p.week) + "</div>"));
-
-    node.appendChild(h('<div class="workout-head"><div class="eyebrow">Today\'s workout</div><h2>' + esc(p.title) + "</h2></div>"));
-    node.appendChild(h('<div class="wmeta"><span>🏋️ ' + p.items.length + ' Exercises</span><span>⏱️ ' + p.mins + " Mins</span></div>"));
-
-    // One More strip — the habit loop, always one tap away.
-    var last = S.logs()[0];
-    var beat = h('<div class="beat"><div class="last">' + (last ? "One More · " + esc(exName(last.ex)) + " · " + relDay(last.date) : "No sessions logged yet") + "</div>" +
-      '<div class="now">' + (last ? "Last: " + last.val + " " + esc(exUnit(last.ex)) : "Start your streak") + "</div>" +
-      '<div class="why">' + (last ? "Next target <b class=\"hl\">" + targetVal(last) + " " + esc(exUnit(last.ex)) + "</b>" : "Log your first set to unlock the habit loop.") + "</div>" +
-      '<button class="btn btn-primary mt" id="beatBtn">' + (last ? "Log a set &amp; beat it" : "Log your first set") + "</button></div>");
-    node.appendChild(beat);
-
-    node.appendChild(h('<div class="eyebrow" style="margin:18px 0 12px">Exercise plan</div>'));
-    var grid = h('<div class="exgrid"></div>');
-    p.items.forEach(function (it) {
-      var done = S.logs().some(function (l) { return l.ex === it.ex && l.date === S.today(); });
-      var c = h('<div class="excard"><div class="ph">' + img(it.img, it.name) + (done ? '<span class="pill ok" style="position:absolute;top:8px;left:8px">Done ✓</span>' : "") + "</div><b>" + esc(it.name) + "</b><small>" + esc(it.sets) + "</small></div>");
-      c.onclick = function () { go("logdetail", it.ex); };
-      grid.appendChild(c);
-    });
-    node.appendChild(grid);
-
-    if (!S.isPremium()) {
-      node.appendChild(h('<div class="card mt"><h3>Unlock the full engine</h3><p class="sub mb">Unlimited logging, Tap In, food scans and body projections.</p></div>'));
-      var up = h('<button class="btn btn-primary">See GymBadge Pro</button>');
-      up.onclick = function () { go("pricing"); };
-      node.appendChild(up);
-    }
-
-    shell("workout", null, node);
-    setTimeout(function () { var b = $("#beatBtn"); if (b) b.onclick = function () { go("log"); }; }, 0);
+    if (window.GBPlan) window.GBPlan.screen(function (a, title, body, opts) { shell(a, title, body, opts); }, go);
+    else shell("workout", "My Plan", h('<p class="sub">Your plan is unavailable.</p>'));
   });
 
   /* Choose exercise to log */
@@ -396,7 +375,7 @@
       list.appendChild(rowBtn(exIcon(ex.type), ex.name, last ? "Last: " + last.val + " " + ex.unit + " · " + relDay(last.date) : "Not logged yet", function () { go("logdetail", ex.id); }));
     });
     node.appendChild(list);
-    shell("workout", "One More", node, { back: true });
+    shell("workout", "Exercise Tracker", node, { back: true });
   });
 
   route("logdetail", function (param) {
@@ -431,71 +410,42 @@
   });
 
   /* =======================================================================
-     EXERCISE (tab) — muscle map + Tap In equipment (feature #3)
+     EXERCISE (tab) — muscle map + Gym Equipment equipment (feature #3)
   ======================================================================= */
-  route("exercise", function () {
-    var node = h("<div></div>");
-    var search = h('<div class="search">🔍<input id="exq" placeholder="Search exercises"></div>');
-    node.appendChild(search);
-
-    var wrap = h('<div class="muscle-wrap">' + img("coach/model-male.jpg", "Muscle map") + "</div>");
-    MUSCLES.forEach(function (m) {
-      wrap.appendChild(h('<span class="muscle-dot" style="left:' + m.x + "%;top:" + m.y + '%"></span>'));
-      wrap.appendChild(h('<span class="muscle-label" style="left:' + (m.x + 3) + "%;top:" + (m.y - 2) + '%">' + m.n + "</span>"));
-    });
-    node.appendChild(wrap);
-    var labelsOn = true;
-    var labelBtn = h('<button class="btn btn-ghost btn-sm" id="changeModel">Hide muscle labels</button>');
-    var labelWrap = h('<div class="center mt"></div>');
-    labelWrap.appendChild(labelBtn);
-    node.appendChild(labelWrap);
-    labelBtn.onclick = function () {
-      labelsOn = !labelsOn;
-      wrap.querySelectorAll(".muscle-label").forEach(function (x) { x.style.display = labelsOn ? "" : "none"; });
-      labelBtn.textContent = labelsOn ? "Hide muscle labels" : "Show muscle labels";
-    };
-
-    // Tap In — NFC equipment status.
-    node.appendChild(h('<div class="eyebrow" style="margin:22px 0 12px">Tap In · live equipment</div>'));
-    var scan = h('<div class="scanframe">📲 Hold your phone near an equipment tag<div class="scanline"></div></div>');
-    node.appendChild(scan);
-    var sim = h('<button class="btn btn-primary mb">Simulate a tag tap</button>');
-    sim.onclick = function () { toast("NFC tap simulated — demo mode"); go("equipment", D.equipment[Math.floor(Math.random() * D.equipment.length)].id); };
-    node.appendChild(sim);
-
-    var chips = h('<div class="chips mb"></div>');
-    Object.keys(D.statusMeta).forEach(function (k) {
-      var m = D.statusMeta[k];
-      chips.appendChild(h('<span class="pill ' + m.pill + '">' + m.icon + " " + m.label + "</span>"));
-    });
-    node.appendChild(chips);
-
-    var list = h('<div class="list"></div>');
-    D.equipment.forEach(function (eq) {
-      var m = D.statusMeta[eq.status];
-      var r = h('<button class="row"><div class="ri">' + m.icon + '</div><div class="rm"><b>' + esc(eq.name) + "</b><small>" + esc(eq.zone) + '</small></div><div class="rr"><span class="pill ' + m.pill + '">' + m.label + "</span></div></button>");
-      r.onclick = function () { go("equipment", eq.id); };
-      list.appendChild(r);
-    });
-    node.appendChild(list);
-
-    var host = h('<div id="exResults" class="mt"></div>');
-    node.appendChild(host);
-    shell("exercise", "Exercises", node);
-    setTimeout(function () {
-      var inp = $("#exq");
-      if (inp) inp.oninput = function () {
-        var q = this.value.trim().toLowerCase();
-        host.innerHTML = "";
-        if (!q) return;
-        var hits = D.exercises.filter(function (e) { return e.name.toLowerCase().indexOf(q) > -1; });
-        if (!hits.length) { host.appendChild(h('<p class="sub center">No matches</p>')); return; }
-        var l = h('<div class="list"></div>');
-        hits.forEach(function (e) { l.appendChild(rowBtn(exIcon(e.type), e.name, "Log " + e.unit, function () { go("logdetail", e.id); })); });
-        host.appendChild(l);
-      };
-    }, 0);
+    route("exercise", function () {
+    if (window.GBLibrary) {
+      window.GBLibrary.screen(function (a, title, body, opts) { shell(a, title, body, opts); }, go);
+      return;
+    }
+    shell("exercise", "Workout Library", h('<p class="sub">The library is unavailable.</p>'));
   });
+
+  /* One exercise in full — instructions, safety and the photo gallery. */
+  route("exercisedetail", function (param) {
+    if (window.GBLibrary) {
+      window.GBLibrary.detail(function (a, title, body, opts) { shell(a, title, body, opts); }, go, param);
+      return;
+    }
+    go("exercise");
+  });
+
+  /* ---------- 3. Find a Trainer ---------- */
+  route("trainers", function () {
+    if (window.GBTrainers) {
+      window.GBTrainers.directory(function (a, title, body, opts) { shell(a, title, body, opts); }, go);
+      return;
+    }
+    shell("exercise", "Find a Trainer", h('<p class="sub">The trainer directory is unavailable.</p>'));
+  });
+
+  route("trainer", function (param) {
+    if (window.GBTrainers) {
+      window.GBTrainers.profile(function (a, title, body, opts) { shell(a, title, body, opts); }, go, param);
+      return;
+    }
+    go("trainers");
+  });
+
 
   route("equipment", function (param) {
     var eq = null;
@@ -507,7 +457,31 @@
     node.appendChild(h('<div class="list">' +
       '<div class="row"><div class="rm"><b>Last maintenance</b></div><div class="rr">' + esc(eq.lastMaint) + "</div></div>" +
       '<div class="row"><div class="rm"><b>Uses logged today</b></div><div class="rr">' + eq.uses + "</div></div>" +
-      '<div class="row"><div class="rm"><b>Availability</b></div><div class="rr">' + (eq.status === "usable" ? "✅ Safe to use" : "⛔ Avoid for now") + "</div></div></div>"));
+      '<div class="row"><div class="rm"><b>Availability</b></div><div class="rr">' + (eq.status === "usable" ? "✅ Safe to use" : "⛔ Avoid for now") + "</div></div>" +
+      '<div class="row"><div class="rm"><b>Last status update</b></div><div class="rr">' +
+        (eq.updatedAt ? esc(String(eq.updatedAt).slice(0, 10)) : "Not recorded") + "</div></div></div>"));
+
+    /* The written status report. Nothing is invented: when the gym has not
+       given a reason or a return date, we say exactly that. */
+    var rep2 = eq.report || {};
+    var statusCard = h('<div class="card mt"><h3>Status report</h3></div>');
+    function addLine(label, value) {
+      var text = (value === undefined || value === null || value === "") ? "" : String(value).trim();
+      var rowEl = h('<div class="sr-line"><b>' + esc(label) + "</b><small></small></div>");
+      rowEl.querySelector("small").textContent = text ||
+        "The gym has not provided this information yet.";
+      if (!text) rowEl.classList.add("unknown");
+      statusCard.appendChild(rowEl);
+    }
+    addLine("Current status", (D.statusMeta[eq.status] || {}).label || eq.status);
+    addLine("Reason for unavailability", rep2.reason);
+    addLine("Reported issue", rep2.reportedIssue);
+    addLine("Date reported", rep2.reportedAt);
+    addLine("Expected back", rep2.expectedBack);
+    addLine("Safety notice", rep2.safety);
+    addLine("Next action", rep2.nextAction);
+    addLine("Responsible team", rep2.responsible);
+    node.appendChild(statusCard);
     var reported = S.reported();
     var on = reported.indexOf(eq.id) >= 0;
     var rep = h('<button class="btn ' + (on ? "btn-primary" : "btn-ghost") + ' mt">' + (on ? "Reported ✓ — gym notified" : "Report an issue") + "</button>");
@@ -566,66 +540,81 @@
 
     node.appendChild(h('<div class="eyebrow" style="margin:24px 0 12px">Your tools</div>'));
     var tools = h('<div class="list"></div>');
-    tools.appendChild(rowBtn("📈", "One More", "Beat your last number", function () { go("log"); }));
-    tools.appendChild(rowBtn("📲", "Tap In", "Live equipment status", function () { go("exercise"); }));
-    tools.appendChild(rowBtn("🍽️", "Plate Truth", "See your plate for what it is", function () { go("plate"); }));
-    tools.appendChild(rowBtn("🪞", "Tomorrow You", "Meet the body you're building", function () { go("future"); }));
-    tools.appendChild(rowBtn("📍", "Your Floor", "Find a gym and book a slot", function () { go("find"); }));
+    tools.appendChild(rowBtn("📈", "Exercise Tracker", "Beat your last number", function () { go("log"); }));
+    tools.appendChild(rowBtn("📲", "Gym Equipment", "Live equipment status", function () { go("exercise"); }));
+    tools.appendChild(rowBtn("🍽️", "Nutrition Guide", "See your plate for what it is", function () { go("plate"); }));
+    tools.appendChild(rowBtn("🪞", "Body Goals", "Meet the body you're building", function () { go("future"); }));
+    tools.appendChild(rowBtn("📍", "Find a Gym", "Find a gym and book a slot", function () { go("find"); }));
     tools.appendChild(rowBtn("🎫", "Your Badge ID", "Profile, streak and settings", function () { go("profile"); }));
     node.appendChild(tools);
 
-    shell("library", "The Vault", node);
+    shell("library", "Workout Programs", node);
   });
 
-  /* Plate Truth — food scan (feature #4) */
+  /* Nutrition Guide — food scan (feature #4) */
+  /* =======================================================================
+     NUTRITION GUIDE — food explained, plainly (feature #4)
+   ======================================================================= */
   route("plate", function () {
     var node = h("<div></div>");
-    var premium = S.isPremium();
-    node.appendChild(h('<p class="sub mb">Snap your meal. AI breaks down the macros before it undoes your session.</p>'));
-    if (premium) node.appendChild(h('<div class="banner">Pro · unlimited scans</div>'));
-    else if (S.foodScansLeft() <= 5) node.appendChild(h('<div class="banner">' + S.foodScansLeft() + ' free scans left today · <a href="#/pricing">upgrade</a></div>'));
+    node.appendChild(h('<p class="sub mb">Food explained in plain language. Pick something to see what it is, what it does for you, and how it fits your goal.</p>'));
 
-    var frame = h('<div class="scanframe" style="border-style:solid;padding:0;overflow:hidden">' + img("meal/meal-1.jpg", "Your meal", "ph-img") + '<div class="scanline"></div></div>');
-    node.appendChild(frame);
-    var scan = h('<button class="btn btn-primary mb">Scan this meal</button>');
-    scan.onclick = function () {
-      if (!S.canScanFood()) return toast("Free limit reached — upgrade for unlimited");
-      analyze(Math.random() < 0.5 ? "grilled chicken" : "salad");
-    };
-    node.appendChild(scan);
+    if (!S.isPremium() && S.foodScansLeft() <= 5) {
+      node.appendChild(h('<div class="banner">' + S.foodScansLeft() + " free scans left today · <a href=\"#/pricing\">upgrade</a></div>"));
+    }
 
-    node.appendChild(h('<div class="eyebrow" style="margin:18px 0 10px">Meals to scan</div>'));
-    var meals = h('<div class="grid3"></div>');
-    [["meal/meal-1.jpg", "salad"], ["meal/meal-2.jpg", "grilled chicken"], ["meal/meal-3.jpg", "jollof rice"]].forEach(function (x) {
-      var t = h('<div class="ph" style="aspect-ratio:1">' + img(x[0], x[1]) + "</div>");
-      t.onclick = function () {
-        if (!S.canScanFood()) return toast("Free limit reached — upgrade for unlimited");
-        analyze(x[1]);
-      };
-      meals.appendChild(t);
-    });
-    node.appendChild(meals);
+    // Search + pick
+    var search = h('<div class="search">🔍<input id="foodQ" placeholder="Search a food or meal" autocomplete="off"></div>');
+    node.appendChild(search);
 
-    node.appendChild(h('<div class="eyebrow" style="margin:18px 0 10px">Or pick a meal</div>'));
-    var chips = h('<div class="chips"></div>');
-    Object.keys(D.foods).forEach(function (name) {
-      var c = h('<div class="chip">' + esc(name) + "</div>");
-      c.onclick = function () {
-        if (!S.canScanFood()) return toast("Free limit reached — upgrade for unlimited");
-        analyze(name);
-      };
-      chips.appendChild(c);
-    });
-    node.appendChild(chips);
+    var grid = h('<div class="food-grid"></div>');
+    node.appendChild(grid);
 
+    var list = h('<div class="list mt"></div>');
+    node.appendChild(list);
+
+    function paint(q) {
+      grid.innerHTML = "";
+      list.innerHTML = "";
+      var names = Object.keys(D.foods).filter(function (n) {
+        return !q || n.toLowerCase().indexOf(q.toLowerCase()) > -1;
+      });
+      // Photo tiles for the most common foods
+      names.slice(0, 6).forEach(function (name) {
+        var f = D.foods[name];
+        var c = h('<button class="food-tile"><div class="ph">' +
+          img(f.photo || "meal/meal-1.jpg", name) + "</div><b>" + esc(name) + "</b></button>");
+        c.onclick = function () { openFood(name); };
+        grid.appendChild(c);
+      });
+      names.forEach(function (name) {
+        var f = D.foods[name];
+        var r = h('<button class="row"><div class="ri">🍽️</div><div class="rm"><b>' + esc(name) +
+          "</b><small>" + esc(f.portion || "") + " · " + f.kcal + " kcal</small></div>" +
+          '<div class="rr"><span class="chev">›</span></div></button>');
+        r.onclick = function () { openFood(name); };
+        list.appendChild(r);
+      });
+      if (!names.length) {
+        list.appendChild(h('<div class="row"><div class="rm"><b>No food found</b><small>Try a different word.</small></div></div>'));
+      }
+    }
+    paint("");
+
+    setTimeout(function () {
+      var i = $("#foodQ", node);
+      if (i) i.oninput = function () { paint(this.value.trim()); };
+    }, 0);
+
+    // Today's intake
     if (S.foodLogs().length) {
-      node.appendChild(h('<div class="eyebrow" style="margin:18px 0 10px">Today\'s intake</div>'));
       var tot = { kcal:0, carbs:0, protein:0, fat:0, fiber:0 };
       var hist = h('<div class="list"></div>');
       S.foodLogs().slice(0, 10).forEach(function (f) {
         ["kcal","carbs","protein","fat","fiber"].forEach(function (k) { tot[k] += f[k] || 0; });
         hist.appendChild(h('<div class="row"><div class="rm"><b>' + esc(f.name) + '</b><small>' + f.kcal + " kcal · C " + f.carbs + "g · P " + f.protein + "g · F " + f.fat + 'g</small></div><div class="rr">' + verdictPill(f.verdict) + "</div></div>"));
       });
+      node.appendChild(h('<div class="eyebrow" style="margin:18px 0 10px">Today\'s intake</div>'));
       node.appendChild(hist);
       node.appendChild(h('<div class="card mt"><h3>Daily totals</h3>' +
         macroBar("Calories", tot.kcal, MAXES.kcal) +
@@ -634,16 +623,79 @@
         macroBar("Fat", tot.fat, MAXES.fat) +
         macroBar("Fiber", tot.fiber, MAXES.fiber) + "</div>"));
     }
-    shell("library", "Plate Truth", node, { back: true });
 
-    function analyze(name) {
-      var f = D.foods[name] || D.foods.salad;
-      S.addFood({ name:name, kcal:f.kcal, carbs:f.carbs, protein:f.protein, fat:f.fat, fiber:f.fiber, verdict:f.verdict });
-      toast("Scanned ✓"); render();
+    node.appendChild(h('<p class="faint small mt center">This is general nutrition education, not a personal diet plan. ' +
+      "For medical or dietary advice, speak to a qualified professional.</p>"));
+
+    shell("library", "Nutrition Guide", node, { back: true });
+
+    /* ---------------- one food, explained ---------------- */
+    function openFood(name) {
+      var f = D.foods[name];
+      if (!f) return;
+      var sheet = h('<div class="sheet-bg"><div class="sheet"></div></div>');
+      var panel = sheet.firstChild;
+
+      panel.appendChild(h('<div class="sheet-head"><h3>' + esc(name) + '</h3><button class="iconbtn" style="margin-left:auto" id="fdX">✕</button></div>'));
+
+      if (f.photo) {
+        panel.appendChild(h('<div class="ph" style="border-radius:14px;overflow:hidden;margin-bottom:14px">' +
+          img(f.photo, name) + "</div>"));
+      }
+
+      // The numbers, then the explanation
+      panel.appendChild(h('<div class="macros">' +
+        '<div class="mchip"><b>' + f.kcal + "</b><small>kcal</small></div>" +
+        '<div class="mchip"><b>' + f.carbs + "g</b><small>carbs</small></div>" +
+        '<div class="mchip"><b>' + f.protein + "g</b><small>protein</small></div>" +
+        '<div class="mchip"><b>' + f.fat + "g</b><small>fat</small></div>" +
+        '<div class="mchip"><b>' + f.fiber + "g</b><small>fibre</small></div>" +
+        "</div>"));
+
+      panel.appendChild(h('<p class="sub" style="margin-bottom:14px">' + esc(f.simple || f.what || "") + "</p>"));
+
+      function block(title, body) {
+        if (!body) return;
+        panel.appendChild(h('<div class="nut-block"><h4>' + esc(title) + "</h4><p>" + esc(body) + "</p></div>"));
+      }
+      function listBlock(title, items) {
+        if (!items || !items.length) return;
+        var b = h('<div class="nut-block"><h4>' + esc(title) + '</h4><ul class="plist"></ul></div>');
+        var ul = b.querySelector(".plist");
+        items.forEach(function (i) { ul.appendChild(h("<li>" + esc(i) + "</li>")); });
+        panel.appendChild(b);
+      }
+
+      block("What it is", f.what);
+      listBlock("Usual ingredients", f.ingredients);
+      block("Portion size", f.portion);
+      listBlock("What it gives you", f.contributions);
+      block("How it helps you", f.benefits);
+      block("How it fits your goal", f.goals);
+      block("Practical serving sizes", f.servings);
+      listBlock("Easy swaps", f.swaps);
+      listBlock("Allergens to watch for", f.allergens);
+      block("Cultural and regional variations", f.culture);
+      listBlock("Good meal combinations", f.combinations);
+
+      var log = h('<button class="btn btn-primary btn-lg mt">Add to today\'s intake</button>');
+      log.onclick = function () {
+        if (!S.canScanFood()) return toast("Free limit reached — upgrade for unlimited");
+        S.addFood({ name: name, kcal: f.kcal, carbs: f.carbs, protein: f.protein,
+                    fat: f.fat, fiber: f.fiber, verdict: f.verdict });
+        sheet.remove();
+        toast("Added to today\'s intake ✓");
+        render();
+      };
+      panel.appendChild(log);
+
+      $("#fdX", panel).onclick = function () { sheet.remove(); };
+      sheet.onclick = function (e) { if (e.target === sheet) sheet.remove(); };
+      document.body.appendChild(sheet);
     }
   });
 
-  /* Tomorrow You — projection (feature #5) */
+  /* Body Goals — projection (feature #5) */
   route("future", function () {
     var node = h("<div></div>");
     node.appendChild(h('<p class="sub mb">Pick the physique you\'re training for. Gym Badge builds the plan to get you there.</p>'));
@@ -660,7 +712,7 @@
     });
     node.appendChild(arch);
 
-    var preview = h('<div class="ph mt" style="aspect-ratio:3/4;position:relative">' + img("coach/model-male.jpg", "Your projection") + '<div style="position:absolute;inset:auto 0 0 0;padding:16px;background:linear-gradient(to top,rgba(0,0,0,.6),transparent);color:#fff"><b>Your projection appears here</b><div class="small" style="opacity:.85">Estimates only — not a medical tool.</div></div></div>');
+    var preview = h('<div class="ph mt" style="aspect-ratio:3/4;position:relative">' + img(modelImage("projection"), "Your projection") + '<div style="position:absolute;inset:auto 0 0 0;padding:16px;background:linear-gradient(to top,rgba(0,0,0,.6),transparent);color:#fff"><b>Your projection appears here</b><div class="small" style="opacity:.85">Estimates only — not a medical tool.</div></div></div>');
     node.appendChild(preview);
 
     var fileInp = h('<input type="file" accept="image/*" hidden>');
@@ -684,7 +736,7 @@
       go("projection");
     };
     node.appendChild(gen);
-    shell("library", "Tomorrow You", node, { back: true });
+    shell("library", "Body Goals", node, { back: true });
   });
 
   route("projection", function () {
@@ -703,7 +755,7 @@
     b.onclick = function () { toast("Goal saved to your badge 🎯"); go("progress"); };
     node.appendChild(b);
     node.appendChild(h('<p class="faint small center mt">Not a medical tool. Projections are estimates, not guarantees.</p>'));
-    shell("library", "Your projection", node, { back: true });
+    shell("library", "Body Goals", node, { back: true });
   });
 
   /* =======================================================================
@@ -749,9 +801,9 @@
         macroBar("Protein", tot.protein, MAXES.protein) + macroBar("Fat", tot.fat, MAXES.fat) +
         macroBar("Fiber", tot.fiber, MAXES.fiber) + "</div>"));
     } else {
-      node.appendChild(h('<div class="card"><h3>No meals scanned yet</h3><p class="sub">Scan a meal with Plate Truth to see your macros.</p></div>'));
+      node.appendChild(h('<div class="card"><h3>No meals scanned yet</h3><p class="sub">Scan a meal with Nutrition Guide to see your macros.</p></div>'));
     }
-    var pt = h('<button class="btn btn-ghost">Open Plate Truth</button>');
+    var pt = h('<button class="btn btn-ghost">Open Nutrition Guide</button>');
     pt.onclick = function () { go("plate"); };
     node.appendChild(pt);
 
@@ -808,7 +860,7 @@
   }
 
   /* =======================================================================
-     PROFILE (tab) — Badge ID + Your Floor (feature #6)
+     PROFILE (tab) — Badge ID + Find a Gym (feature #6)
   ======================================================================= */
   route("profile", function () {
     var u = S.user() || {};
@@ -836,9 +888,40 @@
       '<div class="row"><div class="ri">📏</div><div class="rm"><b>Height</b><small>' + esc(u.height ? u.height + " cm" : "Not set") + '</small></div></div>' +
       '<div class="row"><div class="ri">🔥</div><div class="rm"><b>Streak</b><small>' + S.streak() + ' days</small></div></div></div>'));
 
+    /* ---- Your Gym Badge Journey: tenure from the account creation date ---- */
+    var tenure = window.GBTrainers ? window.GBTrainers.tenure() : null;
+    if (tenure) {
+      var L = window.GBI18n;
+      var fmt = function (v) { return L ? L.fmtNumber(v) : String(v); };
+      var journey = h('<div class="card mt">' +
+        '<div class="eyebrow" style="margin-bottom:10px">Your GymBadge Journey</div>' +
+        '<div class="journey-grid">' +
+          '<div class="jn"><b>' + fmt(tenure.days) + "</b><small>days</small></div>" +
+          '<div class="jn"><b>' + fmt(tenure.weeks) + "</b><small>weeks</small></div>" +
+          '<div class="jn"><b>' + fmt(tenure.months) + "</b><small>months</small></div>" +
+          '<div class="jn"><b>' + fmt(tenure.years) + "</b><small>years</small></div>" +
+        "</div>" +
+        '<p class="faint small" style="margin:12px 0 0">Member since ' +
+        (L ? L.fmtDate(tenure.joined, { year: "numeric", month: "long", day: "numeric" }) : tenure.joined.toDateString()) +
+        ". This updates every time you open the app.</p></div>");
+      node.appendChild(journey);
+    }
+
+    /* ---- Your Trainer: who you train with, what is next, what came before ---- */
+    node.appendChild(h('<div class="eyebrow" style="margin:22px 0 10px">Your Trainer</div>'));
+    if (window.GBTrainers) {
+      node.appendChild(window.GBTrainers.yourTrainerSection());
+      window.GBTrainers.setProfileRerender(function () { render(); });
+    } else {
+      node.appendChild(h('<div class="list"><div class="row"><div class="rm"><b>Your Trainer</b><small>Book a coach to see your sessions here</small></div></div></div>'));
+    }
+    var findT = h('<button class="btn btn-ghost mt">Find a Trainer</button>');
+    findT.onclick = function () { go("trainers"); };
+    node.appendChild(findT);
+
     var list = h('<div class="list mt"></div>');
-    list.appendChild(rowBtn("✏️", "First Rep", "Name, goal, weight, height", function () { go("editprofile"); }));
-    list.appendChild(rowBtn("📍", "Your Floor", "Nearest gyms & slot booking", function () { go("find"); }));
+    list.appendChild(rowBtn("✏️", "My Profile", "Name, goal, weight, height", function () { go("editprofile"); }));
+    list.appendChild(rowBtn("📍", "Find a Gym", "Nearest gyms & slot booking", function () { go("find"); }));
     list.appendChild(rowBtn("⚙️", "Settings", "Account, security, language, music", function () { go("settings"); }));
     list.appendChild(rowBtn("🔒", "Security", "Password, email recovery, devices", function () { go("settings"); }));
     list.appendChild(rowBtn("❓", "Help & support", "FAQ, contact the team", function () { go("support"); }));
@@ -890,12 +973,30 @@
       '<div class="field"><label>Weight (kg)</label><input id="pWeight" type="number" inputmode="decimal" value="' + esc(u.weight || "") + '"></div>' +
       '<div class="field"><label>Height (cm)</label><input id="pHeight" type="number" inputmode="decimal" value="' + esc(u.height || "") + '"></div></div>'));
     node.appendChild(h('<div class="field"><label>Age</label><input id="pAge" type="number" inputmode="numeric" value="' + esc(u.age || "") + '"></div>'));
+    node.appendChild(h('<div class="field"><label>Phone number</label><input id="pPhone" type="tel" inputmode="tel" placeholder="' +
+      (window.GBCountries ? "e.g. " + GBCountries.formatPhone("8012345678", u.countryCode || "NG") : "+234 801 234 5678") +
+      '" value="' + esc(u.phone || "") + '"><span class="hint">Used for booking notifications only. Never shown publicly.</span></div>'));
     var gf = h('<div class="field"><label>Goal</label><select id="pGoal"></select></div>');
     node.appendChild(gf);
     D.goals.forEach(function (g) { var o = document.createElement("option"); o.textContent = g; if (g === u.goal) o.selected = true; $("#pGoal", gf).appendChild(o); });
-    var gf2 = h('<div class="field"><label>Country</label><select id="pCountry"></select></div>');
+    var gf2 = h('<div class="field"><label>Country</label><div id="pCountryPicker"></div>' +
+      '<span class="hint" id="pCountryDial"></span></div>');
     node.appendChild(gf2);
-    D.countries.forEach(function (c) { var o = document.createElement("option"); o.textContent = c; if (c === u.country) o.selected = true; $("#pCountry", gf2).appendChild(o); });
+    var countryState = { code: u.countryCode || "NG", name: u.country || "Nigeria" };
+    if (window.GBCountries) {
+      var found = GBCountries.find(countryState.code);
+      if (found) { countryState = { code: found.code, name: found.name }; }
+      $("#pCountryPicker", gf2).appendChild(window.GBCountries.picker({
+        value: countryState.code,
+        onChange: function (c) {
+          countryState = { code: c.code, name: c.name };
+          var d = $("#pCountryDial", gf2);
+          if (d) d.textContent = "International dialling code " + (c.dial || "not listed");
+        }
+      }));
+      var dialEl = $("#pCountryDial", gf2);
+      if (dialEl) dialEl.textContent = "International dialling code " + (found ? found.dial : "+234");
+    }
     var save = h('<button class="btn btn-primary btn-lg">Save changes</button>');
     save.onclick = function () {
       var nu = Object.assign({}, u, {
@@ -904,12 +1005,15 @@
         weight: parseFloat($("#pWeight", node).value) || u.weight,
         height: parseFloat($("#pHeight", node).value) || u.height,
         age: parseFloat($("#pAge", node).value) || u.age,
-        goal: $("#pGoal", node).value, country: $("#pCountry", node).value
+        goal: $("#pGoal", node).value,
+        country: countryState.name,
+        countryCode: countryState.code,
+        phone: $("#pPhone", node) ? $("#pPhone", node).value.trim() : (u.phone || "")
       });
       S.setUser(nu); toast("Saved ✓"); go("profile");
     };
     node.appendChild(save);
-    shell("profile", "First Rep", node, { back: true });
+    shell("profile", "My Profile", node, { back: true });
   });
 
   route("prefs", function () {
@@ -1006,9 +1110,9 @@
     var node = h("<div></div>");
     var list = h('<div class="list"></div>');
     [["How do I scan equipment?", "Tap your phone on the NFC tag or scan the QR by the machine."],
-     ["What is One More?", "Gym Badge remembers your last number and sets the next target to beat."],
+     ["What is the Exercise Tracker?", "Gym Badge remembers your last number and sets the next target to beat."],
      ["How do projections work?", "Estimates from your goal and body data — never a guarantee."],
-     ["Delete my data", "You can export or delete everything from First Rep."]].forEach(function (f) {
+     ["Delete my data", "You can export or delete everything from My Profile."]].forEach(function (f) {
       list.appendChild(h('<div class="row" style="flex-direction:column;align-items:flex-start;gap:4px"><b>' + f[0] + '</b><small>' + f[1] + "</small></div>"));
     });
     node.appendChild(list);
@@ -1046,7 +1150,7 @@
       });
       node.appendChild(bl);
     }
-    shell("profile", "Your Floor", node, { back: true });
+    shell("profile", "Find a Gym", node, { back: true });
   });
 
   function openSlots(g) {
@@ -1080,9 +1184,9 @@
   route("pricing", function () {
     var node = h("<div></div>");
     var cur = S.get().currency || "NGN";
-    node.appendChild(h('<div class="center"><span class="pro-badge">GYMBADGE PRO</span><h2 class="headline mt" style="margin-top:12px">Workouts made <span class="hl">simple</span></h2><p class="sub">Unlock the full engine — One More, Tap In, Plate Truth and Tomorrow You.</p></div>'));
+    node.appendChild(h('<div class="center"><span class="pro-badge">GYMBADGE PRO</span><h2 class="headline mt" style="margin-top:12px">Workouts made <span class="hl">simple</span></h2><p class="sub">Unlock the full engine — the Exercise Tracker, Gym Equipment, Nutrition Guide and Body Goals.</p></div>'));
     node.appendChild(h('<div class="card center mt"><div style="font-size:1.4rem;letter-spacing:.1em">★★★★★</div><p class="sub">Loved by 48k+ active members</p></div>'));
-    node.appendChild(h('<ul class="feat card"><li><i>✓</i> One More · unlimited logging and history</li><li><i>✓</i> Tap In · live NFC equipment status</li><li><i>✓</i> Plate Truth · unlimited meal scans</li><li><i>✓</i> Tomorrow You · unlimited projections</li></ul>'));
+    node.appendChild(h('<ul class="feat card"><li><i>✓</i> Exercise Tracker · unlimited logging and history</li><li><i>✓</i> Gym Equipment · live NFC equipment status</li><li><i>✓</i> Nutrition Guide · unlimited meal scans</li><li><i>✓</i> Body Goals · unlimited projections</li></ul>'));
 
     // Currency
     var curBar = h('<div class="field"><label>Show amounts in</label><select id="curSel"></select></div>');
@@ -1152,6 +1256,13 @@
     setTimeout(function () { if (splash) splash.classList.add("hide"); }, 650);
     if (!location.hash) location.hash = S.user() ? "#/workout" : "#/welcome";
     render();
+    if (window.GBChat) {
+      window.GBChat.mount();
+      // Repaint the assistant when the member changes language.
+      window.addEventListener("lang:change", function () {
+        if (window.GBChat) window.GBChat.mount();
+      });
+    }
   }
   boot();
 

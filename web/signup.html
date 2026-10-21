@@ -10,6 +10,9 @@
 <link rel="stylesheet" href="/web/assets/css/site.css">
 <link rel="stylesheet" href="/assets/shared.css">
 <script src="/assets/i18n.js"></script>
+<script src="/assets/i18n-ext.js"></script>
+<script src="/assets/countries.js"></script>
+<script src="/app/assets/js/chat.js"></script>
 <script src="/assets/pw.js"></script>
 <script src="/assets/theme.js"></script>
 </head>
@@ -66,7 +69,9 @@
         </div>
         <div class="field">
           <label for="country">Country</label>
-          <select id="country"></select>
+          <div id="countryPicker"></div>
+          <input type="hidden" id="country" value="NG">
+          <span class="hint" id="countryDial">International dialling code +234</span>
         </div>
       </div>
       <button class="btn btn-primary" type="submit" id="submitBtn" style="width:100%">Create free account</button>
@@ -114,10 +119,25 @@
 <script src="/web/assets/js/chrome.js"></script>
 <script>
 (function () {
-  var countries = ["Nigeria","Ghana","Kenya","South Africa","Egypt","United Kingdom","United States","Canada","Australia","Germany","France","India","United Arab Emirates","Brazil","Mexico","Japan","Other"];
-  document.getElementById("country").innerHTML = countries.map(function (c) {
-    return '<option value="' + c + '">' + c + "</option>";
-  }).join("");
+  // Country is a searchable picker with a flag, the country name, the
+  // standard code and the international dialling code. It is deliberately
+  // separate from the language setting: one country can have many languages.
+  var countryState = { code: "NG", name: "Nigeria" };
+  if (window.GBCountries) {
+    var found = GBCountries.find("NG");
+    if (found) countryState = { code: found.code, name: found.name };
+    document.getElementById("countryPicker").appendChild(GBCountries.picker({
+      value: countryState.code,
+      onChange: function (c) {
+        countryState = { code: c.code, name: c.name };
+        document.getElementById("country").value = c.code;
+        document.getElementById("countryDial").textContent =
+          "International dialling code " + (c.dial || "not listed");
+      }
+    }));
+  }
+  document.getElementById("countryDial").textContent =
+    "International dialling code " + (found ? found.dial : "+234");
 
   var flash = document.getElementById("flash");
   var submitBtn = document.getElementById("submitBtn");
@@ -222,7 +242,8 @@
     submitBtn.disabled = true;
     submitBtn.textContent = "Creating your badge…";
 
-    GBAuth.signup({ name: name, email: email, password: pw, role: role, country: country })
+    GBAuth.signup({ name: name, email: email, password: pw, role: role,
+                    country: countryState.name, countryCode: countryState.code })
       .then(function (res) {
         submitBtn.disabled = false;
         submitBtn.textContent = "Create free account";

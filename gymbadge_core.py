@@ -128,6 +128,8 @@ def valid_password(pw: str) -> tuple[bool, str]:
 # storage — a tiny JSON store with a process-wide lock
 # --------------------------------------------------------------------------
 
+import gymbadge_content as content  # noqa: E402  (needs _DB and db_save)
+
 _LOCK = threading.RLock()
 _DB: dict = {"users": {}, "sessions": {}, "verify": {}, "reset": {}, "revoked": {}}
 
@@ -427,6 +429,8 @@ def public_user(rec: dict) -> dict:
         "verified": bool(rec.get("verified")),
         "role": rec.get("role", "individual"),
         "country": rec.get("country", ""),
+        "countryCode": rec.get("countryCode", ""),
+        "phone": rec.get("phone", ""),
         "idVerified": bool(rec.get("idVerified")),
         "idMasked": rec.get("idMasked", ""),
         "idType": rec.get("idType", ""),
@@ -621,6 +625,8 @@ def api_signup(body: dict, headers) -> tuple[int, dict]:
             "verified": False,
             "role": body.get("role") or "individual",
             "country": body.get("country") or "",
+            "countryCode": body.get("countryCode") or "",
+            "phone": body.get("phone") or "",
             "idVerified": False,
             "idMasked": "",
             "idType": "",
@@ -843,7 +849,7 @@ ROUTE_TABLE = {
 }
 
 
-def api_dispatch(method: str, path: str, body: dict, headers) -> tuple[int, dict]:
+def api_dispatch(method: str, path: str, body: dict, headers, environ=None) -> tuple[int, dict]:
     """Route one API call. Returns (http_status, json_payload)."""
     prune()
 
@@ -853,6 +859,24 @@ def api_dispatch(method: str, path: str, body: dict, headers) -> tuple[int, dict
         return api_profile(headers)
     if path in ("/api/healthz", "/healthz") and method == "GET":
         return (200, {"ok": True, "smtp": mail_configured()})
+
+    # Content, community and assistant endpoints.
+    if method == "GET" and path == "/api/trainers":
+        return content.api_trainers(body, headers, environ)
+    if method == "POST" and path == "/api/chat":
+        return content.api_chat(body, headers, environ)
+    if method == "POST" and path == "/api/translate":
+        return content.api_translate(body, headers, environ)
+    if method == "POST" and path == "/api/trainers/apply":
+        return content.api_trainer_apply(body, headers, environ)
+    if method == "POST" and path == "/api/trainers/review":
+        return content.api_trainer_review(body, headers, environ)
+    if method == "POST" and path == "/api/exercises/submit":
+        return content.api_exercise_submit(body, headers, environ)
+    if method == "POST" and path == "/api/exercises/review":
+        return content.api_exercise_review(body, headers, environ)
+    if method == "POST" and path == "/api/equipment":
+        return content.api_equipment_update(body, headers, environ)
 
     fn = ROUTE_TABLE.get(f"{method} {path}")
     if fn:

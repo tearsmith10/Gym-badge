@@ -569,3 +569,123 @@ p { margin: 0; }
 .np-tx b { display: block; font-size: .9rem; font-weight: 650; }
 .np-tx small { display: block; color: var(--muted); font-size: .78rem; margin-top: 2px;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+
+/* ==========================================================================
+   GYM BADGE — NEW SCREENS
+   Workout Library gallery, My Plan, Nutrition Guide, Gym Equipment reports,
+   trainers, the account journey and the AI support assistant.
+   ========================================================================== */
+
+/* ---------- photo gallery / carousel ---------- */
+.gal{position:relative;border-radius:var(--r);overflow:hidden;background:var(--surface-2);margin-bottom:6px}
+.gal:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.gal-track{display:flex;transition:transform .32s cubic-bezier(.2,.7,.3,1);will-change:transform}
+.gal-slide{flex:0 0 100%;aspect-ratio:4/3;background:var(--surface-2);display:grid;place-items:center;overflow:hidden}
+.gal-slide img{width:100%;height:100%;object-fit:cover}
+.gal-slide.gal-missing{gap:6px;flex-direction:column;color:var(--muted);text-align:center;padding:16px}
+.gal-slide.gal-missing span{font-size:1.8rem;opacity:.6}
+.gal-slide.gal-missing small{font-size:.74rem;max-width:210px;line-height:1.4}
+.gal-nav{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:36px;height:36px;border-radius:50%;border:0;
+  background:rgba(0,0,0,.55);color:#fff;font-size:1.4rem;line-height:1;cursor:pointer;
+  display:grid;place-items:center;z-index:2;backdrop-filter:blur(4px);
+}
+.gal-nav:hover{background:rgba(0,0,0,.78)}
+.gal-prev{left:8px}
+.gal-next{right:8px;transform:translateY(-50%) rotate(180deg)}
+.gal-dots{position:absolute;left:0;right:0;bottom:8px;display:flex;justify-content:center;gap:6px;z-index:2}
+.gal-dot{width:7px;height:7px;border-radius:50%;border:0;background:rgba(255,255,255,.45);cursor:pointer;padding:0}
+.gal-dot.on{background:var(--accent);transform:scale(1.25)}
+
+/* ---------- steps list ---------- */
+.steps-list{margin:8px 0 0;padding-left:20px}
+.steps-list li{font-size:.9rem;line-height:1.55;margin-bottom:9px}
+.steps-list li:last-child{margin-bottom:0}
+
+/* ---------- plan ---------- */
+.plan-item-note{color:var(--muted);font-size:.76rem}
+.plan-day-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+
+/* ---------- nutrition guide ---------- */
+.food-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.food-tile{background:none;border:0;padding:0;cursor:pointer;text-align:left;font:inherit}
+.food-tile .ph{border-radius:12px;overflow:hidden;aspect-ratio:1}
+.food-tile .ph img{width:100%;height:100%;object-fit:cover}
+.food-tile b{display:block;font-size:.76rem;margin-top:6px;font-weight:600;line-height:1.25}
+.nut-block{margin:0 0 16px}
+.nut-block h4{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.nut-block p{font-size:.88rem;line-height:1.55;color:var(--text)}
+.nut-block .plist li{margin-bottom:6px}
+
+/* ---------- equipment status report ---------- */
+.sr-line{padding:10px 0;border-bottom:1px solid var(--line)}
+.sr-line:last-child{border-bottom:0}
+.sr-line b{display:block;font-size:.78rem;font-weight:650;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.sr-line small{display:block;font-size:.88rem;line-height:1.5;margin-top:3px}
+.sr-line.unknown small{color:var(--muted);font-style:italic}
+
+/* ---------- trainers ---------- */
+.tr-ava{width:84px;height:84px;border-radius:50%;margin:0 auto;overflow:hidden;background:var(--surface-2);
+  display:grid;place-items:center;font-size:1.8rem;font-weight:800;color:var(--muted)}
+.tr-ava img{width:100%;height:100%;object-fit:cover}
+
+/* ---------- account journey ---------- */
+.journey-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.jn{background:var(--surface-2);border-radius:12px;padding:12px 6px;text-align:center}
+.jn b{display:block;font-size:1.15rem;font-weight:800;color:var(--accent);line-height:1.1}
+.jn small{display:block;font-size:.64rem;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.06em}
+
+/* ---------- AI support assistant ---------- */
+.gb-chat-fab{
+  position:fixed;right:16px;bottom:calc(var(--nav-h) + 16px);z-index:130;
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--accent);color:var(--on-accent);border:0;border-radius:999px;
+  padding:12px 18px;cursor:pointer;font:inherit;font-size:.86rem;font-weight:700;
+  box-shadow:0 10px 26px rgba(0,0,0,.45);
+}
+.gb-chat-fab .gb-chat-ic{font-size:1rem}
+.gb-chat-fab:hover{filter:brightness(1.06)}
+.gb-chat-fab.on{background:var(--surface);color:var(--text);border:1.5px solid var(--line)}
+
+.gb-chat{
+  position:fixed;right:16px;bottom:calc(var(--nav-h) + 70px);z-index:131;
+  width:min(380px,calc(100vw - 32px));max-height:min(560px,72vh);
+  display:flex;flex-direction:column;
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 18px 48px rgba(0,0,0,.6);overflow:hidden;
+}
+.gb-chat[hidden]{display:none}
+.gb-chat-head{display:flex;align-items:center;gap:10px;padding:14px 14px;border-bottom:1px solid var(--line)}
+.gb-chat-title{flex:1;min-width:0}
+.gb-chat-title b{display:block;font-size:.92rem}
+.gb-chat-title small{display:block;font-size:.72rem;color:var(--muted);margin-top:2px}
+.gb-chat-log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.gb-bubble{max-width:88%}
+.gb-bubble-body{font-size:.86rem;line-height:1.5;padding:10px 13px;border-radius:14px}
+.gb-bot .gb-bubble-body{background:var(--surface-2);border-bottom-left-radius:5px}
+.gb-user{align-self:flex-end}
+.gb-user .gb-bubble-body{background:var(--accent);color:var(--on-accent);border-bottom-right-radius:5px}
+.gb-ask{display:block;margin-top:8px;font-size:.8rem;color:var(--muted);font-style:italic}
+.gb-typing{display:inline-flex;gap:4px;align-items:center}
+.gb-typing i{width:6px;height:6px;border-radius:50%;background:var(--muted);display:inline-block;animation:gbblink 1.1s infinite}
+.gb-typing i:nth-child(2){animation-delay:.18s}
+.gb-typing i:nth-child(3){animation-delay:.36s}
+@keyframes gbblink{0%,60%,100%{opacity:.3}30%{opacity:1}}
+.gb-chat-quick{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px}
+.gb-quick{background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:6px 11px;
+  font-size:.74rem;color:var(--text);cursor:pointer;font:inherit}
+.gb-quick:hover{border-color:var(--accent);color:var(--accent)}
+.gb-chat-form{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--line)}
+.gb-chat-form input{flex:1;min-height:42px;border-radius:999px;border:1.5px solid var(--line);
+  background:var(--surface-2);color:var(--text);padding:0 15px;font:inherit;font-size:.86rem;outline:none}
+.gb-chat-form input:focus{border-color:var(--accent)}
+.gb-chat-send{width:42px;height:42px;border-radius:50%;border:0;background:var(--accent);color:var(--on-accent);
+  cursor:pointer;font-size:.95rem;flex:none}
+.gb-chat-foot{padding:8px 14px 12px;font-size:.68rem;color:var(--muted);text-align:center;letter-spacing:.02em}
+
+@media (max-width:420px){
+  .journey-grid{grid-template-columns:repeat(2,1fr)}
+  .food-grid{grid-template-columns:repeat(2,1fr)}
+}

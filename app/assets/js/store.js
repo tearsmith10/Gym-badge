@@ -91,6 +91,8 @@ window.GBStore = (function () {
     // daily counters (freemium meter — generous while testing)
     canScanFood: function () { return bumpDaily("scans", LIMITS.scans); },
     foodScansLeft: function () { return remaining("scans", LIMITS.scans); },
+    /* Alias, so a screen can ask for the remaining scans either way. */
+    scansLeft: function () { return remaining("scans", LIMITS.scans); },
     canTrial: function () { return bumpDaily("trials", LIMITS.trials); },
     trialsLeft: function () { return remaining("trials", LIMITS.trials); },
     canProject: function () { return bumpDaily("projections", LIMITS.projections); },

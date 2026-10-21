@@ -10,6 +10,9 @@
 <link rel="stylesheet" href="/web/assets/css/site.css">
 <link rel="stylesheet" href="/assets/shared.css">
 <script src="/assets/i18n.js"></script>
+<script src="/assets/i18n-ext.js"></script>
+<script src="/assets/countries.js"></script>
+<script src="/app/assets/js/chat.js"></script>
 <script src="/assets/pw.js"></script>
 <script src="/assets/theme.js"></script>
 </head>
@@ -31,7 +34,7 @@
       <h2 style="margin:16px 0 16px"><span class="power">Progress you can see</span> beats motivation you can't feel</h2>
       <p class="muted" style="font-size:1.05rem;margin-bottom:14px">Motivation fades by week three. What keeps people training is a number to beat, a streak to protect, and proof that last month's effort added up. That's the product we built.</p>
       <p class="muted" style="font-size:1.05rem">Gym Badge remembers your sets, tells you when a machine's free, shows what's really on your plate, and projects the body you're working toward — one honest step at a time.</p>
-      <div class="hero-cta"><a class="btn btn-primary" href="/signup">Join free</a><a class="btn btn-ghost" href="/#features">See the features</a></div>
+      <div class="hero-cta"><a class="btn btn-primary" href="/signup">Join Now</a><a class="btn btn-ghost" href="/#features">See the features</a></div>
     </div>
   </div>
 </section>
@@ -42,7 +45,7 @@
     <div class="stats reveal">
       <div class="stat"><div class="big">250k+</div><div class="lbl">sets logged</div></div>
       <div class="stat"><div class="big">1,200+</div><div class="lbl">gyms mapped</div></div>
-      <div class="stat"><div class="big">16</div><div class="lbl">currencies supported</div></div>
+      <div class="stat"><div class="big">35</div><div class="lbl">languages supported</div></div>
       <div class="stat"><div class="big">4.9★</div><div class="lbl">average rating</div></div>
     </div>
   </div>
@@ -54,7 +57,7 @@
     <div class="grid g3">
       <article class="card reveal"><span class="tag">01</span><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6l-8-4z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Your data is yours</h3><p>We never sell data. Photos are optional, encrypted, and deletable anytime. Logs stay under your control.</p></article>
       <article class="card reveal"><span class="tag">02</span><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Small wins compound</h3><p>Every feature is built around one more rep, one more minute — targets you can actually hit and beat.</p></article>
-      <article class="card reveal"><span class="tag">03</span><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6-7-11a7 7 0 0114 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div><h3>Built for everywhere</h3><p>16 currencies, offline first, works on any device in any market. Wellness, not a medical device.</p></article>
+      <article class="card reveal"><span class="tag">03</span><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6-7-11a7 7 0 0114 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div><h3>Built for everywhere</h3><p>35 languages, offline first, works on any device in any market. Wellness, not a medical device.</p></article>
     </div>
   </div>
 </section>
@@ -70,7 +73,7 @@
   <div class="wrap">
     <div class="cta-band reveal">
       <h2>Come build the habit <span class="power">with us</span></h2>
-      <p>Free to start. Your streak, logs and orders sync everywhere.</p>
+      <p>Free to start. Your streak, logs and plans sync everywhere.</p>
       <div class="hero-cta"><a class="btn btn-primary btn-lg" href="/signup">Create your badge</a><a class="btn btn-ghost btn-lg" href="/reviews">Read reviews</a></div>
     </div>
   </div>
@@ -88,10 +91,12 @@
 <script>
 (function () {
   var team = [
-    ["trainer-1", "Ada Okafor", "Founder & Head Coach"],
-    ["member-3", "Marcus D.", "Engineering"],
-    ["trainer-4", "Zainab Musa", "Product & Design"],
-    ["member-8", "James Otieno", "Community"]
+    ["trainer-1", "Abiodun A.", "Product"],
+    ["trainer-3", "Sodiq A.", "CTO"],
+    ["member-3", "Fahd A. Ridwan M.", "Engineering"],
+    ["member-4", "Faizal T. Ayomide A.", "Design"],
+    ["trainer-4", "Fatimah A.", "Ops and Marketing"],
+    ["member-8", "Zulyqa G.", "QA and Community"]
   ];
   document.getElementById("team").innerHTML = team.map(function (t) {
     return '<div class="member"><div class="ph" data-photo="' + t[0] + '"><div class="ph-fallback">' +

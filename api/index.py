@@ -112,7 +112,7 @@ def app(environ, start_response):
     body = _read_body(environ) if method == "POST" else {}
 
     try:
-        status, payload = core.api_dispatch(method, path, body, environ)
+        status, payload = core.api_dispatch(method, path, body, environ, environ)
     except Exception as exc:  # never leak a stack trace to the client
         print(f"[api] {method} {path} failed: {exc}", file=sys.stderr)
         status, payload = 500, {"ok": False, "error": "Something went wrong on our side."}
@@ -147,7 +147,7 @@ try:
             print(f"[api-handler] {self.command} {self.path} -> body keys: "
                   f"{sorted(body.keys()) if body else 'none'}", file=sys.stderr)
             status, payload = core.api_dispatch(
-                self.command, urlparse(self.path).path, body, self.headers)
+                self.command, urlparse(self.path).path, body, self.headers, None)
             data = json.dumps(payload).encode("utf-8")
             self.send_response(status)
             self.send_header("Content-Type", "application/json; charset=utf-8")

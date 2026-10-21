@@ -16,7 +16,9 @@
   var K = {
     user: "gb_web_user",
     cur: "gb_web_currency",
-    subs: "gb_web_subscriptions"
+    subs: "gb_web_subscriptions",
+    bookings: "gb_web_bookings",
+    country: "gb_web_country"
   };
 
   function read(key, fallback) {
@@ -57,6 +59,30 @@
     global.dispatchEvent(new CustomEvent("currency:change", { detail: code }));
   }
 
+  /* ---- Trainer bookings ----
+     item: { id, trainerId, trainerName, when, mode, status, note } */
+  function getBookings() { return read(K.bookings, []); }
+  function saveBookings(list) { write(K.bookings, list || []); }
+  function addBooking(b) {
+    var all = getBookings();
+    b.id = b.id || ("tb" + Date.now().toString(36));
+    b.at = b.at || new Date().toISOString();
+    b.status = b.status || "confirmed";
+    all.unshift(b);
+    saveBookings(all);
+    return b;
+  }
+  function cancelBooking(id) { saveBookings(getBookings().filter(function (b) { return b.id !== id; })); }
+  function rescheduleBooking(id, when) {
+    saveBookings(getBookings().map(function (b) {
+      return b.id === id ? Object.assign({}, b, { when: when, status: "rescheduled" }) : b;
+    }));
+  }
+
+  /* ---- Country (separate from language: one country, many languages) --- */
+  function getCountry() { return read(K.country, { code: "NG", name: "Nigeria", dial: "+234" }); }
+  function setCountry(c) { write(K.country, c || { code: "NG", name: "Nigeria", dial: "+234" }); }
+
   /* ---- Membership (the plan the user is on) ---- */
   function getSub() { return read(K.subs, { plan: "free" }); }
   function setSub(plan) {
@@ -68,6 +94,13 @@
     getUser: getUser, setUser: setUser, updateUser: updateUser,
     clearUser: clearUser, isAuthed: isAuthed,
     getCur: getCur, setCur: setCur,
-    getSub: getSub, setSub: setSub
+    getSub: getSub, setSub: setSub,
+    getBookings: getBookings, addBooking: addBooking,
+    cancelBooking: cancelBooking, rescheduleBooking: rescheduleBooking,
+    getCountry: getCountry, setCountry: setCountry,
+    __fmt: function (v) {
+      if (global.GBI18n) return global.GBI18n.fmtNumber(v);
+      return String(v);
+    }
   };
 })(typeof window !== "undefined" ? window : this);

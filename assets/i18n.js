@@ -74,8 +74,112 @@
     { code: "fil",   flag: "🇵🇭", name: "Filipino",   native: "Filipino",   dir: "ltr" }
   ];
 
+  /* ---------------- languages available on demand ----------------
+     The 35 languages above ship with a complete, hand-checked dictionary.
+     These additional languages are translated at runtime by the service at
+     /api/translate, in one batched request per page, and cached on the
+     device so it is never paid for twice. */
+  var ON_DEMAND = [
+    { code:"af", flag:"🇿🇦", name:"Afrikaans",  native:"Afrikaans" },
+    { code:"sq", flag:"🇦🇱", name:"Albanian",    native:"Shqip" },
+    { code:"hy", flag:"🇦🇲", name:"Armenian",   native:"Հայերեն" },
+    { code:"az", flag:"🇦🇿", name:"Azerbaijani", native:"Azərbaycan" },
+    { code:"eu", flag:"🇪🇸", name:"Basque",      native:"Euskara" },
+    { code:"be", flag:"🇧🇾", name:"Belarusian",  native:"Беларуская" },
+    { code:"bs", flag:"🇧🇦", name:"Bosnian",     native:"Bosanski" },
+    { code:"bg", flag:"🇧🇬", name:"Bulgarian",   native:"Български" },
+    { code:"ca", flag:"🇦🇩", name:"Catalan",     native:"Català" },
+    { code:"ceb", flag:"🇵🇭", name:"Cebuano",   native:"Cebuano" },
+    { code:"hr", flag:"🇭🇷", name:"Croatian",    native:"Hrvatski" },
+    { code:"cs", flag:"🇨🇿", name:"Czech",       native:"Čeština" },
+    { code:"da", flag:"🇩🇰", name:"Danish",      native:"Dansk" },
+    { code:"et", flag:"🇪🇪", name:"Estonian",    native:"Eesti" },
+    { code:"fi", flag:"🇫🇮", name:"Finnish",     native:"Suomi" },
+    { code:"gl", flag:"🇪🇸", name:"Galician",    native:"Galego" },
+    { code:"ka", flag:"🇬🇪", name:"Georgian",    native:"ქართული" },
+    { code:"el", flag:"🇬🇷", name:"Greek",       native:"Ελληνικά" },
+    { code:"gu", flag:"🇮🇳", name:"Gujarati",    native:"ગુજરાતી" },
+    { code:"is", flag:"🇮🇸", name:"Icelandic",   native:"Íslenska" },
+    { code:"ig", flag:"🇳🇬", name:"Igbo",        native:"Igbo" },
+    { code:"jv", flag:"🇮🇩", name:"Javanese",    native:"Basa Jawa" },
+    { code:"kn", flag:"🇮🇳", name:"Kannada",     native:"ಕನ್ನಡ" },
+    { code:"kk", flag:"🇰🇿", name:"Kazakh",      native:"Қазақша" },
+    { code:"km", flag:"🇰🇭", name:"Khmer",       native:"ខ្មែរ" },
+    { code:"rw", flag:"🇷🇼", name:"Kinyarwanda", native:"Ikinyarwanda" },
+    { code:"ku", flag:"🇰🇷", name:"Kurdish",     native:"Kurdî" },
+    { code:"ky", flag:"🇰🇬", name:"Kyrgyz",      native:"Кыргызча" },
+    { code:"lo", flag:"🇱🇦", name:"Lao",         native:"ລາວ" },
+    { code:"lv", flag:"🇱🇻", name:"Latvian",     native:"Latviešu" },
+    { code:"lt", flag:"🇱🇹", name:"Lithuanian",  native:"Lietuvių" },
+    { code:"lb", flag:"🇱🇺", name:"Luxembourgish", native:"Lëtzebuergesch" },
+    { code:"mk", flag:"🇲🇰", name:"Macedonian",  native:"Македонски" },
+    { code:"mg", flag:"🇲🇬", name:"Malagasy",    native:"Malagasy" },
+    { code:"ms", flag:"🇲🇾", name:"Malay",       native:"Bahasa Melayu" },
+    { code:"ml", flag:"🇮🇳", name:"Malayalam",   native:"മലയാളം" },
+    { code:"mt", flag:"🇲🇹", name:"Maltese",     native:"Malti" },
+    { code:"mi", flag:"🇳🇿", name:"Maori",       native:"Te Reo Māori" },
+    { code:"mn", flag:"🇲🇳", name:"Mongolian",   native:"Монгол" },
+    { code:"ne", flag:"🇳🇵", name:"Nepali",      native:"नेपाली" },
+    { code:"no", flag:"🇳🇴", name:"Norwegian",   native:"Norsk" },
+    { code:"ps", flag:"🇦🇫", name:"Pashto",      native:"پښتو" },
+    { code:"fa", flag:"🇮🇷", name:"Persian",     native:"فارسی" },
+    { code:"st", flag:"🇿🇦", name:"Sesotho",     native:"Sesotho" },
+    { code:"sn", flag:"🇿🇼", name:"Shona",       native:"ChiShona" },
+    { code:"sd", flag:"🇵🇰", name:"Sindhi",      native:"سنڌي" },
+    { code:"si", flag:"🇱🇰", name:"Sinhala",     native:"සිංහල" },
+    { code:"sk", flag:"🇸🇰", name:"Slovak",      native:"Slovenčina" },
+    { code:"sl", flag:"🇸🇮", name:"Slovenian",   native:"Slovenščina" },
+    { code:"so", flag:"🇸🇴", name:"Somali",      native:"Soomaali" },
+    { code:"st2",flag:"🇿🇦", name:"Sotho",       native:"Sesotho" },
+    { code:"su", flag:"🇮🇩", name:"Sundanese",   native:"Basa Sunda" },
+    { code:"sw", flag:"🇰🇪", name:"Swahili",     native:"Kiswahili" },
+    { code:"tg", flag:"🇹🇯", name:"Tajik",       native:"Тоҷикӣ" },
+    { code:"tl", flag:"🇵🇭", name:"Tagalog",     native:"Tagalog" },
+    { code:"tt", flag:"🇷🇺", name:"Tatar",       native:"Татарча" },
+    { code:"te", flag:"🇮🇳", name:"Telugu",      native:"తెలుగు" },
+    { code:"th", flag:"🇹🇭", name:"Thai",        native:"ไทย" },
+    { code:"bo", flag:"🇨🇳", name:"Tibetan",     native:"བོད་ཡིག" },
+    { code:"tk", flag:"🇹🇲", name:"Turkmen",     native:"Türkmençe" },
+    { code:"uk", flag:"🇺🇦", name:"Ukrainian",   native:"Українська" },
+    { code:"ur", flag:"🇵🇰", name:"Urdu",        native:"اردو" },
+    { code:"ug", flag:"🇨🇳", name:"Uyghur",      native:"ئۇيغۇرچە" },
+    { code:"uz", flag:"🇺🇿", name:"Uzbek",       native:"Oʻzbekcha" },
+    { code:"vi", flag:"🇻🇳", name:"Vietnamese",  native:"Tiếng Việt" },
+    { code:"cy", flag:"🏴", name:"Welsh",       native:"Cymraeg" },
+    { code:"xh", flag:"🇿🇦", name:"Xhosa",       native:"isiXhosa" },
+    { code:"yi", flag:"🏴", name:"Yiddish",     native:"ייִדיש" },
+    { code:"yo", flag:"🇳🇬", name:"Yoruba",      native:"Yorùbá" },
+    { code:"zu", flag:"🇿🇦", name:"Zulu",        native:"isiZulu" },
+    { code:"am", flag:"🇪🇹", name:"Amharic",     native:"አማርኛ" },
+    { code:"ha", flag:"🇳🇬", name:"Hausa",       native:"Hausa" },
+    { code:"sm", flag:"🇼🇸", name:"Samoan",      native:"Gagana Sāmoa" },
+    { code:"ty", flag:"🇵🇭", name:"Tahitian",     native:"Reo Tahiti" },
+    { code:"ber",flag:"ⵣ", name:"Berber",       native:"ⵜⴰⵎⴰⵣⵉⵖⵜ" }
+  ];
+
   var BY_CODE = {};
   LANGS.forEach(function (l) { BY_CODE[l.code] = l; });
+  var ON_DEMAND_CODES = {};
+  ON_DEMAND.forEach(function (l) {
+    if (BY_CODE[l.code]) return;            // already bundled
+    l.dir = "ltr";
+    l.onDemand = true;
+    BY_CODE[l.code] = l;
+    ON_DEMAND_CODES[l.code] = l;
+  });
+
+  /* Merge the extended dictionary (the new feature names and screens).
+     It ships as a separate file so this engine stays readable, and it is
+     merged in before any lookup happens. */
+  function mergeExtended() {
+    var ext = global.GBI18nExtend;
+    if (!ext) return;
+    Object.keys(ext).forEach(function (lang) {
+      if (!DICT[lang]) DICT[lang] = {};
+      var box = DICT[lang];
+      Object.keys(ext[lang]).forEach(function (k) { box[k] = ext[lang][k]; });
+    });
+  }
 
   /* ---------------- the dictionary ----------------
      Key = the exact English string used in the UI.
@@ -2620,14 +2724,90 @@
     return DEF;
   }
 
+  mergeExtended();
+
   var current = readLang();
+
+  /* ---------------- runtime translation cache ----------------
+     For on-demand languages we ask the server to translate the strings on
+     the current page in ONE batched request, then keep the result on the
+     device. A string is only ever sent once, and never again for a page
+     the user has already read in that language. */
+  var CACHE_KEY = "gb_tr_cache";
+  var CACHE = (function () {
+    try { return JSON.parse(localStorage.getItem(CACHE_KEY) || "{}"); } catch (e) { return {}; }
+  })();
+  var CACHE_LIMIT = 4000;                   // ~40k characters of translation
+  var cacheChars = 0;
+  Object.keys(CACHE).forEach(function (k) { cacheChars += (CACHE[k] || "").length; });
+
+  function cacheGet(lang, str) {
+    var box = CACHE[lang];
+    return box && Object.prototype.hasOwnProperty.call(box, str) ? box[str] : null;
+  }
+  function cacheSet(lang, str, value) {
+    if (!CACHE[lang]) CACHE[lang] = {};
+    if (Object.keys(CACHE[lang]).length > 600) return;     // keep it bounded
+    CACHE[lang][str] = value;
+    cacheChars += value.length;
+    if (cacheChars > CACHE_LIMIT) return;
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify(CACHE)); } catch (e) {}
+  }
+  function cacheClear(lang) {
+    delete CACHE[lang];
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify(CACHE)); } catch (e) {}
+  }
+
+  /* Collect the visible English strings on the page so we can batch them. */
+  function collectStrings(root) {
+    var scope = root || document.body;
+    var found = [];
+    var walk = function (el) {
+      if (!el) return;
+      for (var i = 0; i < el.childNodes.length; i++) {
+        var n = el.childNodes[i];
+        if (n.nodeType === 3) {
+          var s = n.nodeValue.replace(/^\s+|\s+$/g, "");
+          if (s.length > 1 && s.length < 400 && /[A-Za-z]/.test(s)) found.push(s);
+        } else if (n.nodeType === 1) {
+          var tag = n.tagName;
+          if (tag !== "SCRIPT" && tag !== "STYLE" && tag !== "SVG" && tag !== "TEXTAREA") walk(n);
+        }
+      }
+    };
+    walk(scope);
+    // de-duplicate
+    var seen = {}, out = [];
+    for (var j = 0; j < found.length; j++) {
+      if (!seen[found[j]]) { seen[found[j]] = 1; out.push(found[j]); }
+    }
+    return out;
+  }
+
+  /* Ask the server to translate a batch. One request per page, ever. */
+  function requestTranslations(strings) {
+    if (!strings.length) return Promise.resolve({});
+    return fetch("/api/translate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ lang: current, strings: strings })
+    }).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (j) { return (j && j.translations) || {}; })
+      .catch(function () { return {}; });
+  }
 
   function t(str) {
     if (str == null) return "";
     var s = String(str);
     if (current === DEF) return s;
+
     var d = DICT[current];
     if (d && Object.prototype.hasOwnProperty.call(d, s)) return d[s];
+
+    // On-demand language: use the cached translation if we have it.
+    var cached = cacheGet(current, s);
+    if (cached !== null) return cached;
+
     return s;                      // English fallback — meaning is preserved
   }
 
@@ -2639,7 +2819,22 @@
     try {
       global.dispatchEvent(new CustomEvent("lang:change", { detail: code }));
     } catch (e) {}
+    if (ON_DEMAND_CODES[code]) ensureTranslated();
     return true;
+  }
+
+  /* Warm the on-demand cache for the current page, then repaint. */
+  var warming = false;
+  function ensureTranslated() {
+    if (warming) return Promise.resolve();
+    warming = true;
+    var strings = collectStrings(document.body).filter(function (s) { return cacheGet(current, s) === null; });
+    if (!strings.length) { warming = false; return Promise.resolve(); }
+    return requestTranslations(strings.slice(0, 120)).then(function (map) {
+      Object.keys(map).forEach(function (k) { cacheSet(current, k, map[k]); });
+      warming = false;
+      try { global.dispatchEvent(new CustomEvent("lang:translated", { detail: current })); } catch (e) {}
+    }).catch(function () { warming = false; });
   }
 
   function applyDir() {
@@ -2709,11 +2904,57 @@
     applyDir();
   }
 
-  /* A ready-made flags picker. Returns a <div> the caller can drop in. */
+  /* ---------------- locale formatting ----------------
+     Dates, numbers and measurements follow the conventions of the chosen
+     language, so a German user sees "1.234" and an English user "1,234". */
+  function locale() {
+    var l = BY_CODE[current] || BY_CODE[DEF];
+    var base = l.code === "en" ? "en" : l.code;
+    try {
+      var nav = navigator.languages || [navigator.language];
+      for (var i = 0; i < nav.length; i++) {
+        if (String(nav[i]).toLowerCase().indexOf(base) === 0) return nav[i];
+      }
+    } catch (e) {}
+    return base;
+  }
+
+  function fmtDate(value, opts) {
+    if (!value) return "";
+    var d = value instanceof Date ? value : new Date(value);
+    if (isNaN(d.getTime())) return "";
+    try {
+      return new Intl.DateTimeFormat(locale(), opts || { year: "numeric", month: "short", day: "numeric" }).format(d);
+    } catch (e) { return d.toISOString().slice(0, 10); }
+  }
+
+  function fmtNumber(value, opts) {
+    var n = Number(value);
+    if (!isFinite(n)) return "0";
+    try {
+      return new Intl.NumberFormat(locale(), opts || { maximumFractionDigits: 1 }).format(n);
+    } catch (e) { return String(n); }
+  }
+
+  /* A measurement always shows its unit, formatted for the locale. */
+  function fmtMeasure(value, unit) {
+    var n = fmtNumber(value);
+    return unit ? n + " " + unit : n;
+  }
+
+  /* ---------------- searchable language picker ---------------- */
   function picker(opts) {
     opts = opts || {};
     var wrap = document.createElement("div");
     wrap.className = opts.className || "lang-picker";
+
+    var search = document.createElement("input");
+    search.type = "search";
+    search.className = "lp-search";
+    search.placeholder = opts.placeholder || "Search language";
+    search.setAttribute("aria-label", "Search language");
+    wrap.appendChild(search);
+
     var head = document.createElement("button");
     head.type = "button";
     head.className = "lang-current";
@@ -2722,33 +2963,72 @@
       '</span><span class="la">' + esc(l.name) + '</span><span class="lc">▾</span>';
     head.setAttribute("aria-haspopup", "listbox");
     head.setAttribute("aria-expanded", "false");
+    wrap.appendChild(head);
+
     var list = document.createElement("div");
     list.className = "lang-list";
     list.setAttribute("role", "listbox");
     list.hidden = true;
+    wrap.appendChild(list);
 
-    LANGS.forEach(function (lang) {
-      var b = document.createElement("button");
-      b.type = "button";
-      b.className = "lang-item" + (lang.code === current ? " on" : "");
-      b.setAttribute("role", "option");
-      b.setAttribute("aria-selected", lang.code === current ? "true" : "false");
-      b.innerHTML = '<span class="lf">' + lang.flag + '</span>' +
-        '<span class="ln">' + esc(lang.native) + '</span>' +
-        '<span class="la">' + esc(lang.name) + '</span>';
-      b.onclick = function () {
-        set(lang.code);
-        list.hidden = true;
-        head.setAttribute("aria-expanded", "false");
-        if (opts.onChange) opts.onChange(lang.code);
+    function paint(query) {
+      var q = (query || "").trim().toLowerCase();
+      list.innerHTML = "";
+      var all = LANGS.concat(Object.keys(ON_DEMAND_CODES).map(function (c) { return ON_DEMAND_CODES[c]; }));
+      var matched = all.filter(function (lang) {
+        if (!q) return true;
+        return lang.native.toLowerCase().indexOf(q) > -1 ||
+               lang.name.toLowerCase().indexOf(q) > -1 ||
+               lang.code.toLowerCase().indexOf(q) > -1;
+      });
+      if (!matched.length) {
+        var none = document.createElement("div");
+        none.className = "lp-empty";
+        none.textContent = "No language matches that search.";
+        list.appendChild(none);
+        return;
+      }
+      var bundled = matched.filter(function (x) { return !x.onDemand; });
+      var onDemand = matched.filter(function (x) { return x.onDemand; });
+
+      var addGroup = function (title, items, note) {
+        if (!items.length) return;
+        var gh = document.createElement("div");
+        gh.className = "lp-group";
+        gh.textContent = title;
+        list.appendChild(gh);
+        items.forEach(function (lang) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = "lang-item" + (lang.code === current ? " on" : "");
+          b.setAttribute("role", "option");
+          b.setAttribute("aria-selected", lang.code === current ? "true" : "false");
+          b.innerHTML = '<span class="lf">' + lang.flag + "</span>" +
+            '<span class="ln">' + esc(lang.native) + "</span>" +
+            '<span class="la">' + esc(lang.name) + "</span>" +
+            (note ? '<span class="ld">' + note + "</span>" : "");
+          b.onclick = function () {
+            set(lang.code);
+            list.hidden = true;
+            head.setAttribute("aria-expanded", "false");
+            if (opts.onChange) opts.onChange(lang.code);
+          };
+          list.appendChild(b);
+        });
       };
-      list.appendChild(b);
-    });
+
+      addGroup("Fully translated", bundled, "");
+      addGroup("Translated on demand", onDemand, "ⓘ");
+    }
+
+    search.oninput = function () { paint(this.value); };
+    paint("");
 
     head.onclick = function () {
       var open = list.hidden;
       list.hidden = !open;
       head.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) { search.value = ""; paint(""); search.focus(); }
     };
     document.addEventListener("click", function (ev) {
       if (!wrap.contains(ev.target)) { list.hidden = true; head.setAttribute("aria-expanded", "false"); }
@@ -2757,8 +3037,6 @@
       if (ev.key === "Escape") { list.hidden = true; head.setAttribute("aria-expanded", "false"); }
     });
 
-    wrap.appendChild(head);
-    wrap.appendChild(list);
     return wrap;
   }
 
@@ -2778,8 +3056,19 @@
       return { code: current, name: l.name, native: l.native, flag: l.flag, dir: l.dir };
     },
     languages: function () { return LANGS.slice(); },
+    onDemandLanguages: function () { return Object.keys(ON_DEMAND_CODES).map(function (c) { return ON_DEMAND_CODES[c]; }); },
+    allLanguages: function () {
+      return LANGS.concat(Object.keys(ON_DEMAND_CODES).map(function (c) { return ON_DEMAND_CODES[c]; }));
+    },
     apply: apply,
     picker: picker,
-    dir: function () { return (BY_CODE[current] || BY_CODE[DEF]).dir; }
+    dir: function () { return (BY_CODE[current] || BY_CODE[DEF]).dir; },
+    locale: locale,
+    fmtDate: fmtDate,
+    fmtNumber: fmtNumber,
+    fmtMeasure: fmtMeasure,
+    ensureTranslated: ensureTranslated,
+    clearCache: cacheClear,
+    isBundled: function (code) { return !ON_DEMAND_CODES[code]; }
   };
 })(typeof window !== "undefined" ? window : this);

@@ -98,9 +98,6 @@
         links.map(function (l) { return '<a href="' + l[0] + '">' + l[1] + "</a>"; }).join("") + "</div>";
     };
     var cur = (global.GBWeb && GBWeb.getCur()) || "USD";
-    var curOptions = CURRENCIES.map(function (c) {
-      return '<option value="' + c[0] + '"' + (c[0] === cur ? " selected" : "") + ">" + c[1] + "</option>";
-    }).join("");
     var soc = function (name, path) {
       return '<a class="soc" href="https://x.com/gymbadge" target="_blank" rel="noopener" aria-label="' + name + '">' +
         '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' + path + "</svg></a>";
@@ -142,8 +139,10 @@
         '<div class="foot-bottom">' +
           "<span>© 2026 Gym Badge. All rights reserved. Made for every body, everywhere.</span>" +
           '<span class="foot-tools">' +
-            '<label class="cur-pick">' +
-              '<select id="curPick" aria-label="Currency">' + curOptions + "</select></label>" +
+            '<label class="cur-pick" aria-label="Language">' +
+              '<span class="cur-label">Language</span>' +
+              '<span id="langSlotFoot"></span>' +
+            "</label>" +
           "</span>" +
         "</div>" +
       "</div></footer>"
@@ -393,7 +392,27 @@
     wireOnce();
     observeReveals();
     mountLangPicker();
+    mountFootLang();
     applyLang();
+    if (global.GBChat) global.GBChat.mount();
+  }
+
+  /* The footer carries its own language picker, in place of the old
+     currency selector. */
+  function mountFootLang() {
+    if (!global.GBI18n) return;
+    var slot = document.getElementById("langSlotFoot");
+    if (!slot) return;
+    slot.innerHTML = "";
+    slot.appendChild(GBI18n.picker({
+      className: "lang-picker foot-lang",
+      onChange: function () {
+        navReflow();
+        mountLangPicker();
+        mountFootLang();
+        applyLang();
+      }
+    }));
   }
 
   /* ---------- language picker (flags) + translation pass ---------- */
