@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#121211">
 <title>Sign in — Gym Badge</title>
-<meta name="description" content="Sign in to Gym Badge with your email and password, or continue with Google or Yahoo. Your streaks, logs and orders sync everywhere.">
+<meta name="description" content="Sign in to Gym Badge with your email and password, or continue with Google or Yahoo. Your streaks, logs and plans sync everywhere.">
 <link rel="icon" href="/assets/img/logo.png" type="image/png">
 <link rel="stylesheet" href="/web/assets/css/site.css">
 <link rel="stylesheet" href="/assets/shared.css">
@@ -148,7 +148,7 @@
       GBAuth.oauth(provider).then(function (res) {
         b.disabled = false;
         b.innerHTML = label;
-        if (!res.ok) { say(res.error || "Sign-in failed."); return; }
+        if (!res.ok) { say(res.error || "Sign in failed."); return; }
         location.href = next();
       }).catch(function () {
         b.disabled = false;

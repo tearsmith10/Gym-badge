@@ -42,9 +42,23 @@ apart.
 
 ## New in this release
 
+### 🎨 The official logo
+The mark is a running figure carrying across an adidas style three stripe.
+The stripes run from the Ember accent through to the honeybadger tawny and
+cream, so the logo reads as part of the app instead of sitting on top of it.
+
+- **No white plate.** The PNG carries a transparent background, the app icon
+  is a rounded espresso tile, and the bare mark is shipped for any dark
+  surface. It works on all three dark themes.
+- Shipped at 512, 192 and 180 for the icons, plus a maskable variant that
+  keeps the figure inside the safe zone.
+
 ### 🌍 Language changes (35 languages, flags first)
 `assets/i18n.js` is one dictionary shared by the app and the site.
 
+- The picker sits in the **footer, below the page**, where the currency
+  selector used to be. It is searchable and lists each language by its flag
+  and its own name.
 - Every language shows **its flag, then its endonym, then its English name**.
 - Translations are **meaning-identical** to the English source — the dictionary
   is keyed by the English phrase, so a missing entry falls back to English

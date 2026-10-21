@@ -267,7 +267,7 @@
         name: document.getElementById("name").value.trim() || null
       }).then(function (res) {
         b.disabled = false; b.innerHTML = label;
-        if (!res.ok) { say(res.error || "Sign-in failed."); return; }
+        if (!res.ok) { say(res.error || "Sign in failed."); return; }
         location.href = next();
       }).catch(function () {
         b.disabled = false; b.innerHTML = label;

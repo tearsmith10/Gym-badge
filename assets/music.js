@@ -192,7 +192,7 @@
       var pop = window.open(url, "gb_music_oauth",
         "width=" + w + ",height=" + h + ",left=" + left + ",top=" + top);
       if (!pop) {
-        reject({ code: "POPUP_BLOCKED", message: "Allow pop-ups to connect your music account." });
+        reject({ code: "POPUP_BLOCKED", message: "Allow pop up windows to connect your music account." });
         return;
       }
       var done = false;

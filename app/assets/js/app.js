@@ -273,7 +273,7 @@
     { k:"reminder",   q:"Set a <span class='hl'>reminder</span>", s:"A nudge at the right time is what makes it stick.",
       opts:[["Morning","06:00 – 09:00","🌅"],["Lunchtime","11:00 – 14:00","☀️"],["Evening","17:00 – 21:00","🌙"]] },
     { k:"acctype",    q:"How are you <span class='hl'>joining</span>?", s:"This shapes your setup.",
-      opts:[["I'm an individual","Gym-goer tracking my own progress","🧍"],["Gym or fitness hub","Register a company, branches & equipment","🏢"],["Personal trainer","Get hired by members near you","🏋️"]] }
+      opts:[["I'm an individual","Gym goer tracking my own progress","🧍"],["Gym or fitness hub","Register a company, branches & equipment","🏢"],["Personal trainer","Get hired by members near you","🏋️"]] }
   ];
 
   route("ob", function (param) {
@@ -1203,7 +1203,7 @@
       var card = h('<div class="plan' + (pl[3] ? " best" : "") + '">' + (pl[3] ? '<span class="besttag">BEST VALUE</span>' : "") +
         '<div class="prow"><span class="pname">' + pl[1] + '</span><span class="pprice">' + price + '</span></div>' +
         '<div class="permo">' + (pl[3] ? "Only " + P.fmt(cur, P.ngnTo(cur, Math.round(pl[2] / 12))) + "/mo" : "Billed monthly") + "</div>" +
-        (pl[3] ? '<span class="trial">7-day free trial</span>' : "") + "</div>");
+        (pl[3] ? '<span class="trial">7 day free trial</span>' : "") + "</div>");
       card.onclick = function () { openUpgrade({ id: pl[0], name: pl[1], ngn: pl[2] }, cur); };
       planHost.appendChild(card);
     });

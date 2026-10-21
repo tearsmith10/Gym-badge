@@ -84,7 +84,6 @@
         '<div class="nav-tools">' +
           '<button class="icon-btn" id="searchBtn" aria-label="Search">' + ICON.search + "</button>" +
           '<button class="theme-toggle" data-theme-toggle aria-label="Switch theme"><span class="dot"></span><span class="lbl">Theme</span></button>' +
-          '<div id="langSlot"></div>' +
           '<div class="nav-cta" id="navCta">' + account + "</div>" +
         "</div>" +
         '<button class="burger" aria-label="Menu">☰</button>' +
@@ -392,36 +391,20 @@
     wireOnce();
     observeReveals();
     mountLangPicker();
-    mountFootLang();
     applyLang();
     if (global.GBChat) global.GBChat.mount();
   }
 
-  /* The footer carries its own language picker, in place of the old
-     currency selector. */
-  function mountFootLang() {
+  /* ---------- language picker (flags) + translation pass ----------
+     The picker lives in the footer, below the page, in place of the old
+     currency selector. One control, one place. */
+  function mountLangPicker() {
     if (!window.GBI18n) return;
     var slot = document.getElementById("langSlotFoot");
     if (!slot) return;
     slot.innerHTML = "";
-    slot.appendChild(GBI18n.picker({
-      className: "lang-picker foot-lang",
-      onChange: function () {
-        navReflow();
-        mountLangPicker();
-        mountFootLang();
-        applyLang();
-      }
-    }));
-  }
-
-  /* ---------- language picker (flags) + translation pass ---------- */
-  function mountLangPicker() {
-    if (!window.GBI18n) return;
-    var slot = document.getElementById("langSlot");
-    if (!slot) return;
-    slot.innerHTML = "";
     var picker = GBI18n.picker({
+      className: "lang-picker foot-lang",
       onChange: function () {
         // Re-render the chrome so every label flips, then re-translate the
         // page body. The footer is rebuilt too so its links follow suit.

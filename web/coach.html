@@ -76,8 +76,8 @@
   function buyBoxHtml() {
     var packs = [
       { n: "Single session", q: 1, mult: 1 },
-      { n: "5-session pack", q: 5, mult: 4.5 },
-      { n: "10-session pack", q: 10, mult: 8.5 }
+      { n: "5 session pack", q: 5, mult: 4.5 },
+      { n: "10 session pack", q: 10, mult: 8.5 }
     ];
     var opts = packs.map(function (p, i) {
       var total = Math.round(c.rateNgn * p.mult);
@@ -145,8 +145,8 @@
     if (add) add.addEventListener("click", function () {
       var packs = [
         { n: "Single session", q: 1, mult: 1 },
-        { n: "5-session pack", q: 5, mult: 4.5 },
-        { n: "10-session pack", q: 10, mult: 8.5 }
+        { n: "5 session pack", q: 5, mult: 4.5 },
+        { n: "10 session pack", q: 10, mult: 8.5 }
       ];
       var p = packs[selected.sessions];
       var total = Math.round(c.rateNgn * p.mult);

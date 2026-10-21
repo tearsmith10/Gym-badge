@@ -221,7 +221,7 @@
     ]},
     { group: "Support & troubleshooting", items: [
       ["How do I contact support?", "Email gymbadgesupport@gmail.com and we'll reply within 1 business day. There is also a live assistant in the app that can answer most questions straight away."],
-      ["Is there live chat?", "Live chat is available to Premium members, and everyone else can reach us by email at gymbadgesupport@gmail.com. The in-app assistant answers account, workout, nutrition, trainer and plan questions for every member."],
+      ["Is there live chat?", "Live chat is available to Premium members, and everyone else can reach us by email at gymbadgesupport@gmail.com. The in app assistant answers account, workout, nutrition, trainer and plan questions for every member."],
       ["How do I put Gym Badge on my home screen?", "Open the site in your browser, tap the share menu and choose Add to Home Screen. It works the same on iOS and Android."],
       ["Why aren't my logs showing on my other device?", "Gym Badge syncs once you're signed in — check that both devices use the same account and are back online. Offline entries upload as soon as you reconnect."],
       ["Which browsers work with Gym Badge?", "Any modern browser on iOS, Android or desktop. Nothing needs to be installed from a store."]
@@ -233,7 +233,7 @@
     ["lock", "Encrypted & private", "Logs and photos are encrypted. We never sell your data."],
     ["shield", "Verified coaches", "Certifications checked once, trusted by every member."],
     ["card", "Secure card payments", "Card data never touches our servers."],
-    ["globe", "Works worldwide", "16 currencies, offline first, usable in any market."]
+    ["globe", "Works worldwide", "35 languages, offline first, usable in any market."]
   ];
 
   function byId(list, id) {
