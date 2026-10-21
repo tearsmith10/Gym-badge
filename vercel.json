@@ -2,6 +2,11 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": false,
   "trailingSlash": false,
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 30
+    }
+  },
   "headers": [
     {
       "source": "/app/sw.js",
@@ -50,26 +55,32 @@
       ]
     }
   ],
-  "rewrites": [
-    { "source": "/api/:path*",     "destination": "/api/index.py" },
-    { "source": "/login",        "destination": "/web/login.html" },
-    { "source": "/signup",       "destination": "/web/signup.html" },
-    { "source": "/forgot",       "destination": "/web/forgot.html" },
-    { "source": "/reset",        "destination": "/web/reset.html" },
-    { "source": "/verify",       "destination": "/web/verify.html" },
-    { "source": "/pricing",      "destination": "/web/pricing.html" },
-    { "source": "/find",         "destination": "/web/find.html" },
-    { "source": "/gyms",         "destination": "/web/gyms.html" },
-    { "source": "/trainers",     "destination": "/web/trainers.html" },
-    { "source": "/coaches",      "destination": "/web/coach.html" },
-    { "source": "/gym",          "destination": "/web/gym.html" },
-    { "source": "/coach",        "destination": "/web/coach.html" },
-    { "source": "/about",        "destination": "/web/about.html" },
-    { "source": "/reviews",      "destination": "/web/reviews.html" },
-    { "source": "/faq",          "destination": "/web/faq.html" },
-    { "source": "/support",      "destination": "/web/support.html" },
-    { "source": "/account",      "destination": "/web/account.html" },
-    { "source": "/privacy",      "destination": "/web/privacy.html" },
-    { "source": "/terms",        "destination": "/web/terms.html" }
+  "routes": [
+    { "src": "/gymbadge_core.py", "status": 404 },
+    { "src": "/gymbadge_content.py", "status": 404 },
+    { "src": "/gymbadge_kb.py", "status": 404 },
+    { "src": "/server.py", "status": 404 },
+    { "src": "/api/index.py", "status": 404 },
+    { "handle": "filesystem" },
+    { "src": "/api/(.*)", "dest": "/api/index.py" },
+    { "src": "/login", "dest": "/web/login.html" },
+    { "src": "/signup", "dest": "/web/signup.html" },
+    { "src": "/forgot", "dest": "/web/forgot.html" },
+    { "src": "/reset", "dest": "/web/reset.html" },
+    { "src": "/verify", "dest": "/web/verify.html" },
+    { "src": "/pricing", "dest": "/web/pricing.html" },
+    { "src": "/find", "dest": "/web/find.html" },
+    { "src": "/gyms", "dest": "/web/gyms.html" },
+    { "src": "/trainers", "dest": "/web/trainers.html" },
+    { "src": "/coaches", "dest": "/web/coach.html" },
+    { "src": "/gym", "dest": "/web/gym.html" },
+    { "src": "/coach", "dest": "/web/coach.html" },
+    { "src": "/about", "dest": "/web/about.html" },
+    { "src": "/reviews", "dest": "/web/reviews.html" },
+    { "src": "/faq", "dest": "/web/faq.html" },
+    { "src": "/support", "dest": "/web/support.html" },
+    { "src": "/account", "dest": "/web/account.html" },
+    { "src": "/privacy", "dest": "/web/privacy.html" },
+    { "src": "/terms", "dest": "/web/terms.html" }
   ]
 }

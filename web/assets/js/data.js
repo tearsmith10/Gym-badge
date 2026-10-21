@@ -166,7 +166,7 @@
       ["What is Gym Badge?", "Gym Badge is a health and fitness product: a marketing website plus an installable web app for logging workouts, scanning meals, checking equipment status and finding gyms near you."],
       ["Is Gym Badge free?", "Yes — the Starter plan is free forever: generous daily logging, food scans and body projections while we test, and the gym locator with bookings at no cost."],
       ["Do I need to download it from an app store?", "There's no store app. Gym Badge runs in your browser and installs to your home screen from there, on iOS and Android alike."],
-      ["What are the six features?", "My Profile (onboarding and profile), the Exercise Tracker (exercise logging), Gym Equipment (equipment status), the Nutrition Guide (food education), Body Goals (body goal projection), Find a Gym (gym locator and bookings) and Find a Trainer (trainer discovery and booking)."],
+      ["What is in the app?", "My Profile for your details, My Plan for your training week, the Workout Library for every movement explained, the Exercise Tracker for logging what you finish, Gym Equipment for live machine status, the Nutrition Guide for food explained, Body Goals for your goal physique, Find a Gym and Find a Trainer for booking."],
       ["Does Gym Badge work on iPhone and Android?", "Yes — the same app runs on both through your browser, and your account syncs across them once you sign in."],
       ["Is Gym Badge a medical device?", "No. Gym Badge is a wellness product and doesn't give medical advice — talk to a qualified professional before starting any new program."]
     ]},

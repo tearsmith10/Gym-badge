@@ -72,7 +72,7 @@
       '<div class="announce" id="announce">' +
         '<div class="wrap announce-in">' +
           '<span class="an-item"><b>4.9★</b> loved by 12,000+ lifters</span>' +
-          '<span class="an-item hide-sm">Premium <b>₦5,000/mo</b> · cancel anytime</span>' +
+          '<span class="an-item hide-sm">Premium from any currency · cancel anytime</span>' +
           '<a class="an-item an-cta" href="/app/">Install the app — iOS &amp; Android →</a>' +
         "</div>" +
       "</div>" +
