@@ -278,8 +278,8 @@
     }
     node.appendChild(rem);
 
-    /* ============ LANGUAGE ============ */
-    node.appendChild(section("Language", "Pick the language you want. The meaning never changes — only the words."));
+    /* ============ LANGUAGE + COUNTRY ============ */
+    node.appendChild(section("Language & country", "Pick the language you want, and the country you are in. The meaning never changes, only the words."));
     var langCard = h('<div class="card"></div>');
     if (L && L.picker) {
       var lp = L.picker({
@@ -295,6 +295,30 @@
       langCard.appendChild(lp);
     } else {
       langCard.appendChild(h('<p class="faint small">Language engine unavailable.</p>'));
+    }
+
+    // Country is a separate control: one country can have many languages.
+    var countryState = { code: (S.user() || {}).countryCode || "NG", name: (S.user() || {}).country || "Nigeria" };
+    var countryBlock = h('<div class="mt"><div class="eyebrow" style="margin-bottom:8px">Country</div>' +
+      '<div id="setCountry"></div><span class="faint small" id="setCountryDial"></span></div>');
+    langCard.appendChild(countryBlock);
+    if (window.GBCountries) {
+      var found = window.GBCountries.find(countryState.code);
+      if (found) countryState = { code: found.code, name: found.name };
+      $("#setCountry", countryBlock).appendChild(window.GBCountries.picker({
+        value: countryState.code,
+        onChange: function (c) {
+          countryState = { code: c.code, name: c.name };
+          var u2 = Object.assign({}, S.user() || {});
+          u2.country = c.name; u2.countryCode = c.code;
+          S.setUser(u2);
+          $("#setCountryDial", countryBlock).textContent =
+            "International dialling code " + (c.dial || "not listed");
+        }
+      }));
+      var cf = window.GBCountries.find(countryState.code);
+      $("#setCountryDial", countryBlock).textContent =
+        "International dialling code " + (cf ? cf.dial : "+234");
     }
     node.appendChild(langCard);
 

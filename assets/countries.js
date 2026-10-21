@@ -222,7 +222,7 @@
     return (dial ? dial + " " : "") + out;
   }
 
-  global.GBCountries = {
+  window.GBCountries = {
     list: function () { return LIST.slice(); },
     find: find,
     flagOf: flagOf,

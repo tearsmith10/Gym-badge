@@ -26,13 +26,13 @@
   }
 
   function money(ngn) {
-    if (!global.GBPricing) return "₦" + ngn.toLocaleString();
-    return GBPricing.price(ngn, (global.GBWeb && GBWeb.getCur()) || "USD");
+    if (!window.GBPricing) return "₦" + ngn.toLocaleString();
+    return GBPricing.price(ngn, (window.GBWeb && GBWeb.getCur()) || "USD");
   }
 
   // Photo-ready media block for a people.js id.
   function photo(id, alt, cls) {
-    var inner = global.GBPeople ? GBPeople.art(id) : "";
+    var inner = window.GBPeople ? GBPeople.art(id) : "";
     var box = '<div class="ph ' + (cls || "") + '" data-photo="' + id + '">' +
       '<div class="ph-fallback">' + inner + "</div></div>";
     return box;
@@ -40,7 +40,7 @@
 
   // Hydrate any [data-photo] blocks that already have a real photo file.
   function hydratePhotos(root) {
-    if (!global.GBPeople) return;
+    if (!window.GBPeople) return;
     (root || document).querySelectorAll("[data-photo]:not([data-hydrated])").forEach(function (box) {
       box.setAttribute("data-hydrated", "1");
       var id = box.getAttribute("data-photo");
@@ -110,7 +110,7 @@
       '<article class="review reveal">' +
         '<div class="rv-head">' +
           '<div class="rv-ava" data-photo="' + esc(r.avatar) + '"><div class="ph-fallback">' +
-            (global.GBPeople ? GBPeople.art(r.avatar) : "") + "</div></div>" +
+            (window.GBPeople ? GBPeople.art(r.avatar) : "") + "</div></div>" +
           "<div><div class='rv-name'>" + esc(r.name) + "</div>" +
             "<div class='rv-where'>" + esc(r.where) + "</div></div>" +
         "</div>" +
@@ -152,7 +152,7 @@
     }).join("") + "</ul>";
   }
 
-  global.GBUI = {
+  window.GBUI = {
     esc: esc, stars: stars, rating: rating, money: money, photo: photo,
     hydratePhotos: hydratePhotos, gymCard: gymCard, coachCard: coachCard,
     reviewCard: reviewCard, ratingSummary: ratingSummary, checkList: checkList

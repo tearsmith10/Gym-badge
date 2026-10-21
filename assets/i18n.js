@@ -172,7 +172,7 @@
      It ships as a separate file so this engine stays readable, and it is
      merged in before any lookup happens. */
   function mergeExtended() {
-    var ext = global.GBI18nExtend;
+    var ext = window.GBI18nExtend;
     if (!ext) return;
     Object.keys(ext).forEach(function (lang) {
       if (!DICT[lang]) DICT[lang] = {};
@@ -2724,7 +2724,9 @@
     return DEF;
   }
 
+  // Merge now, and again lazily in case the extended file loaded late.
   mergeExtended();
+  var _mergedExt = false;
 
   var current = readLang();
 
@@ -2813,6 +2815,7 @@
 
   function set(code) {
     if (!BY_CODE[code]) return false;
+    if (!_mergedExt && window.GBI18nExtend) { mergeExtended(); _mergedExt = true; }
     current = code;
     try { localStorage.setItem(KEY, code); } catch (e) {}
     applyDir();
@@ -2945,6 +2948,7 @@
   /* ---------------- searchable language picker ---------------- */
   function picker(opts) {
     opts = opts || {};
+    if (!_mergedExt && window.GBI18nExtend) { mergeExtended(); _mergedExt = true; }
     var wrap = document.createElement("div");
     wrap.className = opts.className || "lang-picker";
 
@@ -3048,7 +3052,7 @@
 
   applyDir();
 
-  global.GBI18n = {
+  window.GBI18n = {
     t: t,
     set: set,
     current: function () {

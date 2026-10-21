@@ -90,7 +90,7 @@
     global.dispatchEvent(new CustomEvent("plan:change", { detail: plan }));
   }
 
-  global.GBWeb = {
+  window.GBWeb = {
     getUser: getUser, setUser: setUser, updateUser: updateUser,
     clearUser: clearUser, isAuthed: isAuthed,
     getCur: getCur, setCur: setCur,
@@ -99,7 +99,7 @@
     cancelBooking: cancelBooking, rescheduleBooking: rescheduleBooking,
     getCountry: getCountry, setCountry: setCountry,
     __fmt: function (v) {
-      if (global.GBI18n) return global.GBI18n.fmtNumber(v);
+      if (window.GBI18n) return window.GBI18n.fmtNumber(v);
       return String(v);
     }
   };

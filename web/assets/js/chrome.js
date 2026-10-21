@@ -47,7 +47,7 @@
   }
 
   function navHTML() {
-    var user = global.GBWeb ? GBWeb.getUser() : null;
+    var user = window.GBWeb ? GBWeb.getUser() : null;
     var links = NAV_LINKS.map(function (l) {
       return '<a href="' + l[0] + '"' + (isActive(l[0]) ? ' aria-current="page"' : "") + '>' + l[1] + "</a>";
     }).join("");
@@ -97,7 +97,7 @@
       return '<div class="foot-col"><h5>' + title + "</h5>" +
         links.map(function (l) { return '<a href="' + l[0] + '">' + l[1] + "</a>"; }).join("") + "</div>";
     };
-    var cur = (global.GBWeb && GBWeb.getCur()) || "USD";
+    var cur = (window.GBWeb && GBWeb.getCur()) || "USD";
     var soc = function (name, path) {
       return '<a class="soc" href="https://x.com/gymbadge" target="_blank" rel="noopener" aria-label="' + name + '">' +
         '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' + path + "</svg></a>";
@@ -201,7 +201,7 @@
       }).join("");
       // lazy photo thumbs
       res.querySelectorAll("[data-photo]").forEach(function (el) {
-        if (global.GBPeople) el.innerHTML = GBPeople.art(el.getAttribute("data-photo"));
+        if (window.GBPeople) el.innerHTML = GBPeople.art(el.getAttribute("data-photo"));
       });
     }
     input.addEventListener("input", function () { render(input.value); });
@@ -233,11 +233,11 @@
 
     document.querySelectorAll("[data-theme-toggle]").forEach(function (btn) {
       function paint() {
-        var m = global.GBTheme ? GBTheme.get() : "default";
+        var m = window.GBTheme ? GBTheme.get() : "default";
         var lbl = btn.querySelector(".lbl");
-        if (lbl) lbl.textContent = global.GBTheme ? GBTheme.label(m) : "Theme";
+        if (lbl) lbl.textContent = window.GBTheme ? GBTheme.label(m) : "Theme";
       }
-      btn.addEventListener("click", function () { if (global.GBTheme) { GBTheme.next(); paint(); } });
+      btn.addEventListener("click", function () { if (window.GBTheme) { GBTheme.next(); paint(); } });
       paint();
     });
 
@@ -278,7 +278,7 @@
 
     // Currency selector → keeps prices across the site in one pick.
     document.addEventListener("change", function (e) {
-      if (e.target && e.target.id === "curPick" && global.GBWeb) GBWeb.setCur(e.target.value);
+      if (e.target && e.target.id === "curPick" && window.GBWeb) GBWeb.setCur(e.target.value);
     });
 
     // PWA install (footer button) — captures the browser's install prompt.
@@ -400,7 +400,7 @@
   /* The footer carries its own language picker, in place of the old
      currency selector. */
   function mountFootLang() {
-    if (!global.GBI18n) return;
+    if (!window.GBI18n) return;
     var slot = document.getElementById("langSlotFoot");
     if (!slot) return;
     slot.innerHTML = "";
@@ -417,7 +417,7 @@
 
   /* ---------- language picker (flags) + translation pass ---------- */
   function mountLangPicker() {
-    if (!global.GBI18n) return;
+    if (!window.GBI18n) return;
     var slot = document.getElementById("langSlot");
     if (!slot) return;
     slot.innerHTML = "";
@@ -434,7 +434,7 @@
   }
 
   function applyLang() {
-    if (!global.GBI18n) return;
+    if (!window.GBI18n) return;
     GBI18n.apply(document.body);
   }
 

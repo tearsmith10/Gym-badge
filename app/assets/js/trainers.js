@@ -21,7 +21,7 @@
 (function (global) {
   "use strict";
 
-  var S = global.GBStore, I = global.GBI18n;
+  var S = window.GBStore, I = window.GBI18n;
 
   function h(html) { var t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstChild; }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]; }); }
@@ -337,8 +337,8 @@
     // Country picker, distinct from language.
     panel.appendChild(h('<div class="field"><label>Country</label><div id="apCountry"></div></div>'));
     var country = { code: (S.user() || {}).countryCode || "NG", name: (S.user() || {}).country || "Nigeria" };
-    if (global.GBCountries) {
-      var cp = global.GBCountries.picker({
+    if (window.GBCountries) {
+      var cp = window.GBCountries.picker({
         value: country.code,
         onChange: function (c) { country = { code: c.code, name: c.name }; }
       });

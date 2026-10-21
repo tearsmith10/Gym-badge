@@ -17,7 +17,7 @@
 (function (global) {
   "use strict";
 
-  var D = global.GBData, S = global.GBStore;
+  var D = window.GBData, S = window.GBStore;
 
   function h(html) { var t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstChild; }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]; }); }

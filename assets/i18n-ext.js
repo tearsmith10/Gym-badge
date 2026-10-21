@@ -44,7 +44,12 @@
       "Pending verification": "Vérification en attente", "Verified": "Vérifié",
       "Rejected": "Refusé", "Training day": "Jour d'entraînement",
       "Mark done": "Marquer comme fait", "Notes or modifications": "Notes ou modifications",
-      "Custom exercise": "Exercice personnalisé", "Send to the shared library": "Envoyer à la bibliothèque commune"
+      "Custom exercise": "Exercice personnalisé", "Send to the shared library": "Envoyer à la bibliothèque commune",
+      "Programs": "Programmes",
+      "Workout Programs": "Programmes d'entraînement",
+      "Training": "Entraînement",
+      "Language & country": "Langue et pays",
+      "Privacy & data": "Confidentialité et données"
     },
 
     es: {
@@ -78,7 +83,12 @@
       "Pending verification": "Verificación pendiente", "Verified": "Verificado",
       "Rejected": "Rechazado", "Training day": "Día de entrenamiento",
       "Mark done": "Marcar como hecho", "Notes or modifications": "Notas o modificaciones",
-      "Custom exercise": "Ejercicio personalizado", "Send to the shared library": "Enviar a la biblioteca común"
+      "Custom exercise": "Ejercicio personalizado", "Send to the shared library": "Enviar a la biblioteca común",
+      "Programs": "Programas",
+      "Workout Programs": "Programas de entrenamiento",
+      "Training": "Entrenamiento",
+      "Language & country": "Idioma y país",
+      "Privacy & data": "Privacidad y datos"
     },
 
     de: {
@@ -113,7 +123,12 @@
       "Pending verification": "Prüfung ausstehend", "Verified": "Geprüft",
       "Rejected": "Abgelehnt", "Training day": "Trainingstag",
       "Mark done": "Als erledigt markieren", "Notes or modifications": "Notizen oder Änderungen",
-      "Custom exercise": "Eigene Übung", "Send to the shared library": "Zur gemeinsamen Bibliothek senden"
+      "Custom exercise": "Eigene Übung", "Send to the shared library": "Zur gemeinsamen Bibliothek senden",
+      "Programs": "Programme",
+      "Workout Programs": "Trainingsprogramme",
+      "Training": "Training",
+      "Language & country": "Sprache und Land",
+      "Privacy & data": "Datenschutz und Daten"
     },
 
     pt: {
@@ -148,7 +163,12 @@
       "Pending verification": "Verificação pendente", "Verified": "Verificado",
       "Rejected": "Rejeitado", "Training day": "Dia de treino",
       "Mark done": "Marcar como feito", "Notes or modifications": "Notas ou modificações",
-      "Custom exercise": "Exercício personalizado", "Send to the shared library": "Enviar para a biblioteca comum"
+      "Custom exercise": "Exercício personalizado", "Send to the shared library": "Enviar para a biblioteca comum",
+      "Programs": "Programas",
+      "Workout Programs": "Programas de treino",
+      "Training": "Treino",
+      "Language & country": "Idioma e país",
+      "Privacy & data": "Privacidade e dados"
     },
 
     it: {
@@ -183,7 +203,12 @@
       "Pending verification": "Verifica in corso", "Verified": "Verificato",
       "Rejected": "Rifiutato", "Training day": "Giorno di allenamento",
       "Mark done": "Segna come fatto", "Notes or modifications": "Note o modifiche",
-      "Custom exercise": "Esercizio personalizzato", "Send to the shared library": "Invia alla biblioteca condivisa"
+      "Custom exercise": "Esercizio personalizzato", "Send to the shared library": "Invia alla biblioteca condivisa",
+      "Programs": "Programmi",
+      "Workout Programs": "Programmi di allenamento",
+      "Training": "Allenamento",
+      "Language & country": "Lingua e paese",
+      "Privacy & data": "Privacy e dati"
     },
 
     ar: {
@@ -218,7 +243,12 @@
       "Pending verification": "بانتظار التحقق", "Verified": "موثّق",
       "Rejected": "مرفوض", "Training day": "يوم تدريب",
       "Mark done": "تم الإنجاز", "Notes or modifications": "ملاحظات أو تعديلات",
-      "Custom exercise": "تمرين مخصص", "Send to the shared library": "أرسل إلى المكتبة المشتركة"
+      "Custom exercise": "تمرين مخصص", "Send to the shared library": "أرسل إلى المكتبة المشتركة",
+      "Programs": "البرامج",
+      "Workout Programs": "برامج التمرين",
+      "Training": "التدريب",
+      "Language & country": "اللغة والبلد",
+      "Privacy & data": "الخصوصية والبيانات"
     },
 
     zh: {
@@ -253,7 +283,12 @@
       "Pending verification": "待审核", "Verified": "已认证",
       "Rejected": "未通过", "Training day": "训练日",
       "Mark done": "标记完成", "Notes or modifications": "备注或调整",
-      "Custom exercise": "自定义动作", "Send to the shared library": "提交到公共动作库"
+      "Custom exercise": "自定义动作", "Send to the shared library": "提交到公共动作库",
+      "Programs": "训练计划",
+      "Workout Programs": "训练计划",
+      "Training": "训练",
+      "Language & country": "语言与国家",
+      "Privacy & data": "隐私与数据"
     },
 
     hi: {
@@ -288,7 +323,12 @@
       "Pending verification": "सत्यापन लंबित", "Verified": "सत्यापित",
       "Rejected": "अस्वीकृत", "Training day": "प्रशिक्षण दिन",
       "Mark done": "पूरा हुआ चिह्नित करें", "Notes or modifications": "नोट्स या बदलाव",
-      "Custom exercise": "कस्टम व्यायाम", "Send to the shared library": "साझा लाइब्रेरी में भेजें"
+      "Custom exercise": "कस्टम व्यायाम", "Send to the shared library": "साझा लाइब्रेरी में भेजें",
+      "Programs": "प्रोग्राम",
+      "Workout Programs": "वर्कआउट प्रोग्राम",
+      "Training": "प्रशिक्षण",
+      "Language & country": "भाषा और देश",
+      "Privacy & data": "गोपनीयता और डेटा"
     },
 
     sw: {
@@ -323,7 +363,12 @@
       "Pending verification": "Uthibitishaji unasubiri", "Verified": "Uthibitishwa",
       "Rejected": "Imekataa", "Training day": "Siku ya mazoezi",
       "Mark done": "Weka alama imefanyika", "Notes or modifications": "Maelezo au mabadiliko",
-      "Custom exercise": "Mazoezi maalum", "Send to the shared library": "Tuma kwenye maktaba ya pamoja"
+      "Custom exercise": "Mazoezi maalum", "Send to the shared library": "Tuma kwenye maktaba ya pamoja",
+      "Programs": "Mipango",
+      "Workout Programs": "Mipango ya mazoezi",
+      "Training": "Mazoezi",
+      "Language & country": "Lugha na nchi",
+      "Privacy & data": "Faragha na data"
     },
 
     ha: {
@@ -358,7 +403,12 @@
       "Pending verification": "Tabbatar da ke jiran", "Verified": "An tabbatar",
       "Rejected": "An soke", "Training day": "Ranar horar",
       "Mark done": "Shi a gaba", "Notes or modifications": "Notes ko canza",
-      "Custom exercise": "Ƙoƙari na musƙamu", "Send to the shared library": "Aika zuwa maktabar ta pamoja"
+      "Custom exercise": "Ƙoƙari na musƙamu", "Send to the shared library": "Aika zuwa maktabar ta pamoja",
+      "Programs": "Shirin",
+      "Workout Programs": "Shirinen horar",
+      "Training": "Horar",
+      "Language & country": "Harshe da ƙasa",
+      "Privacy & data": "Sirri da bayanai"
     },
 
     yo: {
@@ -389,7 +439,12 @@
       "Pending verification": "Ìjẹ́rìí nfún ìfọwọ́sí", "Verified": "A fọwọ́sí",
       "Rejected": "A kọ̀", "Training day": "Òjọ́ ìṣunẹ́", "Mark done": "Fi bó ń ṣe",
       "Notes or modifications": "Àkíyèsí tàbí ìyí", "Custom exercise": "Ìṣunẹ́ ẹ̀yà",
-      "Send to the shared library": "Fi sí ìwé pọ̀"
+      "Send to the shared library": "Fi sí ìwé pọ̀",
+      "Programs": "Ètò",
+      "Workout Programs": "Ètò ìṣunẹ́",
+      "Training": "Ìṣunẹ́",
+      "Language & country": "Èdè àti orílẹ̀",
+      "Privacy & data": "Ìkọ̀kọ́ àti data"
     },
 
     ru: {
@@ -424,7 +479,12 @@
       "Pending verification": "Ожидает проверки", "Verified": "Проверен",
       "Rejected": "Отклонён", "Training day": "День тренировки",
       "Mark done": "Отметить выполненным", "Notes or modifications": "Заметки или изменения",
-      "Custom exercise": "Своё упражнение", "Send to the shared library": "Отправить в общую библиотеку"
+      "Custom exercise": "Своё упражнение", "Send to the shared library": "Отправить в общую библиотеку",
+      "Programs": "Программы",
+      "Workout Programs": "Программы тренировок",
+      "Training": "Тренировки",
+      "Language & country": "Язык и страна",
+      "Privacy & data": "Конфиденциальность и данные"
     },
 
     ja: {
@@ -459,7 +519,12 @@
       "Pending verification": "審査待ち", "Verified": "認証済み",
       "Rejected": "却下", "Training day": "トレーニング日",
       "Mark done": "完了にする", "Notes or modifications": "メモや変更点",
-      "Custom exercise": "カスタムエクササイズ", "Send to the shared library": "共有ライブラリに送る"
+      "Custom exercise": "カスタムエクササイズ", "Send to the shared library": "共有ライブラリに送る",
+      "Programs": "プログラム",
+      "Workout Programs": "ワークアウトプログラム",
+      "Training": "トレーニング",
+      "Language & country": "言語と国",
+      "Privacy & data": "プライバシーとデータ"
     },
 
     ko: {
@@ -494,7 +559,12 @@
       "Pending verification": "심사 대기 중", "Verified": "인증됨",
       "Rejected": "반려됨", "Training day": "훈련일",
       "Mark done": "완료로 표시", "Notes or modifications": "메모 또는 수정 사항",
-      "Custom exercise": "사용자 운동", "Send to the shared library": "공유 라이브러리에 보내기"
+      "Custom exercise": "사용자 운동", "Send to the shared library": "공유 라이브러리에 보내기",
+      "Programs": "프로그램",
+      "Workout Programs": "워크아웃 프로그램",
+      "Training": "훈련",
+      "Language & country": "언어와 국가",
+      "Privacy & data": "개인정보와 데이터"
     },
 
     tr: {
@@ -529,7 +599,12 @@
       "Pending verification": "Doğrulama bekliyor", "Verified": "Doğrulanmış",
       "Rejected": "Reddedildi", "Training day": "Antrenman günü",
       "Mark done": "Tamamlandı işaretle", "Notes or modifications": "Notlar veya değişiklikler",
-      "Custom exercise": "Özel egzersiz", "Send to the shared library": "Ortak kütüphaneye gönder"
+      "Custom exercise": "Özel egzersiz", "Send to the shared library": "Ortak kütüphaneye gönder",
+      "Programs": "Programlar",
+      "Workout Programs": "Antrenman programları",
+      "Training": "Antrenman",
+      "Language & country": "Dil ve ülke",
+      "Privacy & data": "Gizlilik ve veriler"
     },
 
     id: {
@@ -564,7 +639,12 @@
       "Pending verification": "Menunggu verifikasi", "Verified": "Terverifikasi",
       "Rejected": "Ditolak", "Training day": "Hari latihan",
       "Mark done": "Tandai selesai", "Notes or modifications": "Catatan atau modifikasi",
-      "Custom exercise": "Latihan khusus", "Send to the shared library": "Kirim ke pustaka bersama"
+      "Custom exercise": "Latihan khusus", "Send to the shared library": "Kirim ke pustaka bersama",
+      "Programs": "Program",
+      "Workout Programs": "Program latihan",
+      "Training": "Latihan",
+      "Language & country": "Bahasa dan negara",
+      "Privacy & data": "Privasi dan data"
     },
 
     nl: {
@@ -599,7 +679,12 @@
       "Pending verification": "Verificatie in afwachting", "Verified": "Geverifieerd",
       "Rejected": "Afgewezen", "Training day": " trainingsdag",
       "Mark done": "Markeer als gedaan", "Notes or modifications": "Notities of aanpassingen",
-      "Custom exercise": "Eigen oefening", "Send to the shared library": "Naar de gedeelde bibliotheek sturen"
+      "Custom exercise": "Eigen oefening", "Send to the shared library": "Naar de gedeelde bibliotheek sturen",
+      "Programs": "Programma's",
+      "Workout Programs": "Trainingsprogramma's",
+      "Training": "Training",
+      "Language & country": "Taal en land",
+      "Privacy & data": "Privacy en gegevens"
     },
 
     pl: {
@@ -634,7 +719,12 @@
       "Pending verification": "Oczekuje na weryfikację", "Verified": "Zweryfikowany",
       "Rejected": "Odrzucony", "Training day": "Dzień treningowy",
       "Mark done": "Oznacz jako zrobione", "Notes or modifications": "Notatki lub modyfikacje",
-      "Custom exercise": "Własne ćwiczenie", "Send to the shared library": "Wyślij do wspólnej biblioteki"
+      "Custom exercise": "Własne ćwiczenie", "Send to the shared library": "Wyślij do wspólnej biblioteki",
+      "Programs": "Programy",
+      "Workout Programs": "Programy treningowe",
+      "Training": "Trening",
+      "Language & country": "Język i kraj",
+      "Privacy & data": "Prywatność i dane"
     },
 
     vi: {
@@ -669,7 +759,12 @@
       "Pending verification": "Đang chờ xác minh", "Verified": "Đã xác minh",
       "Rejected": "Bị từ chối", "Training day": "Ngày tập",
       "Mark done": "Đánh dấu đã xong", "Notes or modifications": "Ghi chú hoặc điều chỉnh",
-      "Custom exercise": "Bài tập tự tạo", "Send to the shared library": "Gửi vào thư viện chung"
+      "Custom exercise": "Bài tập tự tạo", "Send to the shared library": "Gửi vào thư viện chung",
+      "Programs": "Chương trình",
+      "Workout Programs": "Chương trình tập luyện",
+      "Training": "Tập luyện",
+      "Language & country": "Ngôn ngữ và quốc gia",
+      "Privacy & data": "Quyền riêng tư và dữ liệu"
     },
 
     th: {
@@ -704,7 +799,12 @@
       "Pending verification": "รอการตรวจสอบ", "Verified": "ตรวจสอบแล้ว",
       "Rejected": "ไม่ผ่าน", "Training day": "วันฝึก",
       "Mark done": "ทำเครื่องหมายว่าทำแล้ว", "Notes or modifications": "บันทึกหรือปรับปรุง",
-      "Custom exercise": "ท่ากำหนดเอง", "Send to the shared library": "ส่งไปคลังท่ากลาง"
+      "Custom exercise": "ท่ากำหนดเอง", "Send to the shared library": "ส่งไปคลังท่ากลาง",
+      "Programs": "โปรแกรม",
+      "Workout Programs": "โปรแกรมการออกกำลังกาย",
+      "Training": "การฝึกซ้อม",
+      "Language & country": "ภาษาและประเทศ",
+      "Privacy & data": "ความเป็นส่วนตัวและข้อมูล"
     },
 
     ms: {
@@ -739,7 +839,12 @@
       "Pending verification": "Menunggu pengesahan", "Verified": "Disahkan",
       "Rejected": "Ditolak", "Training day": "Hari latihan",
       "Mark done": "Tandakan selesai", "Notes or modifications": "Nota atau pengubahsuai",
-      "Custom exercise": "Latihan tersuai", "Send to the shared library": "Hantar ke pustaka bersama"
+      "Custom exercise": "Latihan tersuai", "Send to the shared library": "Hantar ke pustaka bersama",
+      "Programs": "Program",
+      "Workout Programs": "Program latihan",
+      "Training": "Latihan",
+      "Language & country": "Bahasa dan negara",
+      "Privacy & data": "Privasi dan data"
     },
 
     fil: {
@@ -774,9 +879,11 @@
       "Pending verification": "Naghihintay ng beripikasyon", "Verified": "Beripikado",
       "Rejected": "Tinanggap na hindi", "Training day": "Araw ng pagsasanay",
       "Mark done": "Markahang tapos na", "Notes or modifications": "Mga tala o pagbabago",
-      "Custom exercise": "Sariling ehersisyo", "Send to the shared library": "Ipadala sa shared library"
+      "Custom exercise": "Sariling ehersisyo", "Send to the shared library": "Ipadala sa shared library",
+      "Programs": "Mga programa", "Workout Programs": "Mga programa ng ehersisyo",
+      "Training": "Pagsasanay", "Language & country": "Wika at bansa", "Privacy & data": "Pagkapribado at data"
     }
   };
 
-  global.GBI18nExtend = EXT;
+  window.GBI18nExtend = EXT;
 })(typeof window !== "undefined" ? window : this);

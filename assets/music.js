@@ -25,7 +25,7 @@
 (function (global) {
   "use strict";
 
-  var S = global.GBStore;
+  var S = window.GBStore;
 
   /* ---------------- provider registry ---------------- */
   var PROVIDERS = {
@@ -468,7 +468,7 @@
     return Promise.resolve(null);
   }
 
-  global.GBMusic = {
+  window.GBMusic = {
     providers: function () { return Object.keys(PROVIDERS).map(function (k) { return PROVIDERS[k]; }); },
     provider: function (id) { return PROVIDERS[id] || null; },
     connect: connect,
