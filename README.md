@@ -253,15 +253,29 @@ node tests/run.js http://localhost:8080
 
 # against production
 node tests/run.js https://gymbadge.vercel.app
+
+# the source audit, no server or browser needed
+node tests/buttons.js
 ```
 
-It covers every route, the removal of the cart and order pages, signup,
-verification, password reset and change, session revocation, the AI
+`tests/run.js` covers every route, the removal of the cart and order pages,
+signup, verification, password reset and change, session revocation, the AI
 assistant answering and refusing to guess, the trainer and exercise
 moderation workflows, the equipment report permissions, the translation
-service, the language and country pickers, the official logo (decoded and
-checked for a white plate and the brand palette) and a sweep of every page
-for hyphens that would reach the reader.
+service, the food scanner, the language and country pickers, the official
+logo (decoded and checked for a white plate and the brand palette) and a
+sweep of every page for hyphens that would reach the reader.
+
+`tests/buttons.js` reads the app source and checks that every control it
+builds has a handler, that every helper it calls is actually in scope, that
+it never falls back to the browser's own `prompt` or `confirm`, and that
+the scanner, the shared helpers and the country picker are all wired up.
+It runs in a second and catches the quiet failures, where a button looks
+right on the screen and does nothing.
+
+Every screen and every website page was also driven in a real browser, one
+control at a time, watching for errors and for anything that changed
+nothing.
 
 ```bash
 python server.py 8080          # in one terminal
