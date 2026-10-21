@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<meta name="theme-color" content="#121211">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Gym Badge">
+<meta name="description" content="Gym Badge — train smarter, prove it, earn your badge.">
+<title>Gym Badge</title>
+<link rel="manifest" href="/app/manifest.webmanifest">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="/app/assets/img/icon-180.png">
+<link rel="stylesheet" href="/assets/shared.css">
+<link rel="stylesheet" href="/app/assets/css/app.css">
+</head>
+<body>
+  <!-- Animated aurora backdrop -->
+  <div class="aurora" aria-hidden="true">
+    <span class="a-shot s1"></span><span class="a-shot s2"></span><span class="a-shot s3"></span>
+    <span class="a-blob b1"></span><span class="a-blob b2"></span><span class="a-blob b3"></span>
+  </div>
+
+  <div id="app"></div>
+
+  <!-- Splash -->
+  <div class="splash" id="splash">
+    <span class="glow"></span>
+    <div class="splash-lock">
+      <img class="logo" src="/assets/img/logo.png" alt="Gym Badge">
+      <div class="brandbig center">Gymbadge</div>
+      <p class="tagline">Train · Track · Triumph</p>
+    </div>
+  </div>
+
+  <noscript><p style="text-align:center;padding:40px">Gym Badge needs JavaScript enabled.</p></noscript>
+
+  <script src="/assets/theme.js"></script>
+  <script src="/assets/i18n.js"></script>
+  <script src="/assets/pw.js"></script>
+  <script src="/assets/music.js"></script>
+  <script src="/assets/auth.js"></script>
+  <script src="/assets/people.js"></script>
+  <script src="/app/assets/js/data.js"></script>
+  <script src="/app/assets/js/store.js"></script>
+  <script src="/app/assets/js/payments.js"></script>
+  <script src="/app/assets/js/app.js"></script>
+  <script src="/app/assets/js/settings.js"></script>
+</body>
+</html>

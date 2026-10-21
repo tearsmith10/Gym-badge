@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>Forgot password — Gym Badge</title>
+<meta name="description" content="Reset your Gym Badge password. Enter your email and we'll send you a secure link to choose a new one.">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n.js"></script>
+<script src="/assets/pw.js"></script>
+<script src="/assets/theme.js"></script>
+</head>
+<body>
+
+<div class="wrap auth-wrap">
+  <div class="auth-card" id="card">
+    <h1>Forgot your password?</h1>
+    <p class="sub">Enter the email on your account and we'll send you a link to choose a new password. The link expires in 1 hour.</p>
+
+    <div class="form-notice" id="flash" hidden></div>
+
+    <form class="form" id="forgotForm" style="max-width:none" novalidate>
+      <div class="field">
+        <label for="email">Email address</label>
+        <input id="email" type="email" placeholder="you@email.com" autocomplete="email" required>
+      </div>
+      <button class="btn btn-primary" type="submit" id="submitBtn" style="width:100%">Send reset link</button>
+    </form>
+
+    <div class="form-notice ok" id="sentBox" hidden>
+      <b>Check your inbox.</b> If that email has an account, a reset link is on its way.
+      <div id="devWrap" hidden style="margin-top:10px">
+        <b>Dev mode (no SMTP yet):</b> open your link here:
+        <a id="devLink" href="#" target="_blank" rel="noopener"></a>
+      </div>
+    </div>
+
+    <div class="auth-foot">Remembered it? <a href="/login">Back to sign in</a></div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="/assets/people.js"></script>
+<script src="/assets/theme.js"></script>
+<script src="/assets/auth.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script>
+(function () {
+  var flash = document.getElementById("flash");
+  function say(msg) { flash.textContent = msg; flash.hidden = false; }
+
+  document.getElementById("forgotForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    flash.hidden = true;
+    var email = document.getElementById("email").value.trim();
+    if (!GBAuth.EMAIL_RE.test(email)) { say("Please enter a valid email address."); return; }
+
+    var btn = document.getElementById("submitBtn");
+    btn.disabled = true; btn.textContent = "Sending…";
+
+    GBAuth.forgot(email).then(function (res) {
+      btn.disabled = false; btn.textContent = "Send reset link";
+      if (!res.ok) { say(res.error || "Something went wrong. Try again."); return; }
+      document.getElementById("forgotForm").hidden = true;
+      document.getElementById("sentBox").hidden = false;
+      if (res.devResetLink) {
+        var a = document.getElementById("devLink");
+        a.href = res.devResetLink; a.textContent = res.devResetLink;
+        document.getElementById("devWrap").hidden = false;
+      }
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = "Send reset link";
+      say("Network hiccup — try again.");
+    });
+  });
+
+  GBChrome.mount();
+})();
+</script>
+</body>
+</html>

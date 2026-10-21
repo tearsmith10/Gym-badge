@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>Gym — Gym Badge</title>
+<meta name="description" content="Gym details, amenities, day-pass and membership pricing, live status and reviews. Book your slot in seconds.">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n.js"></script>
+<script src="/assets/pw.js"></script>
+<script src="/assets/theme.js"></script>
+</head>
+<body>
+
+<div class="wrap page-head" style="padding-bottom:20px">
+  <div class="crumb" id="crumb"><a href="/">Home</a><span>/</span><a href="/find">Find a gym</a><span>/</span><b id="crumbNow">Gym</b></div>
+</div>
+
+<div class="wrap" id="detailWrap"></div>
+
+<section class="section" id="reviewsSec">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">What members say</span><h2>Reviews from real sessions</h2></div>
+    <div id="revBlock"></div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Nearby floors</span><h2>Other gyms you might like</h2></div>
+    <div class="catalog" id="nearby"></div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="/assets/people.js"></script>
+<script src="/assets/theme.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var id = params.get("id") || "iron-house";
+  var g = GBCatalog.gym(id);
+
+  if (!g) {
+    document.getElementById("detailWrap").innerHTML =
+      '<div class="empty"><b>Gym not found</b>It may have moved. <a href="/find" style="color:var(--accent);font-weight:650">Browse all gyms</a>.</div>';
+    GBChrome.mount();
+    return;
+  }
+
+  document.title = g.name + " — Gym Badge";
+  document.getElementById("crumbNow").textContent = g.name;
+
+  var open = g.open ? '<span class="pill pill-open">Open now</span>' : '<span class="pill pill-closed">Closed</span>';
+  var verified = g.verified ? '<span class="pill pill-verified">Verified</span>' : "";
+  var selected = { idx: 0 };
+
+  function spec(icon, title, body) {
+    return '<div class="spec"><span class="sic">' + icon + "</span><div><b>" + GBUI.esc(title) + "</b><small>" + GBUI.esc(body) + "</small></div></div>";
+  }
+  var pin = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6-7-11a7 7 0 0114 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+  var clock = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+  var check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+  var tag = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.6 13.4L12 22l-9-9V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>';
+
+  function buyBoxHtml() {
+    var opts = g.plans.map(function (p, i) {
+      return '<button type="button" data-i="' + i + '" class="' + (i === selected.idx ? "on" : "") + '">' +
+        "<b>" + GBUI.esc(p[0]) + "</b><small>" + GBUI.money(p[1]) + "</small></button>";
+    }).join("");
+    var price = g.plans[selected.idx][1];
+    return (
+      '<div class="buybox">' +
+        "<div style='margin-bottom:6px'><div class='muted' style='font-size:.85rem'>Choose access</div></div>" +
+        '<div class="opt" id="planOpt">' + opts + "</div>" +
+        '<div class="row"><span>Location</span><b>' + GBUI.esc(g.area) + ", " + GBUI.esc(g.city) + "</b></div>" +
+        '<div class="row"><span>Hours</span><b>' + GBUI.esc(g.hours) + "</b></div>" +
+        '<div class="row"><span>Distance</span><b>' + g.dist + " km away</b></div>" +
+        '<div class="row"><span>Access</span><b class="total">' + GBUI.money(price) + "</b></div>" +
+        '<button class="btn btn-primary" id="bookNow" style="width:100%;margin-top:16px">Book this access</button>' +
+        '<button class="btn btn-ghost" id="bookSlot" style="width:100%;margin-top:10px">Reserve a slot in the app</button>' +
+        '<div class="secure-note">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>' +
+          "<span>Payments run through Stripe. Free cancellation on monthly &amp; annual passes.</span>" +
+        "</div>" +
+      "</div>"
+    );
+  }
+
+  document.getElementById("detailWrap").innerHTML =
+    '<div class="detail">' +
+      "<div>" +
+        '<div class="detail-media">' +
+          '<div class="badges">' + open + verified + "</div>" +
+          '<div class="ph" data-photo="' + GBUI.esc(g.photo) + '" data-alt="' + GBUI.esc(g.name) + '">' +
+            '<div class="ph-fallback">' + (window.GBPeople ? GBPeople.art(g.photo) : "") + "</div></div>" +
+        "</div>" +
+        '<div class="spec-list">' +
+          spec(pin, "Where", g.area + ", " + g.city + ", " + g.country + " · " + g.dist + " km") +
+          spec(clock, "Hours", g.hours) +
+          spec(check, "Amenities", g.equipment.join(" · ")) +
+        "</div>" +
+      "</div>" +
+      "<div>" +
+        "<div class='rating' style='margin-bottom:14px'>" + GBUI.rating(g.rating, g.reviews) +
+          (g.verified ? ' <span class="pill pill-verified" style="margin-left:8px">Verified</span>' : "") + "</div>" +
+        "<h1>" + GBUI.esc(g.name) + "</h1>" +
+        '<div class="tags" style="display:flex;gap:7px;flex-wrap:wrap;margin-top:14px">' +
+          g.tags.map(function (t) { return '<span class="tagchip">' + GBUI.esc(t) + "</span>"; }).join("") + "</div>" +
+        '<p class="subtitle">' + GBUI.esc(g.blurb) + "</p>" +
+        '<div class="sec-head" style="margin-bottom:14px"><span class="eyebrow">What\'s inside</span></div>' +
+        GBUI.checkList(g.equipment) +
+        '<div id="buyBox">' + buyBoxHtml() + "</div>" +
+      "</div>" +
+    "</div>";
+
+  // wire buy box
+  var buy = document.getElementById("detailWrap");
+  function wireBuy() {
+    var opt = document.getElementById("planOpt");
+    if (opt) opt.addEventListener("click", function (e) {
+      var b = e.target.closest("button[data-i]");
+      if (!b) return;
+      selected.idx = +b.getAttribute("data-i");
+      document.getElementById("buyBox").innerHTML = buyBoxHtml();
+      wireBuy();
+    });
+    var now = document.getElementById("bookNow");
+    if (now) now.addEventListener("click", function () {
+      var p = g.plans[selected.idx];
+      var who = GBWeb.getUser();
+      if (!who) {
+        location.href = "/signup?next=" + encodeURIComponent(location.pathname + location.search);
+        return;
+      }
+      now.textContent = "Booking…";
+      GBWeb.setSub(GBWeb.getSub().plan);
+      GBWeb.updateUser({ lastGym: g.name, lastAccess: p[0] });
+      now.textContent = "Booked ✓";
+      setTimeout(function () { location.href = "/app/#/find"; }, 700);
+    });
+    var book = document.getElementById("bookSlot");
+    if (book) book.addEventListener("click", function () { location.href = "/signup?next=" + encodeURIComponent(location.pathname + location.search); });
+  }
+  wireBuy();
+
+  // reviews for this gym (reuse global reviews, seed 3)
+  document.getElementById("revBlock").innerHTML =
+    GBUI.ratingSummary(GBCatalog.REVIEWS) +
+    '<div class="reviews">' + GBCatalog.REVIEWS.slice(0, 3).map(GBUI.reviewCard).join("") + "</div>";
+
+  // nearby gyms
+  document.getElementById("nearby").innerHTML =
+    GBCatalog.GYMS.filter(function (x) { return x.id !== g.id; }).slice(0, 3).map(GBUI.gymCard).join("");
+
+  GBUI.hydratePhotos();
+  GBChrome.observeReveals();
+  GBChrome.mount();
+  GBUI.hydratePhotos();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>Create account — Gym Badge</title>
+<meta name="description" content="Join Gym Badge free. Create your badge in 60 seconds as an individual, gym or trainer — no card needed.">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n.js"></script>
+<script src="/assets/pw.js"></script>
+<script src="/assets/theme.js"></script>
+</head>
+<body>
+
+<div class="wrap auth-wrap">
+  <!-- ============ STEP 1: create ============ -->
+  <div class="auth-card" id="stepCreate">
+    <h1>Create your badge</h1>
+    <p class="sub">Free to start. No card needed. Upgrade whenever you're ready.</p>
+
+    <div class="form-notice" id="flash" hidden></div>
+
+    <div class="oauth">
+      <button type="button" data-oauth="google"><span class="g" style="color:#4285F4">G</span> Continue with Google</button>
+      <button type="button" data-oauth="yahoo"><span class="g" style="color:#6001d2">Y!</span> Continue with Yahoo</button>
+    </div>
+    <div class="oauth-note" id="oauthNote" hidden></div>
+
+    <div class="divider-txt">or with email</div>
+
+    <form class="form" id="signupForm" style="max-width:none" novalidate>
+      <div class="field">
+        <label for="name">Full name</label>
+        <input id="name" type="text" placeholder="Ada Okafor" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <label for="email">Email address</label>
+        <input id="email" type="email" placeholder="you@email.com" autocomplete="email" required>
+        <span class="hint">We'll send a verification link to confirm it's you.</span>
+      </div>
+      <div class="field">
+        <label for="pw">Password</label>
+        <div class="pw-wrap">
+          <input id="pw" type="password" placeholder="Create a password" autocomplete="new-password" required>
+          <button type="button" class="pw-eye" aria-label="Show password" aria-pressed="false" title="Show password">
+            <span class="eye-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.2 12S5.8 5.5 12 5.5 21.8 12 21.8 12 18.2 18.5 12 18.5 2.2 12 2.2 12z"/><circle cx="12" cy="12" r="3.2"/></svg></span>
+            <span class="eye-off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 5.7A9.6 9.6 0 0112 5.5c6.2 0 9.8 6.5 9.8 6.5a17 17 0 01-3.4 4.3"/><path d="M6.3 7.4A16.6 16.6 0 002.2 12S5.8 18.5 12 18.5a9.4 9.4 0 004-.9"/><path d="M10 10a2.9 2.9 0 004.1 4.1"/><path d="M3 3l18 18"/></svg></span>
+          </button>
+        </div>
+        <ul class="pw-rules" id="pwRules">
+          <li data-rule="length"><span class="tick"></span>At least 8 characters</li>
+          <li data-rule="alnum"><span class="tick"></span>Letters and numbers combined</li>
+        </ul>
+      </div>
+      <div class="form-2col">
+        <div class="field">
+          <label for="role">I'm joining as</label>
+          <select id="role">
+            <option value="individual">An individual</option>
+            <option value="gym">A gym / company</option>
+            <option value="trainer">A trainer</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="country">Country</label>
+          <select id="country"></select>
+        </div>
+      </div>
+      <button class="btn btn-primary" type="submit" id="submitBtn" style="width:100%">Create free account</button>
+    </form>
+
+    <div class="auth-foot">Already have an account? <a href="/login">Sign in</a></div>
+    <div class="auth-foot" style="margin-top:6px">
+      Already registered but never verified? <a href="/signup?step=check">Resend verification email</a> ·
+      <a href="/forgot">Forgot your password?</a>
+    </div>
+    <div class="terms-mini">By creating an account you agree to our <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>. Photo upload is optional.</div>
+  </div>
+
+  <!-- ============ STEP 2: check your email ============ -->
+  <div class="auth-card" id="stepCheck" hidden>
+    <div class="verify-art" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
+    </div>
+    <h1>Check your inbox</h1>
+    <p class="sub">We sent a verification link to <b id="checkEmail"></b>. Click it to activate your badge — it expires in 24 hours.</p>
+
+    <div class="form-notice ok" id="devBox" hidden>
+      <b>Dev mode (no SMTP configured yet):</b> no real email was sent — open your link here:
+      <a id="devLink" href="#" target="_blank" rel="noopener"></a>
+    </div>
+
+    <div class="form-stack">
+      <a class="btn btn-primary" id="openMail" href="https://mail.google.com" target="_blank" rel="noopener" style="width:100%">Open my email app</a>
+      <button class="btn btn-outline" id="resendBtn" type="button" style="width:100%">Resend verification email</button>
+      <a class="link-mini center" href="/login">Back to sign in</a>
+    </div>
+    <div class="terms-mini" id="resendNote">Didn't get it? Check spam, then resend.</div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="/assets/people.js"></script>
+<script src="/assets/theme.js"></script>
+<script src="/assets/auth.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script>
+(function () {
+  var countries = ["Nigeria","Ghana","Kenya","South Africa","Egypt","United Kingdom","United States","Canada","Australia","Germany","France","India","United Arab Emirates","Brazil","Mexico","Japan","Other"];
+  document.getElementById("country").innerHTML = countries.map(function (c) {
+    return '<option value="' + c + '">' + c + "</option>";
+  }).join("");
+
+  var flash = document.getElementById("flash");
+  var submitBtn = document.getElementById("submitBtn");
+  var pwInput = document.getElementById("pw");
+
+  function say(msg, kind) {
+    flash.textContent = msg;
+    flash.className = "form-notice " + (kind || "err");
+    flash.hidden = false;
+  }
+  function next() {
+    var p = new URLSearchParams(location.search).get("next");
+    return p || "/";
+  }
+
+  /* ---- live password rules ---- */
+  function paintRules() {
+    var r = GBAuth.checkPassword(pwInput.value);
+    document.querySelectorAll("#pwRules li").forEach(function (li) {
+      li.classList.toggle("on", !!r[li.getAttribute("data-rule")]);
+    });
+    return r;
+  }
+  pwInput.addEventListener("input", paintRules);
+  pwInput.addEventListener("blur", function () {
+    var r = paintRules();
+    if (pwInput.value && !r.ok) say(r.message);
+    else flash.hidden = true;
+  });
+
+  /* ---- social providers note ---- */
+  GBAuth.cfg().then(function (cfg) {
+    if (!cfg.googleOAuth || !cfg.yahooOAuth) {
+      var n = document.getElementById("oauthNote");
+      var missing = [!cfg.googleOAuth && "Google", !cfg.yahooOAuth && "Yahoo"].filter(Boolean).join(" & ");
+      n.textContent = missing + " sign in activates as soon as the server has its OAuth client ID. Until then it creates a linked account so you can test the flow.";
+      n.hidden = false;
+    }
+  });
+
+  /* ---- check-email step ---- */
+  var pendingEmail = "";
+  function showCheck(email, devLink) {
+    pendingEmail = email;
+    document.getElementById("stepCreate").hidden = true;
+    document.getElementById("stepCheck").hidden = false;
+    document.getElementById("checkEmail").textContent = email;
+    var host = /[^\s@]+@(gmail|googlemail)\./i.test(email);
+    document.getElementById("openMail").href = host ? "https://mail.google.com"
+      : /yahoo/i.test(email) ? "https://mail.yahoo.com"
+      : /outlook|hotmail|live/i.test(email) ? "https://outlook.live.com/mail"
+      : "mailto:";
+    if (devLink) {
+      var box = document.getElementById("devBox"), a = document.getElementById("devLink");
+      a.href = devLink; a.textContent = devLink;
+      box.hidden = false;
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ---- verify deep link: /signup?step=check&email=... ---- */
+  var qp = new URLSearchParams(location.search);
+  if (qp.get("step") === "check" && qp.get("email")) showCheck(qp.get("email"), null);
+
+  document.getElementById("resendBtn").addEventListener("click", function () {
+    var btn = this;
+    btn.disabled = true; btn.textContent = "Sending…";
+    GBAuth.resendVerification(pendingEmail).then(function (res) {
+      btn.disabled = false; btn.textContent = "Resend verification email";
+      var note = document.getElementById("resendNote");
+      if (res.devVerifyLink) {
+        var box = document.getElementById("devBox"), a = document.getElementById("devLink");
+        a.href = res.devVerifyLink; a.textContent = res.devVerifyLink;
+        box.hidden = false;
+        note.textContent = "New link generated (dev mode).";
+      } else {
+        note.textContent = res.message || "If that email needs verifying, a new link is on its way.";
+      }
+    });
+  });
+
+  /* ---- create account ---- */
+  document.getElementById("signupForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    flash.hidden = true;
+    var name = document.getElementById("name").value.trim();
+    var email = document.getElementById("email").value.trim();
+    var role = document.getElementById("role").value;
+    var country = document.getElementById("country").value;
+    var pw = pwInput.value;
+
+    if (!name) { document.getElementById("name").focus(); say("Please enter your full name."); return; }
+    if (!GBAuth.EMAIL_RE.test(email)) {
+      document.getElementById("email").style.borderColor = "var(--bad)";
+      document.getElementById("email").focus();
+      say("Please enter a valid email address.");
+      return;
+    }
+    var r = paintRules();
+    if (!r.ok) { pwInput.focus(); say(r.message); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Creating your badge…";
+
+    GBAuth.signup({ name: name, email: email, password: pw, role: role, country: country })
+      .then(function (res) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Create free account";
+        if (!res.ok) { say(res.error || "Could not create the account. Try again."); return; }
+        if (res.needsVerification) { showCheck(email, res.devVerifyLink); return; }
+        location.href = next();
+      }).catch(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Create free account";
+        say("Network hiccup — try again.");
+      });
+  });
+
+  document.querySelectorAll("[data-oauth]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var provider = b.getAttribute("data-oauth");
+      var label = b.innerHTML;
+      b.disabled = true;
+      b.innerHTML = "Connecting…";
+      GBAuth.oauth(provider, {
+        name: document.getElementById("name").value.trim() || null
+      }).then(function (res) {
+        b.disabled = false; b.innerHTML = label;
+        if (!res.ok) { say(res.error || "Sign-in failed."); return; }
+        location.href = next();
+      }).catch(function () {
+        b.disabled = false; b.innerHTML = label;
+        say("Could not reach the sign in service. Try email instead.");
+      });
+    });
+  });
+
+  GBChrome.mount();
+})();
+</script>
+</body>
+</html>

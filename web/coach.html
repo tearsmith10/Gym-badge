@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>Coach — Gym Badge</title>
+<meta name="description" content="Coach profile: specialties, certifications, results, rates and verified reviews. Book a session in seconds.">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n.js"></script>
+<script src="/assets/pw.js"></script>
+<script src="/assets/theme.js"></script>
+</head>
+<body>
+
+<div class="wrap page-head" style="padding-bottom:20px">
+  <div class="crumb" id="crumb"><a href="/">Home</a><span>/</span><a href="/coaches">Coaches</a><span>/</span><b id="crumbNow">Coach</b></div>
+</div>
+
+<div class="wrap" id="detailWrap"></div>
+
+<section class="section" id="reviewsSec">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Client results</span><h2>What athletes say</h2></div>
+    <div id="revBlock"></div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">More coaches</span><h2>You might also like</h2></div>
+    <div class="catalog" id="others"></div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="/assets/people.js"></script>
+<script src="/assets/theme.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var id = params.get("id") || "ada-okafor";
+  var c = GBCatalog.coach(id);
+
+  if (!c) {
+    document.getElementById("detailWrap").innerHTML =
+      '<div class="empty"><b>Coach not found</b>They may have moved. <a href="/coaches" style="color:var(--accent);font-weight:650">Browse all coaches</a>.</div>';
+    GBChrome.mount();
+    return;
+  }
+
+  document.title = c.name + " — Gym Badge";
+  document.getElementById("crumbNow").textContent = c.name;
+
+  var verified = c.verified ? '<span class="pill pill-verified">Verified coach</span>' : "";
+  var selected = { sessions: 1 };
+
+  var pin = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6-7-11a7 7 0 0114 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+  var badge = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M8.2 12.5L7 22l5-3 5 3-1.2-9.5"/></svg>';
+  var cal = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>';
+  function spec(icon, title, body) {
+    return '<div class="spec"><span class="sic">' + icon + "</span><div><b>" + GBUI.esc(title) + "</b><small>" + GBUI.esc(body) + "</small></div></div>";
+  }
+
+  function buyBoxHtml() {
+    var packs = [
+      { n: "Single session", q: 1, mult: 1 },
+      { n: "5-session pack", q: 5, mult: 4.5 },
+      { n: "10-session pack", q: 10, mult: 8.5 }
+    ];
+    var opts = packs.map(function (p, i) {
+      var total = Math.round(c.rateNgn * p.mult);
+      return '<button type="button" data-i="' + i + '" class="' + (i === selected.sessions ? "on" : "") + '">' +
+        "<b>" + GBUI.esc(p.n) + "</b><small>" + GBUI.money(total) + "</small></button>";
+    }).join("");
+    var p = packs[selected.sessions];
+    var total = Math.round(c.rateNgn * p.mult);
+    var per = Math.round(total / p.q);
+    return (
+      '<div class="buybox">' +
+        '<div class="muted" style="font-size:.85rem;margin-bottom:6px">Choose a pack</div>' +
+        '<div class="opt" id="packOpt">' + opts + "</div>" +
+        '<div class="row"><span>Rate per session</span><b>' + GBUI.money(per) + "</b></div>" +
+        '<div class="row"><span>Sessions</span><b>' + p.q + "</b></div>" +
+        '<div class="row"><span>Availability</span><b>' + GBUI.esc(c.avail) + "</b></div>" +
+        '<div class="row"><span>Session fee</span><b class="total">' + GBUI.money(total) + "</b></div>" +
+        '<button class="btn btn-primary" id="bookNow" style="width:100%;margin-top:16px">Book ' + p.q + " session" + (p.q > 1 ? "s" : "") + "</button>" +
+        '<div class="secure-note">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>' +
+          "<span>Payments run through Stripe. Reschedule free up to 12h before.</span>" +
+        "</div>" +
+      "</div>"
+    );
+  }
+
+  document.getElementById("detailWrap").innerHTML =
+    '<div class="detail">' +
+      "<div>" +
+        '<div class="detail-media">' +
+          '<div class="badges">' + verified + "</div>" +
+          '<div class="ph" data-photo="' + GBUI.esc(c.photo) + '" data-alt="' + GBUI.esc(c.name) + '" style="aspect-ratio:4/5">' +
+            '<div class="ph-fallback">' + (window.GBPeople ? GBPeople.art(c.photo) : "") + "</div></div>" +
+        "</div>" +
+        '<div class="spec-list">' +
+          spec(badge, "Certifications", c.certs.join(" · ")) +
+          spec(cal, "Availability", c.avail + " · " + c.years + " years coaching") +
+          spec(pin, "Location", c.city + ", " + c.country + " · online &amp; in person") +
+        "</div>" +
+      "</div>" +
+      "<div>" +
+        "<div class='rating' style='margin-bottom:14px'>" + GBUI.rating(c.rating, c.reviews) + "</div>" +
+        "<h1>" + GBUI.esc(c.name) + "</h1>" +
+        '<div class="loc" style="color:var(--faint);margin-top:8px">' + GBUI.esc(c.specialty) + " · " + GBUI.esc(c.city) + "</div>" +
+        '<p class="subtitle">' + GBUI.esc(c.blurb) + "</p>" +
+        '<div class="sec-head" style="margin-bottom:10px"><span class="eyebrow">Proven results</span></div>' +
+        GBUI.checkList(c.results) +
+        '<div class="sec-head" style="margin:22px 0 10px"><span class="eyebrow">Speaks</span></div>' +
+        '<div class="tags" style="display:flex;gap:7px;flex-wrap:wrap">' +
+          c.langs.map(function (l) { return '<span class="tagchip">' + GBUI.esc(l) + "</span>"; }).join("") + "</div>" +
+        '<div id="buyBox" style="margin-top:24px">' + buyBoxHtml() + "</div>" +
+      "</div>" +
+    "</div>";
+
+  function wireBuy() {
+    var opt = document.getElementById("packOpt");
+    if (opt) opt.addEventListener("click", function (e) {
+      var b = e.target.closest("button[data-i]");
+      if (!b) return;
+      selected.sessions = +b.getAttribute("data-i");
+      document.getElementById("buyBox").innerHTML = buyBoxHtml();
+      wireBuy();
+    });
+    var add = document.getElementById("bookNow");
+    if (add) add.addEventListener("click", function () {
+      var packs = [
+        { n: "Single session", q: 1, mult: 1 },
+        { n: "5-session pack", q: 5, mult: 4.5 },
+        { n: "10-session pack", q: 10, mult: 8.5 }
+      ];
+      var p = packs[selected.sessions];
+      var total = Math.round(c.rateNgn * p.mult);
+      if (!GBWeb.getUser()) {
+        location.href = "/signup?next=" + encodeURIComponent(location.pathname + location.search);
+        return;
+      }
+      add.textContent = "Booking…";
+      GBWeb.updateUser({ lastCoach: c.name, lastSession: p.n, lastCoachAmount: total });
+      add.textContent = "Booked ✓";
+      setTimeout(function () { location.href = "/app/"; }, 700);
+    });
+  }
+  wireBuy();
+
+  document.getElementById("revBlock").innerHTML =
+    GBUI.ratingSummary(GBCatalog.REVIEWS) +
+    '<div class="reviews">' + GBCatalog.REVIEWS.slice(2, 5).map(GBUI.reviewCard).join("") + "</div>";
+
+  document.getElementById("others").innerHTML =
+    GBCatalog.COACHES.filter(function (x) { return x.id !== c.id; }).slice(0, 3).map(GBUI.coachCard).join("");
+
+  GBUI.hydratePhotos();
+  GBChrome.observeReveals();
+  GBChrome.mount();
+  GBUI.hydratePhotos();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>Support &amp; contact — Gym Badge</title>
+<meta name="description" content="Contact the Gym Badge team. Support for members, gyms and trainers — we reply within one business day.">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n.js"></script>
+<script src="/assets/pw.js"></script>
+<script src="/assets/theme.js"></script>
+</head>
+<body>
+
+<div class="wrap page-head">
+  <span class="eyebrow">Get in touch</span>
+  <h1>Talk to a <span class="power">human</span></h1>
+  <p>Questions about your account, billing, partnerships or anything else — the team reads every message and replies within one business day.</p>
+</div>
+
+<div class="wrap">
+  <div class="support-grid">
+    <div class="contact-methods">
+      <div class="cm">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg></span>
+        <div><b>Email support</b><small>support@gymbadge.app · replies within 1 business day</small></div>
+      </div>
+      <div class="cm">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>
+        <div><b>In app live chat</b><small>Premium members · priority, usually within the hour</small></div>
+      </div>
+      <div class="cm">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M9 13h.01M9 17h.01M15 9h.01M15 13h.01M15 17h.01"/></svg></span>
+        <div><b>Partnerships &amp; gyms</b><small>partners@gymbadge.app · seat packages, NFC kits, API</small></div>
+      </div>
+      <div class="cm">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <div><b>Support hours</b><small>Mon–Sat, 08:00–20:00 WAT · emergency billing 7 days</small></div>
+      </div>
+      <div class="figure-block" id="supFig" style="padding:20px;margin-top:6px"></div>
+    </div>
+
+    <div class="summary" style="position:static">
+      <h3>Send us a message</h3>
+      <form class="form" id="contactForm" style="max-width:none" novalidate>
+        <div class="form-2col">
+          <div class="field"><label for="cName">Name</label><input id="cName" type="text" placeholder="Your name" required></div>
+          <div class="field"><label for="cEmail">Email</label><input id="cEmail" type="email" placeholder="you@email.com" required></div>
+        </div>
+        <div class="field">
+          <label for="cTopic">Topic</label>
+          <select id="cTopic">
+            <option>General question</option>
+            <option>Billing &amp; Premium</option>
+            <option>Partner with a gym</option>
+            <option>Trainer &amp; coaching</option>
+            <option>Report a problem</option>
+            <option>Press &amp; careers</option>
+          </select>
+        </div>
+        <div class="field"><label for="cMsg">Message</label><textarea id="cMsg" rows="5" placeholder="How can we help?" required></textarea></div>
+        <button class="btn btn-primary" type="submit" style="justify-self:start">Send message</button>
+        <div class="secure-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg><span>We never sell your data. See our <a href="/privacy" style="color:var(--accent)">Privacy Policy</a>.</span></div>
+      </form>
+      <div id="contactDone" hidden style="text-align:center;padding:20px 0">
+        <div style="font-size:2.4rem">✅</div>
+        <h3 style="margin-top:12px">Message sent</h3>
+        <p class="muted" style="margin-top:8px">Thanks — we've got it and will reply within one business day.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="/assets/people.js"></script>
+<script src="/assets/theme.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script>
+(function () {
+  var fig = document.getElementById("supFig");
+  if (fig) fig.innerHTML = (window.GBPeople ? GBPeople.art("member-rest") : "");
+
+  document.getElementById("contactForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var n = document.getElementById("cName").value.trim();
+    var em = document.getElementById("cEmail").value.trim();
+    var m = document.getElementById("cMsg").value.trim();
+    if (!n || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em) || !m) {
+      (!n ? document.getElementById("cName") : !m ? document.getElementById("cMsg") : document.getElementById("cEmail")).focus();
+      return;
+    }
+    this.hidden = true;
+    document.getElementById("contactDone").hidden = false;
+  });
+
+  GBChrome.observeReveals();
+  GBChrome.mount();
+})();
+</script>
+</body>
+</html>

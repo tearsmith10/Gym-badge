@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>Set a new password — Gym Badge</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n.js"></script>
+<script src="/assets/pw.js"></script>
+<script src="/assets/theme.js"></script>
+</head>
+<body>
+
+<div class="wrap auth-wrap">
+  <div class="auth-card">
+    <h1>Choose a new password</h1>
+    <p class="sub">Pick something strong — at least 8 characters, mixing letters and numbers.</p>
+
+    <div class="form-notice" id="flash" hidden></div>
+
+    <form class="form" id="resetForm" style="max-width:none" novalidate>
+      <div class="field">
+        <label for="pw">New password</label>
+        <div class="pw-wrap">
+          <input id="pw" type="password" placeholder="New password" autocomplete="new-password" required>
+          <button type="button" class="pw-eye" aria-label="Show password" aria-pressed="false" title="Show password">
+            <span class="eye-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.2 12S5.8 5.5 12 5.5 21.8 12 21.8 12 18.2 18.5 12 18.5 2.2 12 2.2 12z"/><circle cx="12" cy="12" r="3.2"/></svg></span>
+            <span class="eye-off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 5.7A9.6 9.6 0 0112 5.5c6.2 0 9.8 6.5 9.8 6.5a17 17 0 01-3.4 4.3"/><path d="M6.3 7.4A16.6 16.6 0 002.2 12S5.8 18.5 12 18.5a9.4 9.4 0 004-.9"/><path d="M10 10a2.9 2.9 0 004.1 4.1"/><path d="M3 3l18 18"/></svg></span>
+          </button>
+        </div>
+        <ul class="pw-rules" id="pwRules">
+          <li data-rule="length"><span class="tick"></span>At least 8 characters</li>
+          <li data-rule="alnum"><span class="tick"></span>Letters and numbers combined</li>
+        </ul>
+      </div>
+      <div class="field">
+        <label for="pw2">Confirm new password</label>
+        <div class="pw-wrap">
+          <input id="pw2" type="password" placeholder="Repeat it" autocomplete="new-password" required>
+          <button type="button" class="pw-eye" aria-label="Show password" aria-pressed="false" title="Show password">
+            <span class="eye-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.2 12S5.8 5.5 12 5.5 21.8 12 21.8 12 18.2 18.5 12 18.5 2.2 12 2.2 12z"/><circle cx="12" cy="12" r="3.2"/></svg></span>
+            <span class="eye-off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 5.7A9.6 9.6 0 0112 5.5c6.2 0 9.8 6.5 9.8 6.5a17 17 0 01-3.4 4.3"/><path d="M6.3 7.4A16.6 16.6 0 002.2 12S5.8 18.5 12 18.5a9.4 9.4 0 004-.9"/><path d="M10 10a2.9 2.9 0 004.1 4.1"/><path d="M3 3l18 18"/></svg></span>
+          </button>
+        </div>
+      </div>
+      <button class="btn btn-primary" type="submit" id="submitBtn" style="width:100%">Save new password</button>
+    </form>
+
+    <div class="form-notice ok" id="doneBox" hidden>
+      Password updated. <a href="/login?notice=reset">Sign in with it →</a>
+    </div>
+
+    <div class="auth-foot">Link expired? <a href="/forgot">Request a new one</a></div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="/assets/people.js"></script>
+<script src="/assets/theme.js"></script>
+<script src="/assets/auth.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script>
+(function () {
+  var token = new URLSearchParams(location.search).get("token");
+  var flash = document.getElementById("flash");
+  var pwInput = document.getElementById("pw");
+
+  function say(msg, kind) {
+    flash.textContent = msg;
+    flash.className = "form-notice " + (kind || "err");
+    flash.hidden = false;
+  }
+
+  if (!token) {
+    say("This reset link is incomplete. Request a new one from the forgot password page.");
+    document.getElementById("resetForm").hidden = true;
+    GBChrome.mount();
+    return;
+  }
+
+  function paintRules() {
+    var r = GBAuth.checkPassword(pwInput.value);
+    document.querySelectorAll("#pwRules li").forEach(function (li) {
+      li.classList.toggle("on", !!r[li.getAttribute("data-rule")]);
+    });
+    return r;
+  }
+  pwInput.addEventListener("input", paintRules);
+
+  document.getElementById("resetForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    flash.hidden = true;
+    var pw = pwInput.value;
+    var pw2 = document.getElementById("pw2").value;
+    var r = paintRules();
+    if (!r.ok) { say(r.message); return; }
+    if (pw !== pw2) { say("Both passwords must match."); return; }
+
+    var btn = document.getElementById("submitBtn");
+    btn.disabled = true; btn.textContent = "Saving…";
+
+    GBAuth.reset(token, pw).then(function (res) {
+      btn.disabled = false; btn.textContent = "Save new password";
+      if (!res.ok) { say(res.error || "Could not update the password."); return; }
+      document.getElementById("resetForm").hidden = true;
+      document.getElementById("doneBox").hidden = false;
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = "Save new password";
+      say("Network hiccup — try again.");
+    });
+  });
+
+  GBChrome.mount();
+})();
+</script>
+</body>
+</html>

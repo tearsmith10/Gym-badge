@@ -1,0 +1,10 @@
+# Gym Badge has no third-party Python dependencies.
+#
+# server.py is written entirely against the Python standard library
+# (http.server, hashlib, hmac, secrets, smtplib, ssl, json), so there is
+# nothing to install.
+#
+# Keep this file for future optional extras, e.g.:
+#   stripe>=7.0.0    # live Stripe payment intents
+#
+# Install with:  pip install -r requirements.txt

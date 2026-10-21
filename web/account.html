@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>My account — Gym Badge</title>
+<meta name="description" content="Manage your Gym Badge profile, plan and preferences. Manage your account, language, music sync and privacy in one place.">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n.js"></script>
+<script src="/assets/pw.js"></script>
+<script src="/assets/theme.js"></script>
+</head>
+<body>
+
+<div class="wrap page-head">
+  <span class="eyebrow">Your account</span>
+  <h1>Profile &amp; plan</h1>
+  <p>Everything about you, your plan and your preferences — in one place.</p>
+</div>
+
+<div class="wrap" id="accountWrap" style="padding-bottom:40px"></div>
+
+<div id="site-footer"></div>
+
+<script src="/assets/people.js"></script>
+<script src="/assets/theme.js"></script>
+<script src="/assets/auth.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script>
+(function () {
+  var wrap = document.getElementById("accountWrap");
+  var user = GBWeb.getUser();
+
+  if (!user) {
+    wrap.innerHTML =
+      '<div class="empty"><b>You\'re not signed in</b>' +
+      'Sign in to see your profile, plan and preferences.<br><br>' +
+      '<a class="btn btn-primary" href="/login?next=/account" style="margin-right:10px">Sign in</a>' +
+      '<a class="btn btn-ghost" href="/signup?next=/account">Create account</a></div>';
+    GBChrome.mount();
+    return;
+  }
+
+  var plan = GBWeb.getSub().plan || "free";
+  var planName = plan === "premium" ? "Premium" : plan === "elite" ? "Elite" : "Starter";
+  var planObj = GBPricing.PLANS[plan === "premium" ? "premium" : plan === "elite" ? "elite" : "free"];
+  var cur = GBWeb.getCur();
+  var initials = (user.name || user.email || "U").split(/[\s@]+/).filter(Boolean).map(function (w) { return w[0]; }).slice(0, 2).join("").toUpperCase();
+
+  function planRow(name, price, featured) {
+    return (
+      '<div class="plan' + (featured ? " featured" : "") + '" style="text-align:left">' +
+        (featured ? '<span class="badge">Current tier</span>' : "") +
+        '<div class="pname">' + name + "</div>" +
+        '<div class="amt">' + price + '<small>/mo</small></div>' +
+        '<div class="equiv">' + (plan === featuredKey(name) ? "You're on this" : "") + "</div>" +
+        '<button class="btn ' + (plan === featuredKey(name) ? "btn-ghost" : "btn-outline") + '" data-plan="' + featuredKey(name) + '"' +
+          (plan === featuredKey(name) ? " disabled" : "") + ">" +
+          (plan === featuredKey(name) ? "Current plan" : "Switch") + "</button>" +
+      "</div>"
+    );
+  }
+  function featuredKey(name) { return name === "Premium" ? "premium" : name === "Elite" ? "elite" : "free"; }
+
+  wrap.innerHTML =
+    '<div class="acct-head">' +
+      '<div class="big-ava"><div class="ava">' + GBUI.esc(initials) + "</div></div>" +
+      '<div class="acct-meta">' +
+        "<h1>" + GBUI.esc(user.name || "Athlete") + "</h1>" +
+        '<div class="m">' + GBUI.esc(user.email || "no email") +
+          (user.role ? " · " + GBUI.esc(user.role) : "") +
+          (user.country ? " · " + GBUI.esc(user.country) : "") + "</div>" +
+        '<div class="m">Joined ' + new Date(user.joined).toLocaleDateString(undefined, { year: "numeric", month: "long" }) + "</div>" +
+      "</div>" +
+      '<div class="acct-actions">' +
+        '<a class="btn btn-outline btn-sm" href="/app/#/settings">App settings</a>' +
+        '<button class="btn btn-ghost btn-sm" id="signOut">Sign out</button>' +
+      "</div>" +
+    "</div>" +
+
+    '<div class="plan-callout" id="plan">' +
+      "<div><b>Your plan: " + planName + "</b><small>" + GBUI.esc(planObj.blurb) + "</small></div>" +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
+        '<a class="btn btn-outline btn-sm" href="/pricing">Change plan</a>' +
+        (plan !== "premium" ? '<a class="btn btn-primary btn-sm" href="/pricing">Upgrade to Premium</a>' : "") +
+      "</div>" +
+    "</div>" +
+
+    '<div class="acct-grid">' +
+      "<div>" +
+        '<div class="summary" style="position:static;margin-bottom:20px">' +
+          "<h3>Profile</h3>" +
+          '<div class="form" style="max-width:none">' +
+            '<div class="form-2col">' +
+              '<div class="field"><label for="pName">Full name</label><input id="pName" type="text" value="' + GBUI.esc(user.name || "") + '"></div>' +
+              '<div class="field"><label for="pEmail">Email</label><input id="pEmail" type="email" value="' + GBUI.esc(user.email || "") + '"></div>' +
+            "</div>" +
+            '<div class="field"><label for="pCountry">Country</label><input id="pCountry" type="text" value="' + GBUI.esc(user.country || "") + '"></div>' +
+            '<button class="btn btn-primary" id="saveProfile" style="justify-self:start">Save changes</button>' +
+          "</div>" +
+        "</div>" +
+      "</div>" +
+      '<div class="summary">' +
+        "<h3>Plan</h3>" +
+        '<div class="sum-row"><span>Current plan</span><b>' + planName + "</b></div>" +
+        '<div class="sum-row"><span>Monthly</span><b>' + (planObj.ngn ? GBUI.money(planObj.ngn) : "Free") + "</b></div>" +
+        '<div class="sum-row"><span>Currency</span><b>' + GBUI.esc(cur) + "</b></div>" +
+        '<div class="sum-row"><span>Next renewal</span><b>' + (plan === "free" ? "—" : "Monthly, cancel anytime") + "</b></div>" +
+        '<a class="btn btn-outline" href="/pricing" style="width:100%;margin-top:16px">Manage plan</a>' +
+        '<div class="secure-note">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>' +
+          "<span>Payments handled by Stripe. Card details never touch our servers.</span>" +
+        "</div>" +
+      "</div>" +
+    "</div>" +
+
+    /* ---- Trust & verification panel (email + optional identity) ---- */
+    '<div class="summary" id="identity" style="margin-top:20px">' +
+      "<h3>Trust &amp; verification</h3>" +
+      '<div class="sum-row"><span>Email address</span><b>' +
+        (user.verified
+          ? '<span class="v-badge on">✓ Verified</span>'
+          : '<span class="v-badge" id="verifyEmailBtn" role="button" tabindex="0">Not verified — resend</span>') +
+      "</b></div>" +
+      '<div class="sum-row"><span>Identity (optional)</span><b>' +
+        (user.idVerified
+          ? '<span class="v-badge on">✓ Verified · ' + GBUI.esc((user.idType || "").toUpperCase()) + " " + GBUI.esc(user.idMasked || "") + "</span>"
+          : '<span class="v-badge">Not verified</span>') +
+      "</b></div>" +
+      (user.idVerified ? "" :
+        '<div class="form" style="max-width:none;margin-top:14px" id="idForm">' +
+          '<p class="hint" style="margin:0 0 4px">Boost trust on bookings by verifying your identity — NIN, SSN, passport or driving licence. ' +
+          "Only the last 4 digits are stored (masked + hashed). <b>Your ID is never used to log in.</b></p>" +
+          '<div class="form-2col">' +
+            '<div class="field"><label for="idType">ID type</label><select id="idType">' +
+              '<option value="nin">National ID (NIN)</option>' +
+              '<option value="ssn">Social Security (SSN)</option>' +
+              '<option value="passport">Passport</option>' +
+              '<option value="licence">Driving licence</option>' +
+            "</select></div>" +
+            '<div class="field"><label for="idName">Full name on the ID</label><input id="idName" type="text" value="' + GBUI.esc(user.name || "") + '"></div>' +
+          "</div>" +
+          '<div class="field"><label for="idNum">ID number</label><input id="idNum" type="password" placeholder="Enter the number" autocomplete="off"></div>' +
+          '<div class="form-notice" id="idMsg" hidden></div>' +
+          '<button class="btn btn-primary" id="idSubmit" style="justify-self:start">Verify identity</button>' +
+        "</div>") +
+      '<div class="secure-note" style="margin-top:16px">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg>' +
+        "<span>Verification is optional. Identity numbers are salted-hashed — we keep only the last 4 digits, never the full number.</span>" +
+      "</div>" +
+    "</div>";
+
+  document.getElementById("saveProfile").addEventListener("click", function () {
+    GBWeb.updateUser({
+      name: document.getElementById("pName").value.trim(),
+      email: document.getElementById("pEmail").value.trim(),
+      country: document.getElementById("pCountry").value.trim()
+    });
+    this.textContent = "Saved ✓";
+    var b = this;
+    setTimeout(function () { b.textContent = "Save changes"; }, 1500);
+  });
+
+  document.getElementById("signOut").addEventListener("click", function () {
+    if (window.GBAuth) GBAuth.logout().then(function () { location.href = "/"; });
+    else { GBWeb.clearUser(); location.href = "/"; }
+  });
+
+  /* ---- optional identity verification ---- */
+  var idSubmit = document.getElementById("idSubmit");
+  if (idSubmit) idSubmit.addEventListener("click", function () {
+    var msg = document.getElementById("idMsg");
+    var num = document.getElementById("idNum").value.trim();
+    var name = document.getElementById("idName").value.trim();
+    var type = document.getElementById("idType").value;
+    if (num.replace(/\D/g, "").length < 8) {
+      msg.textContent = "That ID number looks too short."; msg.className = "form-notice"; msg.hidden = false; return;
+    }
+    idSubmit.disabled = true; idSubmit.textContent = "Verifying…";
+    GBAuth.verifyId({ idType: type, number: num, fullName: name }).then(function (res) {
+      idSubmit.disabled = false;
+      if (!res.ok) {
+        idSubmit.textContent = "Verify identity";
+        msg.textContent = res.error || "Could not verify. Try again.";
+        msg.className = "form-notice"; msg.hidden = false;
+        return;
+      }
+      location.reload(); // reflect the verified badge instantly
+    }).catch(function () {
+      idSubmit.disabled = false; idSubmit.textContent = "Verify identity";
+      msg.textContent = "Network hiccup — try again."; msg.className = "form-notice"; msg.hidden = false;
+    });
+  });
+
+  /* ---- resend verification email ---- */
+  var vBtn = document.getElementById("verifyEmailBtn");
+  if (vBtn) vBtn.addEventListener("click", function () {
+    vBtn.textContent = "Sending…";
+    GBAuth.resendVerification(user.email).then(function (res) {
+      vBtn.textContent = res.devVerifyLink
+        ? "Link ready — " + res.devVerifyLink
+        : "Sent — check your inbox";
+      if (res.devVerifyLink) vBtn.setAttribute("title", res.devVerifyLink);
+    });
+  });
+
+  GBChrome.mount();
+})();
+</script>
+</body>
+</html>

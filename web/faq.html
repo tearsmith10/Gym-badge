@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>Help &amp; FAQ — Gym Badge</title>
+<meta name="description" content="Answers to common questions about Gym Badge — getting started, training features, Premium billing, privacy and safety.">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n.js"></script>
+<script src="/assets/pw.js"></script>
+<script src="/assets/theme.js"></script>
+</head>
+<body>
+
+<div class="wrap page-head">
+  <span class="eyebrow">Help centre</span>
+  <h1>How can we help?</h1>
+  <p>Quick answers to the questions we hear most. Can't find it? Our support team replies within a day.</p>
+
+  <div class="filters">
+    <label class="search-inline">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="text" id="q" placeholder="Search help articles…" autocomplete="off">
+    </label>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="faq" id="faqList"></div>
+  <div class="empty" id="empty" hidden><b>No articles match that</b>Try different keywords, or contact support below.</div>
+
+  <div class="center" style="margin-top:44px">
+    <p class="muted" style="margin-bottom:16px">Still stuck? We're one message away.</p>
+    <a class="btn btn-primary" href="/support">Contact support</a>
+  </div>
+</div>
+
+<section class="section alt">
+  <div class="wrap">
+    <div class="grid g3">
+      <article class="card reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><h3>Live chat</h3><p>Premium members get priority support in app, usually within the hour.</p></article>
+      <article class="card reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg></div><h3>Email us</h3><p>Write to support@gymbadge.app and we'll reply within one business day.</p></article>
+      <article class="card reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Community</h3><p>1,200+ gyms and thousands of members training together, worldwide.</p></article>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="/assets/people.js"></script>
+<script src="/assets/theme.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script>
+(function () {
+  function render(filter) {
+    filter = (filter || "").trim().toLowerCase();
+    var html = "", shown = 0;
+    GBCatalog.FAQS.forEach(function (grp) {
+      var items = grp.items.filter(function (it) {
+        return !filter || (it[0] + " " + it[1]).toLowerCase().indexOf(filter) > -1;
+      });
+      if (!items.length) return;
+      shown += items.length;
+      html += '<div class="faq-group"><h3>' + GBUI.esc(grp.group) + "</h3><div class='faq'>" +
+        items.map(function (it) {
+          return '<details class="q"' + (filter ? " open" : "") + "><summary>" + GBUI.esc(it[0]) +
+            "</summary><div class='a'>" + GBUI.esc(it[1]) + "</div></details>";
+        }).join("") + "</div></div>";
+    });
+    document.getElementById("faqList").innerHTML = html;
+    document.getElementById("empty").hidden = shown > 0;
+  }
+  document.getElementById("q").addEventListener("input", function (e) { render(e.target.value); });
+  render("");
+  GBChrome.observeReveals();
+  GBChrome.mount();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>Verify your email — Gym Badge</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n.js"></script>
+<script src="/assets/pw.js"></script>
+<script src="/assets/theme.js"></script>
+</head>
+<body>
+
+<div class="wrap auth-wrap">
+  <div class="auth-card center-card">
+    <div class="verify-art" id="vArt" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>
+    </div>
+    <h1 id="vTitle">Verifying…</h1>
+    <p class="sub" id="vMsg">One moment while we confirm your email address.</p>
+    <div class="form-stack" id="vActions" hidden>
+      <a class="btn btn-primary" href="/login?notice=verified" style="width:100%" id="vPrimary">Continue to sign in</a>
+      <a class="link-mini center" href="/">Back to home</a>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="/assets/people.js"></script>
+<script src="/assets/theme.js"></script>
+<script src="/assets/auth.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script>
+(function () {
+  function done(ok, title, msg, primary) {
+    document.getElementById("vTitle").textContent = title;
+    document.getElementById("vMsg").textContent = msg;
+    var actions = document.getElementById("vActions");
+    actions.hidden = false;
+    if (primary) {
+      document.getElementById("vPrimary").textContent = primary.label;
+      document.getElementById("vPrimary").href = primary.href;
+    }
+    if (!ok) document.getElementById("vArt").classList.add("bad");
+  }
+
+  var token = new URLSearchParams(location.search).get("token");
+  if (!token) {
+    done(false, "Link missing", "This verification link is incomplete. Check the email we sent you and try the full link.",
+      { label: "Back to sign in", href: "/login" });
+    GBChrome.mount();
+    return;
+  }
+
+  GBAuth.verify(token).then(function (res) {
+    if (res.ok) {
+      done(true, "Email verified!", "Your badge is active. Sign in to start logging, tapping and earning.",
+        { label: "Continue to sign in", href: "/login?notice=verified" });
+    } else {
+      done(false, "Link expired", res.error || "We couldn't verify that link.",
+        { label: "Sign in anyway", href: "/login" });
+    }
+    GBChrome.mount();
+  }).catch(function () {
+    done(false, "Connection problem", "We couldn't reach the verification service. Check your connection and click the link in your email again.",
+      { label: "Back to sign in", href: "/login" });
+    GBChrome.mount();
+  });
+})();
+</script>
+</body>
+</html>

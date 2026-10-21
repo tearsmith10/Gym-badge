@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>For Gyms &amp; Companies — Gym Badge</title>
+<meta name="description" content="Register your gym, fitness hub or company on Gym Badge. Seat packages, equipment backend access, NFC tag kits and live floor status.">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n.js"></script>
+<script src="/assets/pw.js"></script>
+<script src="/assets/theme.js"></script>
+</head>
+<body>
+
+<section class="hero" style="padding:0">
+  <div class="hero-grad"></div>
+  <div class="wrap hero-in">
+    <span class="eyebrow">For gyms, studios &amp; companies</span>
+    <h1>Put your floor <span class="hl">in every member's pocket</span></h1>
+    <p class="hero-sub">Register your gym or company, grant optional access to your equipment maintenance backend, and let members see live machine status before they queue. Sell day passes, fill off peak hours, cut no shows.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary btn-lg" href="/app/">Register your gym</a>
+      <a class="btn btn-outline btn-lg" href="/pricing#corporate">See seat packages</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="grid g2" style="align-items:center;gap:40px">
+      <div class="reveal">
+        <span class="eyebrow">Live floor status</span>
+        <h2 style="margin:16px 0 18px">Your members see a healthy floor — <span class="power">before they arrive</span></h2>
+        <p class="muted" style="font-size:1.05rem">Tap and go status on every machine means fewer complaints at the desk, less time queuing for broken equipment, and a gym that feels well run. Connect your maintenance backend or log it in seconds from our console.</p>
+        <div class="hero-cta"><a class="btn btn-primary" href="/app/">Get the tag kit</a></div>
+      </div>
+      <div class="figure-block reveal" id="gymFig" style="padding:24px"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Why gyms switch</span>
+      <h2>Turn empty machines into <span class="power">booked hours</span></h2>
+    </div>
+    <div class="grid g3">
+      <article class="card reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg></div><h3>Fewer no shows</h3><p>Bookings + reminders mean members actually turn up. Off peak slots fill automatically.</p></article>
+      <article class="card reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2 5 4-12 2 7h6"/></svg></div><h3>Live equipment status</h3><p>Members tap a tag and see if a machine is usable, in maintenance, faulty or overused — no complaints at the desk.</p></article>
+      <article class="card reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 4v16"/></svg></div><h3>Employee wellness</h3><p>Register staff in blocks of 5, 10 or 20. Track participation, not personal data.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">How onboarding works</span><h2>Live <span class="power">in a week</span>, not a quarter</h2></div>
+    <div class="steps reveal">
+      <div class="step"><div class="n">01</div><h4>Register</h4><p>Company details, branches, and the questions that matter for compliance.</p></div>
+      <div class="step"><div class="n">02</div><h4>Choose seats</h4><p>Pick a 5, 10 or 20-seat block — or a custom plan for hundreds of expatriates.</p></div>
+      <div class="step"><div class="n">03</div><h4>Tag equipment</h4><p>We ship NFC / QR kits. Your team tags dumbbells, treadmills and every machine.</p></div>
+      <div class="step"><div class="n">04</div><h4>Go live</h4><p>Connect your maintenance backend (optional). Members see real status instantly.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <h2>Ready to <span class="power">fill your floor?</span></h2>
+      <p>Create your gym account in the app, or book a 15-minute walkthrough with our team.</p>
+      <div class="hero-cta"><a class="btn btn-primary btn-lg" href="/app/">Register your gym</a><a class="btn btn-ghost btn-lg" href="/pricing#corporate">Compare seat packages</a></div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="/assets/people.js"></script>
+<script src="/assets/theme.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script>
+GBChrome.mount();
+
+(function () {
+  var host = document.getElementById("gymFig");
+  if (!host || !window.GBPeople) return;
+  // Photo-ready: real photo if present, else a lit generated scene.
+  var wrap = document.createElement("div");
+  wrap.className = "ph";
+  wrap.style.borderRadius = "var(--r-lg)";
+  wrap.style.aspectRatio = "4/3";
+  wrap.innerHTML = '<div class="ph-fallback">' + GBPeople.art("gym-floor") + "</div>";
+  host.appendChild(wrap);
+  // Swap in a real gym-floor photo if one has been dropped in.
+  GBPeople.findPhoto("gym-floor").then(function (url) {
+    if (!url) return;
+    var im = document.createElement("img");
+    im.className = "ph-img"; im.alt = "Gym floor"; im.src = url;
+    im.onload = function () { wrap.classList.add("ph-ready"); wrap.appendChild(im); };
+  });
+})();
+</script>
+</body>
+</html>

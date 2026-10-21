@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>Sign in — Gym Badge</title>
+<meta name="description" content="Sign in to Gym Badge with your email and password, or continue with Google or Yahoo. Your streaks, logs and orders sync everywhere.">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n.js"></script>
+<script src="/assets/pw.js"></script>
+<script src="/assets/theme.js"></script>
+</head>
+<body>
+
+<div class="wrap auth-wrap">
+  <div class="auth-card">
+    <h1>Welcome back</h1>
+    <p class="sub">Sign in to pick up your streak where you left off.</p>
+
+    <div class="form-notice" id="flash" hidden></div>
+
+    <div class="oauth">
+      <button type="button" data-oauth="google"><span class="g" style="color:#4285F4">G</span> Continue with Google</button>
+      <button type="button" data-oauth="yahoo"><span class="g" style="color:#6001d2">Y!</span> Continue with Yahoo</button>
+    </div>
+    <div class="oauth-note" id="oauthNote" hidden></div>
+
+    <div class="divider-txt">or with email</div>
+
+    <form class="form" id="loginForm" style="max-width:none" novalidate>
+      <div class="field">
+        <label for="email">Email address</label>
+        <input id="email" type="email" placeholder="you@email.com" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <div class="label-row">
+          <label for="pw">Password</label>
+          <a class="link-mini" href="/forgot">Forgot password?</a>
+        </div>
+        <div class="pw-wrap">
+          <input id="pw" type="password" placeholder="Your password" autocomplete="current-password" required>
+          <button type="button" class="pw-eye" aria-label="Show password" aria-pressed="false" title="Show password">
+            <span class="eye-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.2 12S5.8 5.5 12 5.5 21.8 12 21.8 12 18.2 18.5 12 18.5 2.2 12 2.2 12z"/><circle cx="12" cy="12" r="3.2"/></svg></span>
+            <span class="eye-off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 5.7A9.6 9.6 0 0112 5.5c6.2 0 9.8 6.5 9.8 6.5a17 17 0 01-3.4 4.3"/><path d="M6.3 7.4A16.6 16.6 0 002.2 12S5.8 18.5 12 18.5a9.4 9.4 0 004-.9"/><path d="M10 10a2.9 2.9 0 004.1 4.1"/><path d="M3 3l18 18"/></svg></span>
+          </button>
+        </div>
+        <span class="hint">At least 8 characters, letters + numbers.</span>
+      </div>
+      <label class="checkline"><input type="checkbox" id="remember" checked> Keep me signed in on this device</label>
+      <button class="btn btn-primary" type="submit" id="submitBtn" style="width:100%">Sign in</button>
+    </form>
+
+    <div class="auth-foot">New to Gym Badge? <a href="/signup">Create an account</a></div>
+    <div class="auth-foot" style="margin-top:6px">
+      Can't get in? <a href="/forgot">Reset your password</a> ·
+      <a href="/signup?step=check">Resend verification email</a>
+    </div>
+    <div class="terms-mini">By continuing you agree to our <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>.</div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="/assets/people.js"></script>
+<script src="/assets/theme.js"></script>
+<script src="/assets/auth.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script>
+(function () {
+  var flash = document.getElementById("flash");
+  var submitBtn = document.getElementById("submitBtn");
+
+  function next() {
+    var p = new URLSearchParams(location.search).get("next");
+    return p || "/";
+  }
+  function say(msg, kind) {
+    flash.textContent = msg;
+    flash.className = "form-notice " + (kind || "err");
+    flash.hidden = false;
+  }
+
+  // Deep-link states: /login?notice=verified  |  ?reset=1  |  ?next=/app/
+  var qp = new URLSearchParams(location.search);
+  if (qp.get("notice") === "verified") say("Email verified — you're all set. Sign in to continue.", "ok");
+  if (qp.get("notice") === "reset") say("Password updated. Sign in with your new password.", "ok");
+  if (qp.get("error")) say(qp.get("error"), "err");
+
+  // Which social providers are actually configured on the server?
+  GBAuth.cfg().then(function (cfg) {
+    if (!cfg.googleOAuth || !cfg.yahooOAuth) {
+      var n = document.getElementById("oauthNote");
+      var missing = [!cfg.googleOAuth && "Google", !cfg.yahooOAuth && "Yahoo"].filter(Boolean).join(" & ");
+      n.textContent = missing + " sign in activates as soon as the server has its OAuth client ID. Until then it creates a linked account so you can test the flow.";
+      n.hidden = false;
+    }
+  });
+
+  document.getElementById("loginForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = document.getElementById("email").value.trim();
+    var pw = document.getElementById("pw").value;
+    flash.hidden = true;
+
+    if (!GBAuth.EMAIL_RE.test(email)) {
+      document.getElementById("email").style.borderColor = "var(--bad)";
+      document.getElementById("email").focus();
+      say("Please enter a valid email address.");
+      return;
+    }
+    if (!pw) { document.getElementById("pw").focus(); say("Enter your password."); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Signing in…";
+
+    GBAuth.login({ email: email, password: pw }).then(function (res) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Sign in";
+      if (!res.ok) { say(res.error || "Sign in failed. Try again."); return; }
+      if (res.needsVerification) {
+        location.href = "/signup?step=check&email=" + encodeURIComponent(email);
+        return;
+      }
+      location.href = next();
+    }).catch(function () {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Sign in";
+      say("Network hiccup — try again.");
+    });
+  });
+
+  document.querySelectorAll("[data-oauth]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var provider = b.getAttribute("data-oauth");
+      var label = b.innerHTML;
+      b.disabled = true;
+      b.innerHTML = "Connecting to " + (provider === "google" ? "Google" : "Yahoo") + "…";
+      GBAuth.oauth(provider).then(function (res) {
+        b.disabled = false;
+        b.innerHTML = label;
+        if (!res.ok) { say(res.error || "Sign-in failed."); return; }
+        location.href = next();
+      }).catch(function () {
+        b.disabled = false;
+        b.innerHTML = label;
+        say("Could not reach the sign in service. Try email instead.");
+      });
+    });
+  });
+
+  if (window.GBPW) GBPW.enhanceAll(document);
+  GBChrome.mount();
+})();
+</script>
+</body>
+</html>

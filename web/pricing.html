@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>Pricing — Gym Badge</title>
+<meta name="description" content="Gym Badge pricing. Premium from ₦5,000/month with worldwide currency equivalents, plus corporate seat packages for gyms and companies.">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n.js"></script>
+<script src="/assets/pw.js"></script>
+<script src="/assets/theme.js"></script>
+</head>
+<body>
+
+<section class="section" style="border-top:0">
+  <div class="wrap">
+    <div class="sec-head center reveal" style="margin-left:auto;margin-right:auto;text-align:center">
+      <span class="eyebrow" style="justify-content:center">Simple, honest pricing</span>
+      <h2>One badge. Plans that <span class="power">scale with you.</span></h2>
+      <p>Premium unlocks the full engine from <strong>₦5,000 / month</strong>. Prices convert to your local currency — pay by card, bank, Apple&nbsp;Pay, Pi&nbsp;Network or stablecoins.</p>
+    </div>
+
+    <div class="curbar reveal">
+      <label for="cur">Show amounts in</label>
+      <select id="cur" aria-label="Select currency"></select>
+    </div>
+    <p class="cur-note">Indicative conversion for display. You will be charged in your selected currency at the rate shown when you activate.</p>
+
+    <div class="price-grid" id="planGrid"></div>
+
+    <!-- PAYMENT METHODS -->
+    <div style="margin-top:56px" class="reveal">
+      <div class="sec-head center" style="margin-left:auto;margin-right:auto;text-align:center">
+        <h3 style="font-size:1.4rem">Pay the way that works for you</h3>
+      </div>
+      <div class="paymethods" id="payMethods"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CORPORATE -->
+<section class="section alt" id="corporate">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">For gyms, teams &amp; companies</span>
+      <h2>Seat packages for employees &amp; expatriates</h2>
+      <p>Register your team in blocks of 5, 10 or 20 — and scale to 100s. Pricing flexes with head count <em>and</em> how unlimited you want each seat to be. Companies can optionally grant Gym&nbsp;Badge read access to their equipment maintenance backend for live floor status.</p>
+    </div>
+    <div class="co-grid" id="corpGrid"></div>
+    <p class="cur-note" style="margin-top:26px">Per seat rates drop as you scale. Multi country expat billing and invoicing / PO available on Enterprise. <a href="/gyms" style="color:var(--accent);font-weight:600">Talk to sales →</a></p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head center reveal" style="margin-left:auto;margin-right:auto;text-align:center">
+      <h2>Questions, <span class="power">answered</span></h2>
+    </div>
+    <div class="faq reveal">
+      <details class="q"><summary>Is there a free plan?</summary><div class="a">Yes. Starter is free forever — First Rep setup, One More logging, the gym locator, bookings and streaks, with generous food scans and body projections while we test. No card required.</div></details>
+      <details class="q"><summary>What exactly do I get with Premium (₦5,000)?</summary><div class="a">Unlimited logging and history, NFC / QR equipment tap with live status, unlimited AI food &amp; diet scans, unlimited body goal projections, smart reminders, wearable sync, offline first sync, and priority support.</div></details>
+      <details class="q"><summary>Can I pay in my own currency?</summary><div class="a">Yes. Use the currency selector above to see your local equivalent. Your membership is charged in your chosen currency at the live rate.</div></details>
+      <details class="q"><summary>Can I pay with Pi Network or stablecoins?</summary><div class="a">Yes. We support Pi Network (PI) and USDT / USDC stablecoins alongside cards, bank transfer, Apple&nbsp;Pay and Google&nbsp;Pay. Crypto settles at the activation rate and converts to your plan currency.</div></details>
+      <details class="q"><summary>How does corporate seat pricing work?</summary><div class="a">Buy a seat block (5, 10 or 20 to start). Assign seats to employees by email. Per seat pricing drops as you scale, and higher tiers unlock unlimited logging, food scans, equipment backend access and NFC kits. Scale to 50 / 100 / 500+ on Enterprise.</div></details>
+      <details class="q"><summary>Can we connect our equipment maintenance system?</summary><div class="a">Yes — that's what powers Tap&nbsp;In. On Business and Enterprise, Gym Badge can read your maintenance backend (or you log it manually in our console) so members see real time machine status. Access is optional and revocable.</div></details>
+      <details class="q"><summary>Is my data safe? Is photo upload compulsory?</summary><div class="a">Photo upload is never compulsory. When you do upload one, it's encrypted, confidential, and deletable at any time. See our <a href="/privacy" style="color:var(--accent)">Privacy Policy</a>.</div></details>
+      <details class="q"><summary>Can I cancel anytime?</summary><div class="a">Yes. Cancel in one tap from your account. You keep Premium until the end of the billing period, then drop to Starter — your data and history stay with you.</div></details>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="/assets/theme.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script src="/web/assets/js/site.js"></script>
+<script>
+GBChrome.mount();
+
+(function(){
+  var P = window.GBPricing;
+  var grid = document.getElementById('planGrid');
+  var corp = document.getElementById('corpGrid');
+  var curSel = document.getElementById('cur');
+  var payHost = document.getElementById('payMethods');
+
+  // Populate currency dropdown
+  P.CURRENCIES.forEach(function(c){
+    var o = document.createElement('option');
+    o.value = c.code; o.textContent = c.code + ' — ' + c.name + ' (' + c.symbol + ')';
+    if (c.code === 'USD') o.selected = true;
+    curSel.appendChild(o);
+  });
+
+  function checkIcon(off){
+    if (off) return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>';
+  }
+
+  function renderPlans(code){
+    grid.innerHTML = '';
+    ['free','premium','elite'].forEach(function(k){
+      var p = P.PLANS[k];
+      var el = document.createElement('div');
+      el.className = 'plan' + (p.featured ? ' featured' : '');
+      var priceTxt = p.ngn === 0 ? 'Free' : P.price(p.ngn, code);
+      var equiv = p.ngn === 0 ? 'No card required'
+        : (code === 'NGN' ? 'Billed monthly · cancel anytime'
+        : '≈ ' + P.price(p.ngn,'NGN') + ' billed in NGN');
+      var lis = p.features.map(function(f){
+        return '<li class="'+(f[1]?'':'off')+'">'+checkIcon(!f[1])+'<span>'+f[0]+'</span></li>';
+      }).join('');
+      el.innerHTML =
+        (p.featured ? '<span class="badge">Most popular</span>' : '') +
+        '<div class="pname">'+p.name+'</div>' +
+        '<div class="pdesc">'+p.blurb+'</div>' +
+        '<div class="amt">'+priceTxt+(p.ngn===0?'':' <small>/mo</small>')+'</div>' +
+        '<div class="equiv">'+equiv+'</div>' +
+        '<ul>'+lis+'</ul>' +
+        '<a class="btn '+(p.featured?'btn-primary':'btn-dark')+'" href="/app/">'+(p.ngn===0?'Start free':'Choose '+p.name)+'</a>';
+      grid.appendChild(el);
+    });
+  }
+
+  function renderCorp(code){
+    corp.innerHTML = '';
+    P.CORP_TIERS.forEach(function(t){
+      var total = t.ngnPerSeat * t.seats;
+      var el = document.createElement('div');
+      el.className = 'co-card' + (t.featured ? ' card' : '');
+      if (t.featured){ el.style.borderColor = 'var(--accent)'; }
+      var lis = t.features.map(function(f){ return '<li>'+checkIcon(false)+'<span>'+f+'</span></li>'; }).join('');
+      el.innerHTML =
+        '<h3>'+t.name+'</h3>' +
+        '<div class="seats">'+t.seats+' seats · '+t.tag+'</div>' +
+        '<div class="amt">'+P.price(total, code)+' <small>/mo</small></div>' +
+        '<div class="equiv" style="color:var(--faint);font-size:.86rem">'+P.price(t.ngnPerSeat,code)+' per seat / month</div>' +
+        '<ul>'+lis+'</ul>' +
+        '<a class="btn '+(t.featured?'btn-primary':'btn-dark')+'" href="/gyms" style="width:100%;margin-top:20px">Get '+t.name+'</a>';
+      corp.appendChild(el);
+    });
+  }
+
+  function renderPay(){
+    payHost.innerHTML = '';
+    P.PAY_METHODS.forEach(function(m){
+      var d = document.createElement('div');
+      d.className = 'pm';
+      d.innerHTML = '<b>'+m.name+'</b><span>via '+m.via+'</span>' + (m.primary ? '<span class="badge-min">Stripe</span>' : '');
+      payHost.appendChild(d);
+    });
+  }
+
+  function renderAll(){ var code = curSel.value; renderPlans(code); renderCorp(code); }
+  curSel.addEventListener('change', renderAll);
+  renderAll(); renderPay();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>Reviews — Gym Badge</title>
+<meta name="description" content="Real reviews from Gym Badge members and trainers. See ratings, results and what people love about training with us.">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n.js"></script>
+<script src="/assets/pw.js"></script>
+<script src="/assets/theme.js"></script>
+</head>
+<body>
+
+<div class="wrap page-head">
+  <span class="eyebrow">Loved by real members</span>
+  <h1>Reviews &amp; results</h1>
+  <p>Don't take our word for it — here's what members, trainers and partner gyms say after training with Gym Badge.</p>
+</div>
+
+<div class="wrap">
+  <div id="revSummary"></div>
+  <div class="reviews" id="revGrid"></div>
+</div>
+
+<section class="section alt">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <h2>Join thousands going <span class="power">one more</span></h2>
+      <p>Free to start. Your streak, logs and orders sync across web and mobile.</p>
+      <div class="hero-cta"><a class="btn btn-primary btn-lg" href="/signup">Create your badge</a><a class="btn btn-ghost btn-lg" href="/find">Find a gym</a></div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="/assets/people.js"></script>
+<script src="/assets/theme.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script>
+(function () {
+  var R = GBCatalog.REVIEWS;
+  document.getElementById("revSummary").innerHTML = GBUI.ratingSummary(R);
+  document.getElementById("revGrid").innerHTML = R.map(GBUI.reviewCard).join("");
+  GBUI.hydratePhotos();
+  GBChrome.observeReveals();
+  GBChrome.mount();
+  GBUI.hydratePhotos();
+})();
+</script>
+</body>
+</html>

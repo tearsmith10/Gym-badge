@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>Find a gym — Gym Badge</title>
+<meta name="description" content="Browse gyms near you. Filter by city, amenities and price, see live open status and day passes, and book a slot in seconds.">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n.js"></script>
+<script src="/assets/pw.js"></script>
+<script src="/assets/theme.js"></script>
+</head>
+<body>
+
+<div class="wrap page-head">
+  <span class="eyebrow">Find your floor</span>
+  <h1>Gyms near you,<br><span class="power">ready when you are</span></h1>
+  <p>Search verified gyms by city, amenities and price. See who's open right now, what a day pass costs, and book a slot before you leave the house.</p>
+
+  <div class="filters">
+    <label class="search-inline">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="text" id="q" placeholder="Search by gym, city or amenity…" autocomplete="off">
+    </label>
+    <div class="chips" id="cityChips"></div>
+    <div class="sort">
+      <label for="sort">Sort</label>
+      <select id="sort">
+        <option value="dist">Nearest first</option>
+        <option value="rating">Top rated</option>
+        <option value="price">Lowest day pass</option>
+        <option value="name">Name A–Z</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="result-count" id="count"></div>
+</div>
+
+<div class="wrap">
+  <div class="catalog" id="grid"></div>
+  <div class="empty" id="empty" hidden>
+    <b>No gyms match that yet</b>
+    Try a different city or clear the search — new gyms are added weekly.
+  </div>
+</div>
+
+<section class="section alt">
+  <div class="wrap two-col">
+    <div class="reveal">
+      <span class="eyebrow">Run a gym?</span>
+      <h2 style="margin:16px 0 16px">Get your floor <span class="power">listed here</span></h2>
+      <p class="muted" style="font-size:1.05rem">Register your gym to show live equipment status, sell day passes, fill off peak slots and cut no shows. Onboarding takes a week, not a quarter.</p>
+      <div class="hero-cta"><a class="btn btn-primary" href="/gyms">List your gym</a><a class="btn btn-ghost" href="/pricing#corporate">See seat packages</a></div>
+    </div>
+    <div class="figure-block reveal" id="listFig" style="padding:24px"></div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="/assets/people.js"></script>
+<script src="/assets/theme.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script>
+(function () {
+  var cities = ["All"];
+  GBCatalog.GYMS.forEach(function (g) { if (cities.indexOf(g.city) < 0) cities.push(g.city); });
+  var activeCity = "All";
+
+  var chipHost = document.getElementById("cityChips");
+  chipHost.innerHTML = cities.map(function (c, i) {
+    return '<button class="chip' + (i === 0 ? " on" : "") + '" data-city="' + GBUI.esc(c) + '">' + GBUI.esc(c) + "</button>";
+  }).join("");
+
+  function current() {
+    var q = document.getElementById("q").value.trim().toLowerCase();
+    var sort = document.getElementById("sort").value;
+    var list = GBCatalog.GYMS.filter(function (g) {
+      if (activeCity !== "All" && g.city !== activeCity) return false;
+      if (!q) return true;
+      return (g.name + " " + g.city + " " + g.area + " " + g.tags.join(" ") + " " + g.blurb).toLowerCase().indexOf(q) > -1;
+    });
+    list.sort(function (a, b) {
+      if (sort === "rating") return b.rating - a.rating;
+      if (sort === "price") return a.dayPassNgn - b.dayPassNgn;
+      if (sort === "name") return a.name.localeCompare(b.name);
+      return a.dist - b.dist;
+    });
+    return list;
+  }
+
+  function render() {
+    var list = current();
+    document.getElementById("count").textContent =
+      list.length + " gym" + (list.length === 1 ? "" : "s") +
+      (activeCity !== "All" ? " in " + activeCity : " near you");
+    document.getElementById("grid").innerHTML = list.map(GBUI.gymCard).join("");
+    document.getElementById("empty").hidden = list.length > 0;
+    wireFavs();
+    GBChrome.observeReveals();
+    GBUI.hydratePhotos();
+  }
+
+  function wireFavs() {
+    document.querySelectorAll("[data-fav]").forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault(); e.stopPropagation();
+        btn.classList.toggle("on");
+      });
+    });
+  }
+
+  document.getElementById("q").addEventListener("input", render);
+  document.getElementById("sort").addEventListener("change", render);
+  chipHost.addEventListener("click", function (e) {
+    var b = e.target.closest(".chip");
+    if (!b) return;
+    chipHost.querySelectorAll(".chip").forEach(function (c) { c.classList.remove("on"); });
+    b.classList.add("on");
+    activeCity = b.getAttribute("data-city");
+    render();
+  });
+
+  // Decorative figure for the "list your gym" block.
+  var fig = document.getElementById("listFig");
+  if (fig) fig.innerHTML = (window.GBPeople ? GBPeople.art("gym-floor") : "");
+
+  render();
+  GBChrome.mount();
+})();
+</script>
+</body>
+</html>

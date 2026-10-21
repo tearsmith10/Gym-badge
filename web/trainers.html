@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>For Trainers — Gym Badge</title>
+<meta name="description" content="Personal trainers: build your verified profile on Gym Badge, showcase your experience and clients, and get hired by members near you.">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n.js"></script>
+<script src="/assets/pw.js"></script>
+</head>
+<body>
+
+<section class="hero" style="padding:0">
+  <div class="hero-grad"></div>
+  <div class="wrap hero-in">
+    <span class="eyebrow">For personal trainers &amp; coaches</span>
+    <h1>Turn your reputation into <span class="hl">booked sessions</span></h1>
+    <p class="hero-sub">Build a verified trainer profile that shows what clients actually need to see — your years in the gym, who you've trained with, and the results you deliver. Get matched with members who want exactly what you offer.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary btn-lg" href="/app/">Create trainer profile</a>
+      <a class="btn btn-outline btn-lg" href="#apply">What you'll need</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="grid g2" style="align-items:center;gap:40px">
+      <div class="figure-block reveal" id="trainerFig" style="padding:24px;order:2"></div>
+      <div class="reveal" style="order:1">
+        <span class="eyebrow">Get discovered</span>
+        <h2 style="margin:16px 0 18px">Your reputation, <span class="power">doing the selling</span></h2>
+        <p class="muted" style="font-size:1.05rem">Members choose trainers they can trust. Show your years in the gym, your certifications, and the results you've delivered — then let people who already want what you offer find you.</p>
+        <div class="hero-cta"><a class="btn btn-primary" href="/app/">Build my profile</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">Why trainers join</span><h2>Get discovered by people already training</h2></div>
+    <div class="grid g3">
+      <article class="card reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><h3>Verified profile</h3><p>Certifications and experience verified once — trusted by every member who finds you.</p></article>
+      <article class="card reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4L12 17l-6.3 4.4L8 14 2 9.4h7.6z"/></svg></div><h3>Show your results</h3><p>Client outcomes and a results portfolio do the selling while you train.</p></article>
+      <article class="card reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><h3>Direct enquiries</h3><p>Members who match your specialty and location come to you — no cold outreach.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="apply">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">The profile</span><h2>What genuine trainers share</h2><p>These questions build the trust layer that gets you hired. Everything is verified where possible and fully under your control.</p></div>
+    <div class="grid g2">
+      <article class="card reveal"><h3>Experience</h3><p>Years in the gym, specialities (strength, hypertrophy, weight loss, rehab, sport specific), and the certifications you hold.</p></article>
+      <article class="card reveal"><h3>Track record</h3><p>Who you've worked for or with — gyms, clubs, teams, notable clients. Optional, but it converts.</p></article>
+      <article class="card reveal"><h3>Results portfolio</h3><p>Client transformations (with their consent) and measurable outcomes. Proof beats promises.</p></article>
+      <article class="card reveal"><h3>Practical details</h3><p>Location, availability, session formats (in person / online), languages, and your rates.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <h2>Your next client is already on Gym Badge</h2>
+      <p>Create your trainer profile in the app today. Early trainers get featured placement in their city.</p>
+      <div class="hero-cta"><a class="btn btn-primary btn-lg" href="/app/">Create trainer profile</a><a class="btn btn-ghost btn-lg" href="/pricing">See Elite &amp; trainer plans</a></div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="/assets/people.js"></script>
+<script src="/assets/theme.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script>
+GBChrome.mount();
+
+(function () {
+  var host = document.getElementById("trainerFig");
+  if (!host || !window.GBPeople) return;
+  // A coach (large photo) flanked by two members (round portraits).
+  var coach = document.createElement("div");
+  coach.className = "ph";
+  coach.style.cssText = "flex:none;width:170px;aspect-ratio:3/4;border-radius:var(--r-lg)";
+  coach.innerHTML = '<div class="ph-fallback">' + GBPeople.art("trainer-1") + "</div>";
+
+  var stack = document.createElement("div");
+  stack.style.cssText = "display:grid;gap:14px";
+  ["trainer-2", "member-3"].forEach(function (id) {
+    var p = document.createElement("div");
+    p.className = "ph round";
+    p.style.cssText = "width:92px;height:92px";
+    p.innerHTML = '<div class="ph-fallback">' + GBPeople.art(id) + "</div>";
+    stack.appendChild(p);
+    GBPeople.findPhoto(id).then(function (url) {
+      if (!url) return;
+      var im = document.createElement("img"); im.className = "ph-img"; im.alt = ""; im.src = url;
+      im.onload = function () { p.classList.add("ph-ready"); p.appendChild(im); };
+    });
+  });
+
+  host.appendChild(coach);
+  host.appendChild(stack);
+
+  GBPeople.findPhoto("coach-hero").then(function (url) {
+    if (!url) return;
+    var im = document.createElement("img"); im.className = "ph-img"; im.alt = "Coach"; im.src = url;
+    im.onload = function () { coach.classList.add("ph-ready"); coach.appendChild(im); };
+  });
+})();
+</script>
+</body>
+</html>
