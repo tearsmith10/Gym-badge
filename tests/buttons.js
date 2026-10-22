@@ -278,6 +278,25 @@ for (const f of FILES) {
   check("the trainer directory survives a restart", /_LIST_KEYS/.test(core));
 }
 
+/* --- 16. local data can never be deployed --- */
+{
+  const ignorePath = path.join(ROOT, ".vercelignore");
+  check("there is a .vercelignore", fs.existsSync(ignorePath));
+  if (fs.existsSync(ignorePath)) {
+    const ignore = fs.readFileSync(ignorePath, "utf8");
+    check("the runtime database is never deployed", /^data\/$/m.test(ignore));
+    check("environment files are never deployed", /^\.env/m.test(ignore));
+  }
+  const vj = JSON.parse(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"));
+  const routes = vj.routes || [];
+  const blocked = routes.filter((r) => /gymbadge_core|gymbadge_content|gymbadge_kb|server\.py|\/data\//.test(r.src || ""));
+  check("the server source cannot be fetched as a file", blocked.length >= 5, String(blocked.length));
+  check("the blocked paths are answered by the API, not the filesystem",
+    blocked.every((r) => r.dest === "/api/index.py"), JSON.stringify(blocked));
+  check("the data directory is blocked before the filesystem handler",
+    routes.findIndex((r) => /\/data\//.test(r.src || "")) < routes.findIndex((r) => r.handle === "filesystem"));
+}
+
 console.log("\n" + "=".repeat(52));
 console.log("  PASS " + pass + "   FAIL " + fail);
 console.log("=".repeat(52));

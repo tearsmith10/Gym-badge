@@ -68,11 +68,12 @@
     }
   ],
   "routes": [
-    { "src": "/gymbadge_core.py", "status": 404 },
-    { "src": "/gymbadge_content.py", "status": 404 },
-    { "src": "/gymbadge_kb.py", "status": 404 },
-    { "src": "/server.py", "status": 404 },
+    { "src": "/gymbadge_core.py", "dest": "/api/index.py" },
+    { "src": "/gymbadge_content.py", "dest": "/api/index.py" },
+    { "src": "/gymbadge_kb.py", "dest": "/api/index.py" },
+    { "src": "/server.py", "dest": "/api/index.py" },
     { "src": "/api/index.py", "status": 404 },
+    { "src": "/data/(.*)", "dest": "/api/index.py" },
     { "handle": "filesystem" },
     { "src": "/api/(.*)", "dest": "/api/index.py" },
     { "src": "/login", "dest": "/web/login.html" },

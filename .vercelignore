@@ -1,0 +1,22 @@
+# Files that must never reach production.
+#
+# The runtime account database holds password hashes, one-time tokens and
+# session tokens. It is local data, it is already out of git, and it must
+# stay out of the deployment too — otherwise it is served as a static file.
+data/
+.env
+.env.*
+*.log
+
+# Local development leftovers
+node_modules/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.vercel/
+.git/
+.github/
+
+# The test suite is for the repository, not for the site
+tests/
