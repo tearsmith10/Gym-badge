@@ -33,9 +33,9 @@ apart.
 |---------|--------------|
 | **My Profile** | Two-minute onboarding that builds your badge profile. |
 | **My Routine** | Your training week: day, week, month and 12 week views, add and remove movements. |
-| **The Guides** | 53 movements, searchable and filterable, each with a full coaching guide. |
+| **The Guides** | 55 movements, searchable and filterable, each with a full coaching guide and real photographs. |
 | **My Workout Log** | Logs any set and hands you the number to beat next session. |
-| **Gym Equipment** | NFC/QR equipment status — usable, in maintenance, faulty, overused. |
+| **Gym Equipment** | 27 machines you can browse by zone, each photographed, with the full written status report. |
 | **My Plate Truth** | Photo a meal, get carbs, protein, fat and fibre, and what it costs your work. |
 | **Body Goals** | Pick a goal physique, get the plan to reach it. |
 | **Find a Gym** | Real gyms near you, with slot booking. |
@@ -82,7 +82,7 @@ project (byte mode, error correction level M, versions 1 to 40). It was
 checked against an independent decoder, so the code actually scans.
 
 ### 🏋️ The exercise library has grown
-The catalogue now holds **53 movements**, up from 25, spread properly across
+The catalogue now holds **55 movements**, up from 25, spread properly across
 every category:
 
 | Category | Movements |
@@ -119,10 +119,57 @@ Where they came from:
 
 They are resized to 1000 pixels and re-encoded on the way in, so the app
 ships about 10 MB of pictures rather than 18. Every one is listed with its
-source in [`app/assets/img/ex/CREDITS.md`](app/assets/img/ex/CREDITS.md).
+source in [`app/assets/img/CREDITS.md`](app/assets/img/CREDITS.md).
 
 The website's people photographs are real too — the coaches, members, gym
 floors and training scenes now show photographs instead of generated tiles.
+
+### 🏟️ The gym floor — 27 machines, every one photographed
+Gym Equipment used to be eight machines you could only reach one at a time.
+It is now a **floor you can browse**: 27 machines across three zones, each
+with a real photograph of that machine, its live status, and the full written
+report when something is wrong.
+
+| Zone | Machines |
+|------|----------|
+| Cardio | Treadmill 01 and 02, rowing machine and rowing machine 02, elliptical, spin bike, assault bike, air bike, stair climber, battle ropes |
+| Weights | Dumbbell rack, bench press, flat bench, trap bar, preacher curl bench, dip station, kettlebells, plyometric box, suspension trainer |
+| Machines | Lat pulldown, leg press, cable crossover, leg curl, leg extension, shoulder press, cable machine, chest press |
+
+You can filter by zone or ask for **everything that needs attention**, and
+open any machine for the reason it is down, what was reported, when it is
+expected back, the safety notice, the next action and who is dealing with it.
+
+The photographs came from the Figma board, Pexels and Wikimedia Commons. The
+same rule applies as everywhere else: the picture shows the machine it is
+labelled as, and no picture of one machine stands in for another.
+
+### 🖼️ Real pictures everywhere an icon used to be
+Every place the app used to show an emoji now shows a photograph:
+
+- **The Guides** — each of the 55 rows carries a picture of the movement
+- **My Workout Log** — the same picture, beside your last number
+- **My Routine** — the picture of each movement, with a tick when it is done
+- **My Trainer** — the coach's own portrait in the directory
+- **Find a Gym** — a real photograph of each of the five gyms
+- **My Plate Truth** — a real photograph of every food in the guide
+- **Workout Programs** — a photograph on every tool row
+
+The six feature cards on the website had been pointing at picture names that
+no longer existed, so four of them were broken. All six now show a real
+photograph of the feature they describe.
+
+### ⬅️ A back button that always goes somewhere
+The back button used `history.back()`, which does nothing when the app was
+opened from a link — exactly when a member is most likely to need it.
+
+The app now keeps its own short navigation stack. Back goes to the screen you
+came from; if there is nothing to go back to, it goes to the screen's parent
+(the floor for a machine, the guide for a movement, the coach list for a
+coach). The phone's own back button stays in step with it.
+
+Every secondary screen has one, and the five tabs never need one because the
+tab bar is always there.
 
 ### ✨ More from every feature
 - **My Routine** — rename, copy and delete a day; reorder the movements

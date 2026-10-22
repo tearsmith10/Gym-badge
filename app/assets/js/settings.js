@@ -415,7 +415,7 @@
     };
     node.appendChild(out);
 
-    shell("profile", "Settings", node, { back: true });
+    shell("profile", "Settings", node, { back: true, backTo: "profile" });
     wireEye(node);
   }
 

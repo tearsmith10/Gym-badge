@@ -346,12 +346,29 @@ SEED_TRAINERS = [
 
 
 def _ensure_seed_trainers() -> None:
-    """Put the launch coaches in place the first time the server runs."""
+    """Put the launch coaches in place the first time the server runs.
+
+    The coaches were first written before their photographs were ready, so
+    an existing director gets the picture filled in without touching
+    anything else — no real trainer's own details are ever overwritten.
+    """
     db = _core()._DB
-    if db.get("trainers"):
+    if not db.get("trainers"):
+        db["trainers"] = [dict(t) for t in SEED_TRAINERS]
+        _core().db_save()
         return
-    db["trainers"] = [dict(t) for t in SEED_TRAINERS]
-    _core().db_save()
+
+    seeds = {t["id"]: t for t in SEED_TRAINERS}
+    changed = False
+    for row in db["trainers"]:
+        seed = seeds.get(row.get("id"))
+        if not seed:
+            continue
+        if not row.get("photo") and seed.get("photo"):
+            row["photo"] = seed["photo"]
+            changed = True
+    if changed:
+        _core().db_save()
 
 
 def api_trainers(body: dict, headers, environ=None) -> tuple[int, dict]:

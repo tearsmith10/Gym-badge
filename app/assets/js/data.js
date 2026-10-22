@@ -953,7 +953,8 @@
   var FOODS = {
     "jollof rice": {
       kcal: 380, carbs: 58, protein: 9, fat: 12, fiber: 3, verdict: "watch",
-      photo: "meal/meal-1.jpg", portion: "1 bowl, about 250 g",
+      photos: ["meal/jollof-rice-1.jpg", "meal/jollof-rice-2.jpg", "meal/jollof-rice-3.jpg", "meal/jollof-rice-4.jpg"],
+      photo: "meal/jollof-rice-1.jpg",
       ingredients: ["Rice", "Tomatoes", "Onions", "Cooking oil", "Seasoning", "Sometimes peppers"],
       what: "Jollof rice is rice cooked down in a seasoned tomato sauce until the grains are soft and coated in flavour.",
       contributions: [
@@ -972,7 +973,8 @@
     },
     "grilled chicken": {
       kcal: 165, carbs: 0, protein: 31, fat: 3.6, fiber: 0, verdict: "good",
-      photo: "meal/meal-2.jpg", portion: "1 breast, about 150 g",
+      photos: ["meal/grilled-chicken-1.jpg", "meal/grilled-chicken-2.jpg"],
+      photo: "meal/grilled-chicken-1.jpg",
       ingredients: ["Chicken breast", "Olive oil", "Salt", "Pepper", "Lemon or herbs"],
       what: "Chicken breast grilled over heat with a little oil and seasoning, and nothing else added.",
       contributions: [
@@ -991,7 +993,8 @@
     },
     "beans": {
       kcal: 240, carbs: 40, protein: 13, fat: 1, fiber: 12, verdict: "good",
-      photo: "meal/meal-3.jpg", portion: "1 cup, about 200 g cooked",
+      photos: ["meal/beans-1.jpg", "meal/beans-2.jpg"],
+      photo: "meal/beans-1.jpg",
       ingredients: ["Beans", "Water or stock", "Onions", "Tomatoes", "Spices"],
       what: "Beans are seeds from plants, cooked slowly until they are soft and creamy.",
       contributions: [
@@ -1010,7 +1013,8 @@
     },
     "banana": {
       kcal: 105, carbs: 27, protein: 1.3, fat: 0.4, fiber: 3, verdict: "good",
-      photo: "meal/meal-1.jpg", portion: "1 medium, about 120 g",
+      photos: ["meal/banana-1.jpg", "meal/banana-2.jpg", "meal/banana-3.jpg"],
+      photo: "meal/banana-1.jpg",
       ingredients: ["Banana"],
       what: "A banana is the fruit of a banana plant, and it is picked green and ripens after it is picked.",
       contributions: [
@@ -1029,7 +1033,8 @@
     },
     "pizza": {
       kcal: 285, carbs: 36, protein: 12, fat: 10, fiber: 2.5, verdict: "off",
-      photo: "meal/meal-3.jpg", portion: "1 slice, about 107 g",
+      photos: ["meal/pizza-1.jpg", "meal/pizza-2.jpg", "meal/pizza-3.jpg"],
+      photo: "meal/pizza-1.jpg",
       ingredients: ["Flour base", "Tomato sauce", "Cheese", "Toppings", "Oil"],
       what: "Pizza is a flat bread base with tomato sauce, cheese and other toppings baked together.",
       contributions: [
@@ -1048,7 +1053,8 @@
     },
     "burger": {
       kcal: 550, carbs: 42, protein: 26, fat: 29, fiber: 3, verdict: "off",
-      photo: "meal/meal-2.jpg", portion: "1 burger, about 220 g",
+      photos: ["meal/burger-1.jpg", "meal/burger-2.jpg", "meal/burger-3.jpg"],
+      photo: "meal/burger-1.jpg",
       ingredients: ["Bread bun", "Beef patty", "Cheese", "Sauce", "Lettuce and tomato"],
       what: "A burger is a patty of ground meat in a bun, usually with cheese, sauce and salad.",
       contributions: [
@@ -1067,7 +1073,8 @@
     },
     "salad": {
       kcal: 120, carbs: 10, protein: 3, fat: 7, fiber: 4, verdict: "good",
-      photo: "meal/meal-1.jpg", portion: "1 large bowl, about 200 g",
+      photos: ["meal/salad-1.jpg", "meal/salad-2.jpg", "meal/salad-3.jpg"],
+      photo: "meal/salad-1.jpg",
       ingredients: ["Leafy greens", "Tomatoes", "Cucumber", "Onion", "Olive oil and vinegar"],
       what: "A salad is a mix of raw vegetables, usually with a simple dressing of oil and vinegar.",
       contributions: [
@@ -1086,7 +1093,8 @@
     },
     "suya": {
       kcal: 290, carbs: 5, protein: 28, fat: 18, fiber: 1, verdict: "watch",
-      photo: "meal/meal-3.jpg", portion: "5 skewers, about 150 g",
+      photos: ["meal/suya-1.jpg", "meal/suya-2.jpg", "meal/suya-3.jpg"],
+      photo: "meal/suya-1.jpg",
       ingredients: ["Beef", "Groundnut", "Chilli pepper", "Ginger", "Spices"],
       what: "Suya is spiced, seasoned skewered beef, usually coated with groundnut and chilli and cooked over charcoal.",
       contributions: [
@@ -1105,7 +1113,8 @@
     },
     "swallow": {
       kcal: 320, carbs: 70, protein: 3, fat: 1, fiber: 2, verdict: "watch",
-      photo: "meal/meal-1.jpg", portion: "1 piece, about 150 g",
+      photos: ["meal/swallow-1.jpg", "meal/swallow-2.jpg"],
+      photo: "meal/swallow-1.jpg",
       ingredients: ["Cassava flour", "Water", "Coconut"],
       what: "Swallow is a smooth, stretchy dough made from cassava flour and water, eaten with a soup or stew.",
       contributions: [
@@ -1124,7 +1133,8 @@
     },
     "egg": {
       kcal: 78, carbs: 0.6, protein: 6, fat: 5, fiber: 0, verdict: "good",
-      photo: "meal/meal-2.jpg", portion: "1 large egg, about 50 g",
+      photos: ["meal/egg-1.jpg", "meal/egg-2.jpg", "meal/egg-3.jpg"],
+      photo: "meal/egg-1.jpg",
       ingredients: ["Egg"],
       what: "An egg is a simple, complete food. It has protein, fat and a little carbohydrate, plus a wide range of vitamins and minerals.",
       contributions: [
@@ -1143,7 +1153,8 @@
     },
     "oatmeal": {
       kcal: 150, carbs: 27, protein: 5, fat: 3, fiber: 4, verdict: "good",
-      photo: "meal/meal-1.jpg", portion: "1 cup cooked, about 160 g",
+      photos: ["meal/oatmeal-1.jpg", "meal/oatmeal-2.jpg", "meal/oatmeal-3.jpg"],
+      photo: "meal/oatmeal-1.jpg",
       ingredients: ["Oats", "Water or milk", "Optional fruit, nuts and cinnamon"],
       what: "Oatmeal is rolled oats cooked in water or milk until they thicken into a warm porridge.",
       contributions: [
@@ -1192,11 +1203,11 @@
       { id: "bulk",   icon: "🏋️", name: "Bulk & Power",  desc: "Thick & strong" }
     ],
     gyms: [
-      { id: "g1", name: "Iron House Gym",  dist: 0.4, open: true,  x: 28, y: 34, tags: ["Cardio", "Weights", "24/7"] },
-      { id: "g2", name: "FitZone Central", dist: 1.1, open: true,  x: 62, y: 26, tags: ["Classes", "Pool"] },
-      { id: "g3", name: "PowerHouse Fitness", dist: 1.8, open: false, x: 44, y: 66, tags: ["Weights", "Sauna"] },
-      { id: "g4", name: "Pulse Studio",    dist: 2.3, open: true,  x: 76, y: 58, tags: ["HIIT", "Yoga"] },
-      { id: "g5", name: "Iron House Branch 2", dist: 0.9, open: true, x: 38, y: 50, tags: ["Member gym"] }
+      { id: "g1", name: "Iron House Gym",  dist: 0.4, open: true,  x: 28, y: 34, photo: "gym/g1.jpg", tags: ["Cardio", "Weights", "24/7"] },
+      { id: "g2", name: "FitZone Central", dist: 1.1, open: true,  x: 62, y: 26, photo: "gym/g2.jpg", tags: ["Classes", "Pool"] },
+      { id: "g3", name: "PowerHouse Fitness", dist: 1.8, open: false, x: 44, y: 66, photo: "gym/g3.jpg", tags: ["Weights", "Sauna"] },
+      { id: "g4", name: "Pulse Studio",    dist: 2.3, open: true,  x: 76, y: 58, photo: "gym/g4.jpg", tags: ["HIIT", "Yoga"] },
+      { id: "g5", name: "Iron House Branch 2", dist: 0.9, open: true, x: 38, y: 50, photo: "gym/g5.jpg", tags: ["Member gym"] }
     ]
   };
 })(typeof window !== "undefined" ? window : this);

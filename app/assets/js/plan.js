@@ -208,7 +208,14 @@
     current.items.forEach(function (it, idx) {
       var ex = exById(it.ex);
       var name = ex ? ex.name : it.ex;
-      var row = h('<div class="row"><div class="ri">' + (it.done ? "✅" : "▫️") + "</div>" +
+      /* A real photograph of the movement, with a tick once it is done. */
+      var first = ex && (ex.gallery || [])[0];
+      var icon = first
+        ? '<span class="ex-thumb' + (it.done ? " done" : "") + '"><img alt="" src="/app/assets/img/ex/thumb/' +
+          esc(first.replace(/^ex\//, "")) + '" decoding="async">' +
+          (it.done ? '<i class="tick">✓</i>' : "") + "</span>"
+        : (it.done ? "✅" : "▫️");
+      var row = h('<div class="row"><div class="ri">' + icon + "</div>" +
         '<div class="rm"><b>' + esc(name) + "</b><small>" +
         esc([it.sets, it.reps, it.rest ? it.rest + " rest" : "", it.note].filter(Boolean).join(" · ")) +
         "</small></div></div>");
@@ -412,7 +419,12 @@
         return;
       }
       rows.forEach(function (ex) {
-        var r = h('<button class="row"><div class="ri">💪</div><div class="rm"><b>' + esc(ex.name) + "</b><small>" +
+        var first = (ex.gallery || [])[0];
+        var icon = first
+          ? '<span class="ex-thumb"><img alt="" src="/app/assets/img/ex/thumb/' +
+            esc(first.replace(/^ex\//, "")) + '" decoding="async"></span>'
+          : "💪";
+        var r = h('<button class="row"><div class="ri">' + icon + '</div><div class="rm"><b>' + esc(ex.name) + "</b><small>" +
           esc(ex.category || (ex.muscles || []).slice(0, 2).join(", ")) + "</small></div></button>");
         r.onclick = function () { detailSheet(ex, day, rerender, overlay); };
         results.appendChild(r);

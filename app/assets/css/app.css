@@ -241,6 +241,14 @@ button.row-main:focus-visible { outline: 2px solid var(--accent); outline-offset
 .fav-btn.on { color: #f5b301; }
 .fav-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
 
+/* A real photograph as the icon on a row */
+.thumb {
+  display: block; width: 40px; height: 40px; border-radius: 10px;
+  overflow: hidden; background: var(--surface-2); flex: none;
+}
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.row .ri:has(.thumb) { width: 40px; }
+
 /* ---------- coming soon ---------- */
 .soon {
   margin-top: 26px; padding: 15px 16px; border-radius: var(--r);
@@ -634,6 +642,44 @@ button.row-main:focus-visible { outline: 2px solid var(--accent); outline-offset
 }
 .gal-empty .gal-missing span{font-size:1.8rem;opacity:.6}
 .gal-empty .gal-missing small{font-size:.78rem;max-width:240px;line-height:1.45}
+
+/* The photograph of a machine on the gym floor */
+.eq-thumb{
+  display:block;width:42px;height:42px;border-radius:11px;overflow:hidden;
+  background:var(--surface-2);flex:none
+}
+.eq-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.row .ri:has(.eq-thumb){width:42px}
+
+/* The photograph of a movement in The Guides */
+.ex-thumb{
+  display:block;width:52px;height:52px;border-radius:12px;overflow:hidden;
+  background:var(--surface-2);flex:none;position:relative
+}
+.ex-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.row .ri:has(.ex-thumb){width:52px}
+.ex-thumb.done{box-shadow:0 0 0 2px var(--ok, #37b26b)}
+.ex-thumb .tick{
+  position:absolute;right:2px;bottom:2px;width:16px;height:16px;border-radius:50%;
+  background:var(--ok, #37b26b);color:#08150d;font-size:.62rem;font-style:normal;
+  font-weight:800;display:flex;align-items:center;justify-content:center;line-height:1
+}
+
+/* The coach's own photograph in the trainer directory */
+.tr-thumb{
+  display:block;width:48px;height:48px;border-radius:50%;overflow:hidden;
+  background:var(--surface-2);flex:none
+}
+.tr-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.row .ri:has(.tr-thumb){width:48px}
+
+/* A real photograph of the gym in Find a Gym */
+.gym-thumb{
+  display:block;width:56px;height:44px;border-radius:10px;overflow:hidden;
+  background:var(--surface-2);flex:none
+}
+.gym-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.row .ri:has(.gym-thumb){width:56px}
 
 /* ---------- steps list ---------- */
 .steps-list{margin:8px 0 0;padding-left:20px}

@@ -194,7 +194,7 @@
       names.forEach(function (name) {
         var f = D.foods[name];
         var b = h('<button class="scan-pick"><div class="ph">' +
-          img2(f.photo || "meal/meal-1.jpg", name) + "</div><b>" + esc(name) + "</b></button>");
+          img2(f.photo || "meal/jollof-rice-1.jpg", name) + "</div><b>" + esc(name) + "</b></button>");
         b.onclick = function () {
           overlay.remove();
           onPick(name);

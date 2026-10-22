@@ -20,12 +20,38 @@
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]; }); }
   function $(sel, ctx) { return (ctx || document).querySelector(sel); }
   var toast = window.GBUI.toast;
-  function img(src, alt, cls) { return '<img class="' + (cls || "") + '" src="' + IMG + src + '" alt="' + esc(alt || "") + '" loading="lazy">'; }
+  function img(src, alt, cls) { return '<img class="' + (cls || "") + '" src="' + IMG + src + '" alt="' + esc(alt || "") + '" decoding="async">'; }
 
   /* ---------------- router ---------------- */
   var routes = {};
   function route(name, fn) { routes[name] = fn; }
-  function go(name, param) { location.hash = "#/" + name + (param ? "/" + param : ""); }
+
+  /* Where the app has been, so the back button always goes somewhere real.
+     A plain history.back() does nothing when the app was opened straight
+     from a link, so we keep our own short stack and fall back to the
+     screen's parent. */
+  var navStack = [];
+
+  function go(name, param) {
+    var next = "#/" + name + (param ? "/" + param : "");
+    var here = location.hash;
+    if (here && here !== next && here !== "#/" && here !== "#") navStack.push(here);
+    if (navStack.length > 40) navStack.shift();
+    location.hash = next;
+  }
+
+  /* Go back one step inside the app. If there is no step to go back to —
+     a deep link, or the first screen — we go to the screen's parent. */
+  function goBack(fallback) {
+    if (navStack.length) {
+      var prev = navStack.pop();
+      location.hash = prev;
+      return true;
+    }
+    if (fallback) { go(fallback); return true; }
+    return false;
+  }
+
   function current() {
     var m = location.hash.replace(/^#\/?/, "").split("/");
     return { name: m[0] || "", param: m[1] || "" };
@@ -40,7 +66,11 @@
     if (window.GBI18n) window.GBI18n.apply(root);
     window.scrollTo(0, 0);
   }
-  window.addEventListener("hashchange", render);
+  window.addEventListener("hashchange", function () {
+    /* If the phone's own back button moved us, keep our stack in step. */
+    if (navStack.length && navStack[navStack.length - 1] === location.hash) navStack.pop();
+    render();
+  });
   window.addEventListener("lang:change", function () { render(); });
 
   /* ---------------- chrome ---------------- */
@@ -82,12 +112,25 @@
     return box;
   }
 
+  /* Where each tab lives, so a back button with no history still has
+     somewhere sensible to go. */
+  var TAB_HOME = {
+    profile: "profile", workout: "workout", exercise: "exercise",
+    library: "library", progress: "progress"
+  };
+
   function shell(active, title, body, opts) {
     opts = opts || {};
     var scr = h('<div class="screen"></div>');
     if (title !== null) {
       var bar = h('<div class="topbar"></div>');
-      if (opts.back) { var bk = h('<button class="back" aria-label="Back">‹</button>'); bk.onclick = function () { history.back(); }; bar.appendChild(bk); }
+      if (opts.back) {
+        var bk = h('<button class="back" aria-label="Back">‹</button>');
+        bk.onclick = function () {
+          if (!goBack(opts.backTo || TAB_HOME[active])) toast("There is nothing to go back to");
+        };
+        bar.appendChild(bk);
+      }
       bar.appendChild(h('<div class="tt">' + esc(title) + "</div>"));
       if (opts.action) { bar.appendChild(h('<div class="sp"></div>')); bar.appendChild(opts.action); }
       scr.appendChild(bar);
@@ -212,7 +255,7 @@
     w.appendChild(h('<div class="brandbig">Gymbadge</div><p class="tagline">Train · Track · Triumph</p>'));
     w.appendChild(h('<div class="hero-photos" style="margin-top:26px">' +
       '<div class="ph">' + img(modelImage("welcome"), modelAlt()) + "</div>" +
-      '<div class="ph">' + img("ex/goblet-squat.jpg", "Training") + "</div>" +
+      '<div class="ph">' + img("ex/gobletsquat-1.jpg", "Training") + "</div>" +
       '<div class="ph">' + img(modelImage("welcome2"), modelAlt()) + "</div></div>"));
     var start = h('<button class="btn btn-primary btn-lg">Get started</button>');
     start.onclick = function () { go("ob", "0"); };
@@ -376,7 +419,12 @@
         var last = S.lastFor(ex.id);
         var fav = S.isFavourite("exercises", ex.id);
         var sub = last ? "Last: " + last.val + " " + ex.unit + " · " + relDay(last.date) : "Not logged yet";
-        var r = h('<div class="row"><div class="ri">' + exIcon(ex.type) + '</div>' +
+        var first = (ex.gallery || [])[0];
+        var icon = first
+          ? '<span class="ex-thumb"><img alt="" src="/app/assets/img/ex/thumb/' +
+            esc(first.replace(/^ex\//, "")) + '" decoding="async"></span>'
+          : exIcon(ex.type);
+        var r = h('<div class="row"><div class="ri">' + icon + "</div>" +
           '<button class="rm row-main" type="button"><b>' + esc(ex.name) + "</b><small>" + esc(sub) + "</small></button>" +
           '<button class="fav-btn' + (fav ? " on" : "") + '" type="button" aria-label="' +
           (fav ? "Remove from favourites" : "Add to favourites") + '">★</button>' +
@@ -401,7 +449,7 @@
     }, 0);
 
     paint();
-    shell("workout", "My Workout Log", node, { back: true });
+    shell("workout", "My Workout Log", node, { back: true, backTo: "workout" });
   });
 
   route("logdetail", function (param) {
@@ -432,7 +480,7 @@
       go("workout");
     };
     node.appendChild(save);
-    shell("workout", ex.name, node, { back: true });
+    shell("workout", ex.name, node, { back: true, backTo: "log" });
   });
 
   /* =======================================================================
@@ -473,50 +521,21 @@
   });
 
 
-  route("equipment", function (param) {
-    var eq = null;
-    D.equipment.forEach(function (e) { if (e.id === param) eq = e; });
-    eq = eq || D.equipment[0];
-    var m = D.statusMeta[eq.status];
-    var node = h("<div></div>");
-    node.appendChild(h('<div class="card center"><div style="font-size:2rem;margin-bottom:6px">' + m.icon + '</div><h3 style="font-size:1.05rem">' + esc(eq.name) + '</h3><div class="sub mb">' + esc(eq.zone) + '</div><span class="pill ' + m.pill + '" style="font-size:.84rem">' + m.label + '</span><p class="sub mt">' + m.desc + "</p></div>"));
-    node.appendChild(h('<div class="list">' +
-      '<div class="row"><div class="rm"><b>Last maintenance</b></div><div class="rr">' + esc(eq.lastMaint) + "</div></div>" +
-      '<div class="row"><div class="rm"><b>Uses logged today</b></div><div class="rr">' + eq.uses + "</div></div>" +
-      '<div class="row"><div class="rm"><b>Availability</b></div><div class="rr">' + (eq.status === "usable" ? "✅ Safe to use" : "⛔ Avoid for now") + "</div></div>" +
-      '<div class="row"><div class="rm"><b>Last status update</b></div><div class="rr">' +
-        (eq.updatedAt ? esc(String(eq.updatedAt).slice(0, 10)) : "Not recorded") + "</div></div></div>"));
-
-    /* The written status report. Nothing is invented: when the gym has not
-       given a reason or a return date, we say exactly that. */
-    var rep2 = eq.report || {};
-    var statusCard = h('<div class="card mt"><h3>Status report</h3></div>');
-    function addLine(label, value) {
-      var text = (value === undefined || value === null || value === "") ? "" : String(value).trim();
-      var rowEl = h('<div class="sr-line"><b>' + esc(label) + "</b><small></small></div>");
-      rowEl.querySelector("small").textContent = text ||
-        "The gym has not provided this information yet.";
-      if (!text) rowEl.classList.add("unknown");
-      statusCard.appendChild(rowEl);
+  /* ---------- the gym floor: every machine, and one machine in full ---------- */
+  route("equipmentlist", function () {
+    if (window.GBEquipment) {
+      window.GBEquipment.floor(function (a, title, body, opts) { shell(a, title, body, opts); }, go);
+      return;
     }
-    addLine("Current status", (D.statusMeta[eq.status] || {}).label || eq.status);
-    addLine("Reason for unavailability", rep2.reason);
-    addLine("Reported issue", rep2.reportedIssue);
-    addLine("Date reported", rep2.reportedAt);
-    addLine("Expected back", rep2.expectedBack);
-    addLine("Safety notice", rep2.safety);
-    addLine("Next action", rep2.nextAction);
-    addLine("Responsible team", rep2.responsible);
-    node.appendChild(statusCard);
-    var reported = S.reported();
-    var on = reported.indexOf(eq.id) >= 0;
-    var rep = h('<button class="btn ' + (on ? "btn-primary" : "btn-ghost") + ' mt">' + (on ? "Reported ✓ — gym notified" : "Report an issue") + "</button>");
-    rep.onclick = function () {
-      if (on) return toast("Already reported — the gym knows 🙌");
-      S.reportFault(eq.id); toast("Thanks — the gym has been notified 🙌"); render();
-    };
-    node.appendChild(rep);
-    shell("exercise", "Equipment", node, { back: true });
+    shell("exercise", "Gym Floor", h('<p class="sub">The gym floor is unavailable.</p>'), { back: true, backTo: "exercise" });
+  });
+
+  route("equipment", function (param) {
+    if (window.GBEquipment) {
+      window.GBEquipment.machine(function (a, title, body, opts) { shell(a, title, body, opts); }, go, param);
+      return;
+    }
+    go("equipmentlist");
   });
 
   /* =======================================================================
@@ -599,12 +618,24 @@
 
     node.appendChild(h('<div class="eyebrow" style="margin:24px 0 12px">Your tools</div>'));
     var tools = h('<div class="list"></div>');
-    tools.appendChild(rowBtn("📈", "My Workout Log", "Beat your last number", function () { go("log"); }));
-    tools.appendChild(rowBtn("📲", "Gym Equipment", "Live equipment status", function () { go("exercise"); }));
-    tools.appendChild(rowBtn("🍽️", "My Plate Truth", "See your plate for what it is", function () { go("plate"); }));
-    tools.appendChild(rowBtn("🪞", "Body Goals", "Meet the body you're building", function () { go("future"); }));
-    tools.appendChild(rowBtn("📍", "Find a Gym", "Find a gym and book a slot", function () { go("find"); }));
-    tools.appendChild(rowBtn("🎫", "Your Badge ID", "Profile, streak and settings", function () { go("profile"); }));
+    /* Every tool carries a real photograph, so you can see what it is
+       before you tap it. */
+    function tool(photo, name, sub, route) {
+      var src = photo.charAt(0) === "/" ? photo : "/app/assets/img/" + photo;
+      var r = h('<button class="row"><div class="ri">' +
+        '<span class="thumb"><img alt="" src="' + esc(src) + '" decoding="async"></span>' +
+        '</div><div class="rm"><b>' + esc(name) + "</b><small>" + esc(sub) +
+        '</small></div><div class="rr"><span class="chev">›</span></div></button>');
+      r.onclick = function () { go(route); };
+      return r;
+    }
+    tools.appendChild(tool("ex/pushup-2.jpg", "My Workout Log", "Beat your last number", "log"));
+    tools.appendChild(tool("eq/eq4-bench-press-1.jpg", "Gym Equipment", "Live status for every machine", "equipmentlist"));
+    tools.appendChild(tool("meal/jollof-rice-1.jpg", "My Plate Truth", "See your plate for what it is", "plate"));
+    tools.appendChild(tool("/assets/img/people/member-lift.jpg", "Body Goals", "Meet the body you're building", "future"));
+    tools.appendChild(tool("/assets/img/people/gym-floor.jpg", "Find a Gym", "Find a gym and book a slot", "find"));
+    tools.appendChild(tool("coach/coach-ada-okafor.jpg", "My Trainer", "Coaches you can trust", "trainers"));
+    tools.appendChild(tool("logo.png", "Your Badge ID", "Profile, streak and settings", "profile"));
     node.appendChild(tools);
 
     shell("library", "Workout Programs", node);
@@ -652,8 +683,9 @@
       node.appendChild(h('<div class="eyebrow" style="margin:18px 0 10px">Recently eaten</div>'));
       var recentRow = h('<div class="food-grid"></div>');
       recent.forEach(function (f) {
+        var rf = D.foods[f.name] || {};
         var c = h('<button class="food-tile"><div class="ph">' +
-          img((D.foods[f.name] && D.foods[f.name].photo) || "meal/meal-1.jpg", f.name) + "</div><b>" + esc(f.name) + "</b></button>");
+          img(rf.photo || "meal/jollof-rice-1.jpg", f.name) + "</div><b>" + esc(f.name) + "</b></button>");
         c.onclick = function () { openFood(f.name); };
         recentRow.appendChild(c);
       });
@@ -691,18 +723,19 @@
         if (onlyFav && !S.isFavourite("foods", n)) return false;
         return !q || n.toLowerCase().indexOf(q.toLowerCase()) > -1;
       });
-      // Photo tiles for the most common foods
-      names.slice(0, 6).forEach(function (name) {
+      // A photograph of each food, so you can see what you are tapping.
+      names.forEach(function (name) {
         var f = D.foods[name];
         var c = h('<button class="food-tile"><div class="ph">' +
-          img(f.photo || "meal/meal-1.jpg", name) + "</div><b>" + esc(name) + "</b></button>");
+          img(f.photo || "meal/jollof-rice-1.jpg", name) + "</div><b>" + esc(name) + "</b></button>");
         c.onclick = function () { openFood(name); };
         grid.appendChild(c);
       });
       names.forEach(function (name) {
         var f = D.foods[name];
         var fav = S.isFavourite("foods", name);
-        var r = h('<div class="row"><div class="ri">🍽️</div>' +
+        var r = h('<div class="row"><div class="ri"><span class="thumb"><img alt="" src="/app/assets/img/' +
+          esc(f.photo || "meal/jollof-rice-1.jpg") + '" decoding="async"></span></div>' +
           '<button class="rm row-main" type="button"><b>' + esc(name) +
           "</b><small>" + esc(f.portion || "") + " · " + f.kcal + " kcal</small></button>" +
           '<button class="fav-btn' + (fav ? " on" : "") + '" type="button" aria-label="' +
@@ -760,7 +793,7 @@
     node.appendChild(h('<p class="faint small mt center">This is general nutrition education, not a personal diet plan. ' +
       "For medical or dietary advice, speak to a qualified professional.</p>"));
 
-    shell("library", "My Plate Truth", node, { back: true });
+    shell("library", "My Plate Truth", node, { back: true, backTo: "library" });
 
     /* ---------------- one food, explained ---------------- */
     function openFood(name) {
@@ -771,9 +804,37 @@
 
       panel.appendChild(h('<div class="sheet-head"><h3>' + esc(name) + '</h3><button class="iconbtn" style="margin-left:auto" id="fdX">✕</button></div>'));
 
-      if (f.photo) {
-        panel.appendChild(h('<div class="ph" style="border-radius:14px;overflow:hidden;margin-bottom:14px">' +
-          img(f.photo, name) + "</div>"));
+      var foodPhotos = f.photos && f.photos.length ? f.photos : (f.photo ? [f.photo] : []);
+      if (foodPhotos.length) {
+        var gal = h('<div class="gal food-gal"><div class="gal-track"></div>' +
+          '<button type="button" class="gal-nav gal-prev" aria-label="Previous photo">‹</button>' +
+          '<button type="button" class="gal-nav gal-next" aria-label="Next photo">‹</button>' +
+          '<div class="gal-dots" role="tablist" aria-label="Photo position"></div></div>');
+        var ftrack = gal.querySelector(".gal-track");
+        var fdots = gal.querySelector(".gal-dots");
+        var findex = 0;
+        foodPhotos.forEach(function (src, i) {
+          var s = h('<div class="gal-slide"><img alt="' + esc(name) + ' photo ' + (i + 1) + ' of ' + foodPhotos.length + '" src="/app/assets/img/' + esc(src) + '"></div>');
+          ftrack.appendChild(s);
+          var d = h('<button type="button" class="gal-dot" role="tab" aria-label="Photo ' + (i + 1) + '"></button>');
+          d.onclick = function () { fshow(i); };
+          fdots.appendChild(d);
+        });
+        function fshow(i) {
+          findex = (i + foodPhotos.length) % foodPhotos.length;
+          ftrack.style.transform = "translateX(" + (-findex * 100) + "%)";
+          fdots.querySelectorAll(".gal-dot").forEach(function (d, n) { d.classList.toggle("on", n === findex); });
+          ftrack.querySelectorAll(".gal-slide").forEach(function (s, n) { s.classList.toggle("on", n === findex); });
+        }
+        gal.querySelector(".gal-prev").onclick = function () { fshow(findex - 1); };
+        gal.querySelector(".gal-next").onclick = function () { fshow(findex + 1); };
+        gal.setAttribute("tabindex", "0");
+        gal.addEventListener("keydown", function (e) {
+          if (e.key === "ArrowLeft") { e.preventDefault(); fshow(findex - 1); }
+          if (e.key === "ArrowRight") { e.preventDefault(); fshow(findex + 1); }
+        });
+        fshow(0);
+        panel.appendChild(gal);
       }
 
       // The numbers, then the explanation
@@ -943,7 +1004,7 @@
       go("projection");
     };
     node.appendChild(gen);
-    shell("library", "Body Goals", node, { back: true });
+    shell("library", "Body Goals", node, { back: true, backTo: "library" });
   });
 
   route("projection", function () {
@@ -962,7 +1023,7 @@
     b.onclick = function () { toast("Goal saved to your badge 🎯"); go("progress"); };
     node.appendChild(b);
     node.appendChild(h('<p class="faint small center mt">Not a medical tool. Projections are estimates, not guarantees.</p>'));
-    shell("library", "Body Goals", node, { back: true });
+    shell("library", "Body Goals", node, { back: true, backTo: "library" });
   });
 
   /* =======================================================================
@@ -1288,7 +1349,7 @@
       S.setUser(nu); toast("Saved ✓"); go("profile");
     };
     node.appendChild(save);
-    shell("profile", "My Profile", node, { back: true });
+    shell("profile", "My Profile", node, { back: true, backTo: "profile" });
   });
 
   route("prefs", function () {
@@ -1319,7 +1380,7 @@
     var more = h('<button class="btn btn-primary btn-lg mt">Open all settings</button>');
     more.onclick = function () { go("settings"); };
     node.appendChild(more);
-    shell("profile", "Preferences", node, { back: true });
+    shell("profile", "Preferences", node, { back: true, backTo: "profile" });
   });
 
   /* =======================================================================
@@ -1332,7 +1393,7 @@
       // settings.js may still be loading — try again on the next tick.
       setTimeout(function () {
         if (window.GBAppSettings) window.GBAppSettings.render();
-        else shell("profile", "Settings", h('<p class="sub">Settings are unavailable.</p>'), { back: true });
+        else shell("profile", "Settings", h('<p class="sub">Settings are unavailable.</p>'), { back: true, backTo: "profile" });
       }, 60);
     }
   });
@@ -1342,7 +1403,7 @@
     var node = h("<div></div>");
     node.appendChild(h('<div class="center" style="padding:30px 10px"><div style="font-size:2.6rem">🎧</div>' +
       '<h3 class="mt">Finishing sign in…</h3><p class="sub mt" id="mcMsg">Talking to your music service.</p></div>'));
-    shell("profile", "Music", node, { back: true });
+    shell("profile", "Music", node, { back: true, backTo: "profile" });
 
     setTimeout(function () {
       var M = window.GBMusic;
@@ -1393,7 +1454,7 @@
     node.appendChild(list);
     var mail = h('<a class="btn btn-primary mt" href="mailto:hello@gymbadge.app" style="text-decoration:none">Email support</a>');
     node.appendChild(mail);
-    shell("profile", "Help & support", node, { back: true });
+    shell("profile", "Help & support", node, { back: true, backTo: "profile" });
   });
 
   /* =======================================================================
@@ -1408,7 +1469,11 @@
 
     var list = h('<div class="list"></div>');
     D.gyms.slice().sort(function (a, b) { return a.dist - b.dist; }).forEach(function (g) {
-      var r = h('<button class="row"><div class="ri">📍</div><div class="rm"><b>' + esc(g.name) + "</b><small>" + g.dist + " km · " + esc(g.tags.join(" · ")) + '</small></div><div class="rr"><span class="pill ' + (g.open ? "ok" : "bad") + '">' + (g.open ? "Open" : "Closed") + "</span></div></button>");
+      /* A real photograph of the gym, so you know what you are walking into. */
+      var face = g.photo
+        ? '<span class="gym-thumb"><img alt="" src="/app/assets/img/' + esc(g.photo) + '" decoding="async"></span>'
+        : "📍";
+      var r = h('<button class="row"><div class="ri">' + face + '</div><div class="rm"><b>' + esc(g.name) + "</b><small>" + g.dist + " km · " + esc(g.tags.join(" · ")) + '</small></div><div class="rr"><span class="pill ' + (g.open ? "ok" : "bad") + '">' + (g.open ? "Open" : "Closed") + "</span></div></button>");
       r.onclick = function () { openSlots(g); };
       list.appendChild(r);
     });
@@ -1425,7 +1490,7 @@
       });
       node.appendChild(bl);
     }
-    shell("profile", "Find a Gym", node, { back: true });
+    shell("profile", "Find a Gym", node, { back: true, backTo: "profile" });
   });
 
   function openSlots(g) {
@@ -1489,7 +1554,7 @@
     node.appendChild(start);
     node.appendChild(h('<p class="faint small center mt">Terms of use · Privacy policy · Cancel anytime</p>'));
 
-    shell("profile", "GymBadge Pro", node, { back: true });
+    shell("profile", "GymBadge Pro", node, { back: true, backTo: "profile" });
     setTimeout(function () { var c = $("#curSel", node); if (c) c.onchange = function () { S.set({ currency: this.value }); render(); }; }, 0);
   });
 

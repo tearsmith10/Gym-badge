@@ -189,8 +189,15 @@
         var last = S.lastFor(ex.id);
         var mine = isMine(ex);
         var fav = S.isFavourite("exercises", ex.id);
-        var r = h('<div class="row"><div class="ri">' +
-          (ex.type === "time" ? "⏱️" : ex.type === "weight" ? "🏋️" : "💪") + "</div>" +
+        /* The picture on the row is a real photograph of the movement. A
+           movement we have no photograph of shows its type instead, rather
+           than borrowing a picture of something else. */
+        var first = (ex.gallery || [])[0];
+        var icon = first
+          ? '<span class="ex-thumb"><img alt="" src="/app/assets/img/ex/thumb/' +
+            esc(first.replace(/^ex\//, "")) + '" decoding="async"></span>'
+          : (ex.type === "time" ? "⏱️" : ex.type === "weight" ? "🏋️" : "💪");
+        var r = h('<div class="row"><div class="ri">' + icon + "</div>" +
           '<button class="rm row-main" type="button"><b>' + esc(ex.name) + "</b><small>" +
           esc(ex.category || (ex.muscles || []).slice(0, 2).join(", ")) +
           (ex.difficulty ? " · " + esc(ex.difficulty) : "") +
@@ -338,7 +345,7 @@
       node.appendChild(del);
     }
 
-    shell("exercise", ex.name, node, { back: true });
+    shell("exercise", ex.name, node, { back: true, backTo: "exercise" });
   }
 
   global.GBLibrary = { screen: screen, detail: detail, carousel: carousel, CATEGORIES: CATEGORIES };

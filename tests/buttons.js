@@ -22,7 +22,8 @@ const ROOT = path.resolve(__dirname, "..");
 const APP = path.join(ROOT, "app/assets/js");
 
 const FILES = ["app.js", "plan.js", "library.js", "trainers.js", "settings.js",
-  "scanner.js", "chat.js", "data.js", "store.js", "ui.js", "dialog.js", "payments.js"];
+  "scanner.js", "chat.js", "data.js", "store.js", "ui.js", "dialog.js", "payments.js",
+  "equipment.js", "equipment-data.js"];
 
 let pass = 0, fail = 0;
 const problems = [];
@@ -340,8 +341,141 @@ for (const f of FILES) {
     missingCoach.map((m) => m[1]).join(", "));
 }
 
-console.log("\n" + "=".repeat(52));
-console.log("  PASS " + pass + "   FAIL " + fail);
+/* --- 18. the gym floor: every machine has a real photograph --------------- */
+{
+  const eqSrc = fs.readFileSync(path.join(APP, "equipment-data.js"), "utf8");
+  const items = [...eqSrc.matchAll(/id: "(eq\d+)", name: "([^"]+)",[\s\S]*?photos: \[([^\]]*)\]/g)]
+    .map((m) => ({ id: m[1], name: m[2], photos: [...m[3].matchAll(/"([^"]+)"/g)].map((p) => p[1]) }));
+
+  check("the gym floor carries a full catalogue", items.length >= 20, String(items.length));
+  check("every machine has a photograph", items.every((i) => i.photos.length > 0),
+    items.filter((i) => !i.photos.length).map((i) => i.name).join(", "));
+
+  const eqDir = path.join(ROOT, "app/assets/img/");
+  const missing = [];
+  items.forEach((i) => i.photos.forEach((p) => {
+    if (!fs.existsSync(path.join(eqDir, p))) missing.push(p);
+    /* Every one needs the small copy the list shows. */
+    const thumb = p.replace("eq/", "eq/thumb/");
+    if (!fs.existsSync(path.join(eqDir, thumb))) missing.push(thumb);
+  }));
+  check("every machine photograph is installed", missing.length === 0, missing.slice(0, 5).join(", "));
+
+  /* No picture of one machine may stand in for another. */
+  const seen = new Map();
+  const shared = [];
+  items.forEach((i) => i.photos.forEach((p) => {
+    if (seen.has(p) && seen.get(p) !== i.id) shared.push(p + " (" + seen.get(p) + ", " + i.id + ")");
+    seen.set(p, i.id);
+  }));
+  check("no photograph is used for two different machines", shared.length === 0, shared.join(", "));
+
+  /* The screen that shows them is wired into the router and the page. */
+  const appSrc = fs.readFileSync(path.join(APP, "app.js"), "utf8");
+  check("the gym floor screen has its own route", /route\("equipmentlist"/.test(appSrc));
+  check("a machine has its own route", /route\("equipment"/.test(appSrc));
+  const html = fs.readFileSync(path.join(ROOT, "app/index.html"), "utf8");
+  check("the gym floor script is loaded by the app", /equipment\.js/.test(html));
+  check("the catalogue script is loaded by the app", /equipment-data\.js/.test(html));
+  check("the images are loaded in a working order",
+    html.indexOf("equipment-data.js") < html.indexOf("equipment.js") &&
+    html.indexOf("store.js") < html.indexOf("equipment.js"));
+}
+
+/* --- 19. every food has its own real photograph --------------------------- */
+{
+  const data = fs.readFileSync(path.join(APP, "data.js"), "utf8");
+  const foods = [...data.matchAll(/"([a-z ]+)": \{\s*\n\s*kcal:[\s\S]{0,900}?photo: "([^"]+)"/g)]
+    .map((m) => ({ name: m[1], photo: m[2] }));
+  check("the food database is intact", foods.length >= 11, String(foods.length));
+
+  const photoDir = path.join(ROOT, "app/assets/img/");
+  const missing = foods.filter((f) => !fs.existsSync(path.join(photoDir, f.photo)));
+  check("every food photograph exists", missing.length === 0, missing.map((f) => f.name).join(", "));
+
+  const used = new Map();
+  const shared = [];
+  foods.forEach((f) => {
+    if (used.has(f.photo)) shared.push(f.name + " / " + used.get(f.photo));
+    used.set(f.photo, f.name);
+  });
+  check("no two foods share a photograph", shared.length === 0, shared.join(", "));
+
+  const stale = foods.filter((f) => /meal\/meal-\d\.jpg/.test(f.photo));
+  check("no food falls back to a borrowed picture", stale.length === 0, stale.map((f) => f.name).join(", "));
+}
+
+/* --- 20. every gym has a real photograph --------------------------------- */
+{
+  const data = fs.readFileSync(path.join(APP, "data.js"), "utf8");
+  const gyms = [...data.matchAll(/id: "g\d+", name: "([^"]+)"[\s\S]{0,200}?photo: "([^"]+)"/g)]
+    .map((m) => ({ name: m[1], photo: m[2] }));
+  check("every gym is listed", gyms.length >= 5, String(gyms.length));
+  const missing = gyms.filter((g) => !fs.existsSync(path.join(ROOT, "app/assets/img/", g.photo)));
+  check("every gym photograph exists", missing.length === 0, missing.map((g) => g.name).join(", "));
+  check("the gym list shows the photograph",
+    /gym-thumb/.test(fs.readFileSync(path.join(APP, "app.js"), "utf8")));
+}
+
+/* --- 21. the six feature cards on the site have real pictures ------------- */
+{
+  ["index.html", "web/index.html"].forEach((f) => {
+    const src = fs.readFileSync(path.join(ROOT, f), "utf8");
+    const cards = [...src.matchAll(/<a class="card reveal feat"[\s\S]*?<img src="([^"]+)"[\s\S]*?<h3>([^<]+)<\/h3>/g)]
+      .map((m) => ({ src: m[1], name: m[2] }));
+    check(f + ": the six features have their cards", cards.length === 6, String(cards.length));
+    const missing = cards.filter((c) => !fs.existsSync(path.join(ROOT, c.src.replace(/^\//, ""))));
+    check(f + ": every feature picture exists", missing.length === 0,
+      missing.map((c) => c.name + " " + c.src).join(", "));
+    const borrowing = cards.filter((c) => /meal\/meal-\d\.jpg|model-(male|female)\.jpg/.test(c.src));
+    check(f + ": no feature borrows a generic picture", borrowing.length === 0,
+      borrowing.map((c) => c.name).join(", "));
+  });
+}
+
+/* --- 22. every screen has a back button that goes somewhere real ---------- */
+{
+  const appSrc = fs.readFileSync(path.join(APP, "app.js"), "utf8");
+  check("the back button keeps its own navigation stack", /var navStack = \[\]/.test(appSrc));
+  check("the back button never relies on browser history alone",
+    !/bk\.onclick = function \(\) \{ history\.back\(\); \}/.test(appSrc));
+  check("the back button falls back to a parent screen", /function goBack\(fallback\)/.test(appSrc));
+
+  /* Every screen that is not one of the five tabs must offer a way back. */
+  const tabRoutes = ["workout", "exercise", "library", "progress", "profile", "welcome", "ob"];
+  const offenders = [];
+  const re = /shell\(\s*"[a-z]+",\s*[^,]+,\s*[^,)]+(?:,\s*([^)]*))?\)/g;
+  let m;
+  while ((m = re.exec(appSrc)) !== null) {
+    const opts = m[1] || "";
+    const title = m[0];
+    if (/back:\s*true/.test(opts)) continue;
+    /* The tabs themselves do not need one: the tab bar is always there. */
+    if (/shell\("(workout|exercise|library|progress|profile)",\s*"(My Routine|The Guides|Workout Programs|Progress|Profile|My Profile)"/.test(title)) continue;
+    if (/unavailable|Settings are unavailable/.test(title)) continue;
+    offenders.push(title.slice(0, 70));
+  }
+  check("secondary screens offer a back button", offenders.length === 0, offenders.join(" | "));
+
+  /* Every screen that does offer one names where it goes when there is no
+     history. */
+  const withBack = [...appSrc.matchAll(/shell\([^;]*?back: true[^;]*?\)/g)].map((x) => x[0]);
+  const noTarget = withBack.filter((s) => !/backTo:/.test(s));
+  check("every back button names its parent", noTarget.length === 0, noTarget.slice(0, 2).join(" | "));
+}
+
+/* --- 23. photographs are never left to a lazy loader that never fires ----- */
+{
+  const files = fs.readdirSync(APP).filter((f) => f.endsWith(".js"));
+  const offenders = [];
+  files.forEach((f) => {
+    const src = fs.readFileSync(path.join(APP, f), "utf8");
+    if (/loading="lazy"/.test(src)) offenders.push(f);
+  });
+  check("no picture is left waiting on a lazy loader", offenders.length === 0, offenders.join(", "));
+}
+
+console.log("\n" + "=".repeat(52));console.log("  PASS " + pass + "   FAIL " + fail);
 console.log("=".repeat(52));
 if (problems.length) { console.log("\nPROBLEMS:"); problems.forEach((p) => console.log("  - " + p)); }
 process.exit(fail ? 1 : 0);

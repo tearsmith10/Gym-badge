@@ -194,7 +194,11 @@
       empty.hidden = rows.length > 0;
       rows.forEach(function (t) {
         var fav = S.isFavourite("trainers", t.id);
-        var r = h('<div class="row"><div class="ri">🧑‍🏫</div>' +
+        /* A real photograph of the coach, not a generic icon. */
+        var face = t.photo
+          ? '<span class="tr-thumb"><img alt="" src="' + esc(t.photo) + '" decoding="async"></span>'
+          : "🧑‍🏫";
+        var r = h('<div class="row"><div class="ri">' + face + "</div>" +
           '<button class="rm row-main" type="button"><b>' + esc(t.name) +
           (t.status === "verified" ? ' <span class="pill ok" style="font-size:.6rem">Verified</span>' : "") +
           '</b><small>' + esc(t.specialty || "") + " · " + esc(t.city || "") + " · ★ " + (t.rating || 5) + "</small></button>" +
@@ -224,7 +228,7 @@
     apply.onclick = function () { applySheet(rerender); };
     node.appendChild(apply);
 
-    shell("exercise", "My Trainer", node);
+    shell("exercise", "My Trainer", node, { back: true, backTo: "library" });
 
     function rerender() { directory(shell, go); }
 
@@ -288,7 +292,7 @@
     book.onclick = function () { bookSheet(t, function () { go("profile"); }); };
     node.appendChild(book);
 
-    shell("exercise", t.name, node, { back: true });
+    shell("exercise", t.name, node, { back: true, backTo: "trainers" });
   }
 
   /* The slots a trainer offers over the next two weeks. */

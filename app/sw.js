@@ -1,5 +1,5 @@
 /* GYM BADGE — service worker (offline first, self-updating) */
-var CACHE = "gymbadge-v18";
+var CACHE = "gymbadge-v19";
 var IMGS = [
   "/app/assets/img/avatar.jpg",
   "/app/assets/img/coach/model-male.jpg",
@@ -64,9 +64,28 @@ var IMGS = [
   "/app/assets/img/lib/program-5.jpg",
   "/app/assets/img/lib/program-7.jpg",
   "/app/assets/img/lib/program-9.jpg",
-  "/app/assets/img/meal/meal-1.jpg",
-  "/app/assets/img/meal/meal-2.jpg",
-  "/app/assets/img/meal/meal-3.jpg"
+  "/app/assets/img/meal/jollof-rice-1.jpg",
+  "/app/assets/img/meal/grilled-chicken-1.jpg",
+  "/app/assets/img/meal/beans-1.jpg",
+  "/app/assets/img/meal/banana-1.jpg",
+  "/app/assets/img/meal/pizza-1.jpg",
+  "/app/assets/img/meal/burger-1.jpg",
+  "/app/assets/img/meal/salad-1.jpg",
+  "/app/assets/img/meal/suya-1.jpg",
+  "/app/assets/img/meal/swallow-1.jpg",
+  "/app/assets/img/meal/egg-1.jpg",
+  "/app/assets/img/meal/oatmeal-1.jpg",
+  "/app/assets/img/coach/coach-ada-okafor.jpg",
+  "/app/assets/img/coach/coach-tunde-bakare.jpg",
+  "/app/assets/img/coach/coach-zainab-musa.jpg",
+  "/app/assets/img/coach/coach-amara-nwosu.jpg",
+  "/app/assets/img/coach/coach-kwame-asante.jpg",
+  "/app/assets/img/coach/coach-naledi-dlamini.jpg",
+  "/app/assets/img/gym/thumb/g1.jpg",
+  "/app/assets/img/gym/thumb/g2.jpg",
+  "/app/assets/img/gym/thumb/g3.jpg",
+  "/app/assets/img/gym/thumb/g4.jpg",
+  "/app/assets/img/gym/thumb/g5.jpg"
 ];
 var ASSETS = [
   "/app/",
@@ -87,12 +106,18 @@ var ASSETS = [
   "/app/assets/js/data.js",
   "/app/assets/js/exercises-more.js",
   "/app/assets/js/programs.js",
+  "/app/assets/js/equipment-data.js",
   "/app/assets/js/store.js",
   "/app/assets/js/payments.js",
   "/app/assets/js/settings.js",
   "/app/assets/js/dialog.js",
   "/app/assets/js/ui.js",
   "/app/assets/js/scanner.js",
+  "/app/assets/js/equipment.js",
+  "/app/assets/js/library.js",
+  "/app/assets/js/plan.js",
+  "/app/assets/js/trainers.js",
+  "/app/assets/js/chat.js",
   "/app/assets/js/app.js",
   "/app/assets/img/logo.png",
   "/app/assets/img/icon-192.png",
