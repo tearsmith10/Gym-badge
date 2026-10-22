@@ -1,10 +1,12 @@
 {
+  "id": "/app/",
   "name": "Gym Badge — Train smarter, earn your badge",
   "short_name": "Gym Badge",
   "description": "The training companion that remembers every set, checks every machine, explains every meal and shows the body you are building.",
   "start_url": "/app/",
   "scope": "/app/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
   "orientation": "portrait",
   "background_color": "#121211",
   "theme_color": "#121211",
@@ -17,10 +19,10 @@
     { "src": "/app/assets/img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "Log a set", "url": "/app/#/log" },
-    { "name": "Check equipment", "url": "/app/#/equipment" },
-    { "name": "Nutrition guide", "url": "/app/#/plate" },
-    { "name": "Find a gym", "url": "/app/#/find" },
-    { "name": "Find a trainer", "url": "/app/#/trainers" }
+    { "name": "My Routine", "short_name": "Routine", "url": "/app/#/workout" },
+    { "name": "The Guides", "short_name": "Guides", "url": "/app/#/exercise" },
+    { "name": "My Workout Log", "short_name": "Log", "url": "/app/#/log" },
+    { "name": "My Plate Truth", "short_name": "Plate", "url": "/app/#/plate" },
+    { "name": "My Trainer", "short_name": "Trainer", "url": "/app/#/trainers" }
   ]
 }
