@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Gym Badge mark">
+  <defs>
+    <linearGradient id="gbRim" x1="90" y1="60" x2="430" y2="460" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffc09e"/>
+      <stop offset=".22" stop-color="#ff6a45"/>
+      <stop offset=".55" stop-color="#d9552f"/>
+      <stop offset=".8" stop-color="#b07a3c"/>
+      <stop offset="1" stop-color="#8a5a2b"/>
+    </linearGradient>
+    <radialGradient id="gbField" cx="38%" cy="26%" r="82%">
+      <stop offset="0" stop-color="#26201a"/>
+      <stop offset=".62" stop-color="#15110e"/>
+      <stop offset="1" stop-color="#0e0c0a"/>
+    </radialGradient>
+    <linearGradient id="gbCream" x1="150" y1="120" x2="360" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff6e9"/>
+      <stop offset=".6" stop-color="#f4efe6"/>
+      <stop offset="1" stop-color="#e2d6c4"/>
+    </linearGradient>
+  </defs>
+  <path d="M256 28 L438 133 V379 L256 484 L74 379 V133 Z" fill="url(#gbRim)" stroke="url(#gbRim)" stroke-width="18" stroke-linejoin="round"/>
+  <path d="M256 91 L392 170 V342 L256 421 L120 342 V170 Z" fill="url(#gbField)" stroke="url(#gbField)" stroke-width="16" stroke-linejoin="round"/>
+  <path d="M256 91 L392 170 V342 L256 421 L120 342 V170 Z" fill="none" stroke="#f4efe6" stroke-opacity=".45" stroke-width="3" stroke-linejoin="round"/>
+  <g transform="translate(256 256) scale(1.12) translate(-103 -75)">
+    <circle cx="62" cy="75" r="48" fill="none" stroke="url(#gbCream)" stroke-width="21" stroke-dasharray="234.57 67.02"/>
+    <rect x="62" y="64.5" width="58.5" height="21" fill="url(#gbCream)"/>
+    <path fill="url(#gbCream)" fill-rule="evenodd" d="M132 14 H162 C184 14 198 27 198 44 C198 58 189 68 176 71 C192 74 202 86 202 101 C202 122 186 136 162 136 H132 Z M153 35 H162 C173 35 179 39 179 45 C179 52 173 56 162 56 H153 Z M153 79 H165 C178 79 183 87 183 97 C183 109 176 115 164 115 H153 Z"/>
+  </g>
+</svg>

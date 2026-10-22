@@ -251,7 +251,7 @@
   route("welcome", function () {
     var s = h('<div class="screen"><div class="welcome"></div></div>');
     var w = s.firstChild;
-    w.appendChild(h('<img class="logo" src="/assets/img/logo.png" alt="Gym Badge">'));
+    w.appendChild(h('<img class="logo" src="/assets/img/logo.png?v=20" alt="Gym Badge">'));
     w.appendChild(h('<div class="brandbig">Gymbadge</div><p class="tagline">Train · Track · Triumph</p>'));
     w.appendChild(h('<div class="hero-photos" style="margin-top:26px">' +
       '<div class="ph">' + img(modelImage("welcome"), modelAlt()) + "</div>" +
@@ -635,7 +635,7 @@
     tools.appendChild(tool("/assets/img/people/member-lift.jpg", "Body Goals", "Meet the body you're building", "future"));
     tools.appendChild(tool("/assets/img/people/gym-floor.jpg", "Find a Gym", "Find a gym and book a slot", "find"));
     tools.appendChild(tool("coach/coach-ada-okafor.jpg", "My Trainer", "Coaches you can trust", "trainers"));
-    tools.appendChild(tool("logo.png", "Your Badge ID", "Profile, streak and settings", "profile"));
+    tools.appendChild(tool("/app/assets/img/logo.png?v=20", "Your Badge ID", "Profile, streak and settings", "profile"));
     node.appendChild(tools);
 
     shell("library", "Workout Programs", node);
@@ -1213,7 +1213,7 @@
 
     // Digital Badge ID
     var code = badgeCode(u.username || u.name || "athlete");
-    node.appendChild(h('<div class="card center mt"><div class="badge-mark"><img src="/assets/img/logo.png" alt="Gym Badge"></div><h3 style="font-size:1.1rem">Your Badge ID</h3><div class="sub">Scan at any GymBadge partner gym</div><div class="qr">' + qrSvg(code) + '</div><div style="margin-top:10px"><span class="mono-code">' + esc(code) + '</span></div><button class="btn btn-ghost btn-sm" id="copyBadge" style="margin-top:12px">Copy code</button></div>'));
+    node.appendChild(h('<div class="card center mt"><div class="badge-mark"><img src="/assets/img/logo.png?v=20" alt="Gym Badge"></div><h3 style="font-size:1.1rem">Your Badge ID</h3><div class="sub">Scan at any GymBadge partner gym</div><div class="qr">' + qrSvg(code) + '</div><div style="margin-top:10px"><span class="mono-code">' + esc(code) + '</span></div><button class="btn btn-ghost btn-sm" id="copyBadge" style="margin-top:12px">Copy code</button></div>'));
 
     node.appendChild(h('<div class="list mt">' +
       '<div class="row"><div class="ri">🎯</div><div class="rm"><b>Goal</b><small>' + esc(u.goal || "Not set") + '</small></div></div>' +

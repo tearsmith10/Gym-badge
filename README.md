@@ -215,15 +215,21 @@ message toast. Every screen file uses them, so a toast can never fail
 because one file forgot to bring its own copy.
 
 ### 🎨 The official logo
-The mark is a running figure carrying across an adidas style three stripe.
-The stripes run from the Ember accent through to the honeybadger tawny and
-cream, so the logo reads as part of the app instead of sitting on top of it.
+The mark is the Gym Badge hexagon: a signal-coral rim burning down into
+honeybadger tawny around a dark field, with a cream **GB** monogram. The
+hexagon is the badge itself; the monogram is the name. It is drawn as vector
+(`assets/img/logo.svg` and `assets/img/mark.svg`) so it stays crisp from a
+16px favicon to a press banner.
 
-- **No white plate.** The PNG carries a transparent background, the app icon
-  is a rounded espresso tile, and the bare mark is shipped for any dark
-  surface. It works on all three dark themes.
-- Shipped at 512, 192 and 180 for the icons, plus a maskable variant that
-  keeps the figure inside the safe zone.
+- **No white plate.** The tile version sits on a rounded espresso square that
+  reads on all three dark themes; the bare SVG is transparent for any surface.
+  `assets/img/mark.png` is the dark horizontal lockup used for press and
+  social.
+- Shipped at 512, 192 and 180 for the icons, plus a full-bleed maskable
+  variant that keeps the hexagon inside the safe zone.
+- The site header, download page, app splash, welcome screen, OAuth page,
+  favicon and PWA icons all use the same files, so the brand cannot drift
+  between surfaces.
 
 ### 🌍 Language changes (35 languages, flags first)
 `assets/i18n.js` is one dictionary shared by the app and the site.

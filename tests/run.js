@@ -205,6 +205,15 @@ function analyseLogo(buf) {
     check(label + " carries the honeybadger tawny (" + a.tawny + " px)", a.tawny > 500);
     check(label + " carries the honeybadger cream (" + a.cream + " px)", a.cream > 200);
   }
+  const logoSvg = await get("/assets/img/logo.svg");
+  check("the vector logo loads", logoSvg.status === 200);
+  check("the vector logo is the badge", /aria-label="Gym Badge"/.test(logoSvg.text));
+  const markSvg = await get("/assets/img/mark.svg");
+  check("the bare mark loads", markSvg.status === 200);
+  const siteCss = (await get("/web/assets/css/site.css")).text;
+  check("secure note icons stay icon sized", /\.secure-note svg\{width:20px/.test(siteCss));
+  const downloadPage = (await get("/download")).text;
+  check("the download page shows the brand mark", /class="page-mark"/.test(downloadPage));
 
   section("THE FOOD SCANNER");
   const scanner = await fetch(BASE + "/app/assets/js/scanner.js");
