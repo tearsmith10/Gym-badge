@@ -28,6 +28,14 @@
     opts = opts || {};
     var want = 5;
     var photos = (ex.gallery || []).slice();
+
+    /* No photograph yet: say so once, plainly, rather than filling the
+       carousel with repeated placeholders. */
+    if (!photos.length) {
+      return h('<div class="gal gal-empty"><div class="gal-missing"><span>📷</span>' +
+        "<small>No demonstration photo of this movement yet. The written guide below is complete.</small></div></div>");
+    }
+
     var wrap = h('<div class="gal" role="group" aria-label="' + esc(ex.name) + ' demonstration photos">' +
       '<div class="gal-track"></div>' +
       '<button type="button" class="gal-nav gal-prev" aria-label="Previous photo">‹</button>' +
@@ -42,8 +50,8 @@
       s.querySelector("img").src = "/app/assets/img/" + src;
       return s;
     });
-    // Honest padding: a "more coming" tile, never a substitute photo.
-    while (slides.length < want) {
+    /* Honest padding: one "more coming" tile, never a substitute photo. */
+    if (slides.length < want) {
       slides.push(h('<div class="gal-slide gal-missing"><span>📷</span><small>More demonstration photos coming soon</small></div>'));
     }
     slides.forEach(function (s) { track.appendChild(s); });
@@ -92,7 +100,7 @@
 
   function screen(shell, go) {
     var node = h("<div></div>");
-    var state = { q: "", cat: "All", diff: "All" };
+    var state = { q: "", cat: "All", diff: "All", mine: false, fav: false };
     var DIFFS = ["All", "Beginner", "Intermediate", "Advanced"];
 
     node.appendChild(h('<div class="search">🔍<input id="libQ" placeholder="Search the guides" autocomplete="off"></div>'));
@@ -132,11 +140,34 @@
     var empty = h('<div class="empty" hidden><b>No exercises match that</b><br>Try a different word, or add your own exercise below.</div>');
     node.appendChild(empty);
 
+    /* A filter for the member's own exercises, so they can find what they
+       created and take it out again if they do not want it any more. */
+    var mineRow = h('<div class="chips mb"></div>');
+    var mineBtn = h('<button class="chip">My exercises</button>');
+    mineBtn.onclick = function () {
+      state.mine = !state.mine;
+      mineBtn.classList.toggle("on", state.mine);
+      paint();
+    };
+    mineRow.appendChild(mineBtn);
+    var favBtn = h('<button class="chip">★ Favourites</button>');
+    favBtn.onclick = function () {
+      state.fav = !state.fav;
+      favBtn.classList.toggle("on", state.fav);
+      paint();
+    };
+    mineRow.appendChild(favBtn);
+    node.appendChild(mineRow);
+
     function all() {
-      return D.exercises.concat(S.myExercises ? S.myExercises() : []);
+      return D.exercises.concat(S.myExercises());
     }
 
+    function isMine(ex) { return String(ex.id || "").indexOf("mx") === 0; }
+
     function matches(ex) {
+      if (state.mine && !isMine(ex)) return false;
+      if (state.fav && !S.isFavourite("exercises", ex.id)) return false;
       if (state.cat !== "All" && (ex.category || "") !== state.cat) return false;
       if (state.diff !== "All" && (ex.difficulty || "Beginner") !== state.diff) return false;
       if (state.q) {
@@ -154,14 +185,29 @@
       empty.hidden = rows.length > 0;
       rows.forEach(function (ex) {
         var last = S.lastFor(ex.id);
-        var r = h('<button class="row"><div class="ri">' +
+        var mine = isMine(ex);
+        var fav = S.isFavourite("exercises", ex.id);
+        var r = h('<div class="row"><div class="ri">' +
           (ex.type === "time" ? "⏱️" : ex.type === "weight" ? "🏋️" : "💪") + "</div>" +
-          '<div class="rm"><b>' + esc(ex.name) + "</b><small>" +
+          '<button class="rm row-main" type="button"><b>' + esc(ex.name) + "</b><small>" +
           esc(ex.category || (ex.muscles || []).slice(0, 2).join(", ")) +
           (ex.difficulty ? " · " + esc(ex.difficulty) : "") +
           (last ? " · last " + last.val + " " + esc(ex.unit) : "") +
-          "</small></div><div class=\"rr\"><span class=\"chev\">›</span></div></button>");
-        r.onclick = function () { go("exercisedetail", ex.id); };
+          (mine ? " · yours" : "") +
+          "</small></button>" +
+          '<button class="fav-btn' + (fav ? " on" : "") + '" type="button" aria-label="' +
+          (fav ? "Remove from favourites" : "Add to favourites") + '">★</button>' +
+          '<div class="rr"><span class="chev">›</span></div></div>');
+        r.querySelector(".row-main").onclick = function () { go("exercisedetail", ex.id); };
+        r.querySelector(".fav-btn").onclick = function () {
+          S.toggleFavourite("exercises", ex.id);
+          paint();
+        };
+        /* The whole row opens the guide, except the star. */
+        r.onclick = function (e) {
+          if (e.target && e.target.closest && e.target.closest(".fav-btn")) return;
+          go("exercisedetail", ex.id);
+        };
         list.appendChild(r);
       });
     }
@@ -179,7 +225,7 @@
   /* ---------------- one exercise, in full ---------------- */
   function detail(shell, go, id) {
     var ex = null;
-    D.exercises.concat(S.myExercises ? S.myExercises() : []).forEach(function (e) {
+    D.exercises.concat(S.myExercises()).forEach(function (e) {
       if (e.id === id) ex = e;
     });
     if (!ex) { go("exercise"); return; }
@@ -251,6 +297,44 @@
     var logBtn = h('<button class="btn btn-primary btn-lg mt">Log this exercise</button>');
     logBtn.onclick = function () { go("logdetail", ex.id); };
     node.appendChild(logBtn);
+
+    /* Put it in your own routine, and star it for later. */
+    var acts = h('<div class="rr" style="gap:10px;margin-top:10px"></div>');
+    var favBtn = h('<button class="btn btn-ghost">★ Add to favourites</button>');
+    favBtn.onclick = function () {
+      var on = S.toggleFavourite("exercises", ex.id);
+      favBtn.textContent = on ? "★ In your favourites" : "★ Add to favourites";
+      toast(on ? "Saved to your favourites" : "Removed from your favourites");
+    };
+    if (S.isFavourite("exercises", ex.id)) favBtn.textContent = "★ In your favourites";
+    acts.appendChild(favBtn);
+
+    var addBtn = h('<button class="btn btn-ghost">Add to My Routine</button>');
+    addBtn.onclick = function () {
+      if (!window.GBPlan) return toast("Your routine is unavailable");
+      var added = window.GBPlan.addToRoutine(ex);
+      if (added) toast("Added to " + added + " in My Routine");
+    };
+    acts.appendChild(addBtn);
+    node.appendChild(acts);
+
+    /* A movement the member created can be taken out again. */
+    if (String(ex.id || "").indexOf("mx") === 0) {
+      var del = h('<button class="btn btn-ghost mt">Delete this exercise</button>');
+      del.onclick = function () {
+        GBDialog.confirm("Delete \u201c" + ex.name + "\u201d? It will be taken off your routine too.", {
+          title: "Delete your exercise",
+          okLabel: "Delete",
+          danger: true
+        }).then(function (yes) {
+          if (!yes) return;
+          S.removeExercise(ex.id);
+          toast("Deleted");
+          go("exercise");
+        });
+      };
+      node.appendChild(del);
+    }
 
     shell("exercise", ex.name, node, { back: true });
   }

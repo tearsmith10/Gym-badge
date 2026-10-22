@@ -66,7 +66,7 @@
         '<div class="wrap announce-in">' +
           '<span class="an-item"><b>4.9★</b> loved by 12,000+ lifters</span>' +
           '<span class="an-item hide-sm">Premium from any currency · cancel anytime</span>' +
-          '<a class="an-item an-cta" href="/app/">Install the app — iOS &amp; Android →</a>' +
+          '<a class="an-item an-cta" href="/download">Install the app — iOS &amp; Android →</a>' +
         "</div>" +
       "</div>" +
       '<header class="nav" id="nav"><div class="wrap nav-in">' +
@@ -114,7 +114,7 @@
               '<div class="fn-note" id="newsNote">One or two emails a month. Unsubscribe anytime — no data is sold, ever.</div>' +
             "</div>" +
           "</div>" +
-          col("Product", [["/#features", "Features"], ["/pricing", "Pricing"], ["/find", "Find a gym"], ["/coaches", "Coaches"], ["/reviews", "Reviews"], ["/app/", "Open web app"]]) +
+          col("Product", [["/#features", "Features"], ["/pricing", "Pricing"], ["/find", "Find a gym"], ["/coaches", "Coaches"], ["/reviews", "Reviews"], ["/download", "Get the app"], ["/app/", "Open web app"]]) +
           col("For business", [["/gyms", "Gyms & companies"], ["/trainers", "Trainers"], ["/pricing#corporate", "Seat packages"], ["/support", "Partnerships"]]) +
           col("Help", [["/faq", "FAQ & help"], ["/support", "Contact support"], ["/forgot", "Reset password"], ["/account", "My account"]]) +
           col("Company", [["/about", "About"], ["/reviews", "Reviews"], ["/privacy", "Privacy"], ["/terms", "Terms"]]) +
@@ -124,6 +124,7 @@
             "<span>Identical experience on iPhone &amp; Android. Works offline, syncs when you're back.</span></div>" +
           '<div class="fa-actions">' +
             '<button class="btn btn-primary btn-sm" id="installBtn" type="button">Install app</button>' +
+            '<a class="btn btn-outline btn-sm" href="/download">How to install</a>' +
             '<a class="btn btn-outline btn-sm" href="/app/">Open in browser</a>' +
           "</div>" +
         "</div>" +

@@ -5,7 +5,11 @@ window.GBStore = (function () {
 
   var defaults = {
     user: null,          // profile object
-    plan: "free",        // free | premium | elite | corporate
+    plan: "free",        // membership tier: free | premium | elite | corporate
+    routine: null,       // My Routine: { days: [...], view, currentDay }
+    myExercises: [],     // exercises the member created themselves
+    submissions: [],     // exercises sent to the shared library, awaiting review
+    goalArch: "",        // the goal physique the member picked
     logs: [],            // exercise logs
     foodLogs: [],        // scanned/food entries
     scans: { date:"", n:0 },      // food scan daily counter
@@ -18,6 +22,10 @@ window.GBStore = (function () {
     prefs: {},            // workout + notification preferences
     music: { provider: null, token: null, refreshToken: null, expiresAt: 0, currentTrack: null },
     bookings: [],         // gym slot bookings {id, gym, slot, date}
+    trainerApplications: [], // trainer sign ups, held for review
+    trainers: [],         // the trainer directory, cached from the API
+    favourites: {},       // { exercises: [], foods: [], trainers: [] }
+    reviews: [],          // ratings left for trainers
     reported: []          // equipment ids the member reported
   };
 
@@ -72,6 +80,50 @@ window.GBStore = (function () {
     setPlan: function (p) { state.plan = p; save(); },
     plan: function () { return state.plan; },
 
+    /* My Routine — the member's own training week.
+       It lives under "routine" so it can never collide with the
+       membership tier in "plan". */
+    routine: function () { return state.routine || null; },
+    setRoutine: function (r) { state.routine = r; save(); return r; },
+
+    /* Exercises the member created for themselves. They stay private
+       until they are sent for review. */
+    myExercises: function () { return state.myExercises || []; },
+    addExercise: function (ex) {
+      ex.id = "mx" + Date.now().toString(36);
+      state.myExercises = state.myExercises || [];
+      state.myExercises.unshift(ex);
+      save();
+      return ex;
+    },
+    removeExercise: function (id) {
+      state.myExercises = (state.myExercises || []).filter((x) => x.id !== id);
+      // It also comes off the routine, so nothing is left pointing at it.
+      if (state.routine && state.routine.days) {
+        state.routine.days.forEach(function (d) {
+          d.items = (d.items || []).filter(function (it) { return it.ex !== id; });
+        });
+      }
+      save();
+    },
+
+    /* Exercises sent to the shared library. They are NOT published
+       automatically, they wait for an administrator. */
+    submissions: function () { return state.submissions || []; },
+    addSubmission: function (s) {
+      s.id = "s" + Date.now().toString(36);
+      s.status = "pending";
+      s.at = new Date().toISOString();
+      state.submissions = state.submissions || [];
+      state.submissions.unshift(s);
+      save();
+      return s;
+    },
+
+    /* The goal physique the member picked for Body Goals. */
+    goalArch: function () { return state.goalArch || ""; },
+    setGoalArch: function (id) { state.goalArch = id || ""; save(); },
+
     // exercise logs
     logs: function () { return state.logs; },
     addLog: function (log) {
@@ -83,10 +135,91 @@ window.GBStore = (function () {
       for (var i = 0; i < state.logs.length; i++) if (state.logs[i].ex === exId) return state.logs[i];
       return null;
     },
+    /* Edit or remove a logged set. A mistake in the log should be fixable,
+       not permanent. */
+    removeLog: function (id) {
+      state.logs = state.logs.filter(function (l) { return l.id !== id; });
+      save();
+    },
+    updateLog: function (id, val) {
+      for (var i = 0; i < state.logs.length; i++) {
+        if (state.logs[i].id === id) {
+          state.logs[i].val = val;
+          state.logs[i].edited = true;
+          save();
+          return state.logs[i];
+        }
+      }
+      return null;
+    },
+    /* Every log, newest first, and the ones from this week. */
+    logsThisWeek: function () {
+      var start = new Date();
+      start.setDate(start.getDate() - 6);
+      var cut = start.toISOString().slice(0, 10);
+      return state.logs.filter(function (l) { return l.date >= cut; });
+    },
+    /* Rough measure of effort this week: how many sets were logged and the
+       sum of the numbers in them. */
+    volumeThisWeek: function () {
+      var logs = api.logsThisWeek();
+      var total = 0;
+      logs.forEach(function (l) { total += Number(l.val) || 0; });
+      return { sets: logs.length, total: Math.round(total) };
+    },
 
     // food
     foodLogs: function () { return state.foodLogs; },
     addFood: function (f) { f.id = "f" + Date.now(); f.date = today(); state.foodLogs.unshift(f); save(); return f; },
+    removeFood: function (id) {
+      state.foodLogs = state.foodLogs.filter(function (f) { return f.id !== id; });
+      save();
+    },
+    /* The foods the member has eaten recently, most recent first, without
+       duplicates. */
+    recentFoods: function (limit) {
+      var seen = {}, out = [];
+      state.foodLogs.forEach(function (f) {
+        var key = (f.name || "").toLowerCase();
+        if (!key || seen[key]) return;
+        seen[key] = true;
+        out.push(f);
+      });
+      return out.slice(0, limit || 6);
+    },
+
+    /* Favourites — exercises, foods and trainers the member has starred. */
+    favourites: function (kind) {
+      state.favourites = state.favourites || {};
+      return state.favourites[kind] || [];
+    },
+    isFavourite: function (kind, id) {
+      return api.favourites(kind).indexOf(id) >= 0;
+    },
+    toggleFavourite: function (kind, id) {
+      state.favourites = state.favourites || {};
+      var list = state.favourites[kind] || (state.favourites[kind] = []);
+      var at = list.indexOf(id);
+      if (at >= 0) list.splice(at, 1); else list.push(id);
+      save();
+      return at < 0;
+    },
+
+    /* Reviews left for a trainer, kept with their sessions. */
+    reviews: function () { return state.reviews || []; },
+    addReview: function (r) {
+      r.id = "r" + Date.now().toString(36);
+      r.at = new Date().toISOString();
+      state.reviews = state.reviews || [];
+      state.reviews.unshift(r);
+      save();
+      return r;
+    },
+    reviewFor: function (trainerId) {
+      var all = state.reviews || [];
+      for (var i = 0; i < all.length; i++) if (all[i].trainerId === trainerId) return all[i];
+      return null;
+    },
 
     // daily counters (freemium meter — generous while testing)
     canScanFood: function () { return bumpDaily("scans", LIMITS.scans); },

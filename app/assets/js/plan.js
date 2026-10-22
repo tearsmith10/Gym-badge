@@ -30,19 +30,36 @@
   /* ---------------- plan storage ----------------
      A plan is { days: [ { id, name, date, items: [ {ex, sets, reps, note, done} ] } ] } */
   function plan() {
-    var p = S.get().plan;
+    var p = S.routine();
     if (!p || !p.days || !p.days.length) p = null;
     if (!p) {
       p = { days: defaultDays(), view: "week" };
-      S.set({ plan: p });
+      S.setRoutine(p);
     }
     return p;
   }
 
-  /* A sensible starting week so nobody opens an empty screen. */
+  /* A real starting week, so nobody opens an empty screen. It is the
+     beginner Overall Fitness program: two days of full body work, plus two
+     lighter days for conditioning and mobility. */
   function defaultDays() {
-    var days = [];
     var base = new Date();
+    var plan = window.GBPrograms ? window.GBPrograms.byId("overall") : null;
+    var days = [];
+    if (plan) {
+      plan.split.forEach(function (d, i) {
+        var when = new Date(base.getTime() + i * 86400000);
+        days.push({
+          id: "d" + i,
+          name: d.name,
+          date: dateKey(when),
+          items: d.items.map(function (it) {
+            return { ex: it.ex, sets: it.sets, reps: it.reps, rest: it.rest, note: "", done: false };
+          })
+        });
+      });
+      return days;
+    }
     var names = ["Upper body", "Lower body", "Conditioning", "Mobility"];
     for (var i = 0; i < 4; i++) {
       var d = new Date(base.getTime() + i * 86400000);
@@ -51,7 +68,7 @@
     return days;
   }
 
-  function savePlan(p) { S.set({ plan: p }); }
+  function savePlan(p) { S.setRoutine(p); }
 
   function dayById(p, id) {
     for (var i = 0; i < p.days.length; i++) if (p.days[i].id === id) return p.days[i];
@@ -59,7 +76,7 @@
   }
 
   function exById(id) {
-    var all = D.exercises.concat(S.myExercises ? S.myExercises() : []);
+    var all = D.exercises.concat(S.myExercises());
     for (var i = 0; i < all.length; i++) if (all[i].id === id) return all[i];
     return null;
   }
@@ -124,6 +141,64 @@
 
     node.appendChild(h('<div class="sub mb">' + esc(current.name) + " · " + esc(current.date) + "</div>"));
 
+    /* Manage the day: rename it, copy it, or take it off the plan. */
+    var dayTools = h('<div class="rr" style="gap:8px;margin:-6px 0 10px"></div>');
+    var rename = h('<button class="btn btn-ghost btn-sm">Rename day</button>');
+    rename.onclick = function () {
+      GBDialog.prompt("What do you want to call this training day?", current.name, {
+        title: "Rename this day",
+        okLabel: "Save name"
+      }).then(function (name) {
+        if (!name) return;
+        current.name = name;
+        savePlan(p);
+        toast("Day renamed");
+        render();
+      });
+    };
+    dayTools.appendChild(rename);
+
+    var copy = h('<button class="btn btn-ghost btn-sm">Copy day</button>');
+    copy.onclick = function () {
+      var d = new Date();
+      d.setDate(d.getDate() + p.days.length);
+      var copyDay = {
+        id: "d" + Date.now().toString(36),
+        name: current.name,
+        date: dateKey(d),
+        note: current.note || "",
+        items: current.items.map(function (it) {
+          return { ex: it.ex, sets: it.sets, reps: it.reps, rest: it.rest, note: it.note, done: false };
+        })
+      };
+      p.days.push(copyDay);
+      p.currentDay = copyDay.id;
+      savePlan(p);
+      toast("Day copied — the exercises are unmarked");
+      render();
+    };
+    dayTools.appendChild(copy);
+
+    if (p.days.length > 1) {
+      var removeDay = h('<button class="btn btn-ghost btn-sm">Delete day</button>');
+      removeDay.onclick = function () {
+        GBDialog.confirm("Take “" + current.name + "” off your routine?", {
+          title: "Delete this day",
+          okLabel: "Delete day",
+          danger: true
+        }).then(function (yes) {
+          if (!yes) return;
+          p.days = p.days.filter(function (d) { return d.id !== current.id; });
+          p.currentDay = p.days[0] && p.days[0].id;
+          savePlan(p);
+          toast("Day deleted");
+          render();
+        });
+      };
+      dayTools.appendChild(removeDay);
+    }
+    node.appendChild(dayTools);
+
     /* Items */
     var list = h('<div class="list"></div>');
     if (!current.items.length) {
@@ -163,11 +238,49 @@
       };
       acts.appendChild(done);
       acts.appendChild(edit);
+      /* Move it earlier or later in the day. Order matters in a session. */
+      if (current.items.length > 1) {
+        var up = h('<button class="row-del" aria-label="Move earlier">↑</button>');
+        up.onclick = function () {
+          if (idx === 0) return;
+          var moved = current.items.splice(idx, 1)[0];
+          current.items.splice(idx - 1, 0, moved);
+          savePlan(p);
+          render();
+        };
+        var down = h('<button class="row-del" aria-label="Move later">↓</button>');
+        down.onclick = function () {
+          if (idx === current.items.length - 1) return;
+          var moved = current.items.splice(idx, 1)[0];
+          current.items.splice(idx + 1, 0, moved);
+          savePlan(p);
+          render();
+        };
+        acts.appendChild(up);
+        acts.appendChild(down);
+      }
       acts.appendChild(del);
       row.querySelector(".rm").after(acts);
       list.appendChild(row);
     });
     node.appendChild(list);
+
+    /* A note for the whole day, for the things you want to remember. */
+    var noteWrap = h('<div class="card mt"><h3>Note for this day</h3>' +
+      '<textarea id="dayNote" rows="2" placeholder="Warming up on the bike first, or heavy legs tomorrow…"></textarea>' +
+      '<button class="btn btn-ghost btn-sm mt" id="dayNoteSave">Save note</button></div>');
+    node.appendChild(noteWrap);
+    setTimeout(function () {
+      var ta = $("#dayNote", node);
+      if (!ta) return;
+      ta.value = current.note || "";
+      $("#dayNoteSave", node).onclick = function () {
+        current.note = ta.value.trim();
+        savePlan(p);
+        toast("Note saved");
+        render();
+      };
+    }, 0);
 
     /* Add exercise */
     var add = h('<button class="btn btn-primary mt">+ Add Exercise</button>');
@@ -178,9 +291,71 @@
     sub.onclick = function () { submitSheet(render); };
     node.appendChild(sub);
 
+    /* What the member has sent for review, and where it has got to. */
+    var sent = S.submissions();
+    if (sent.length) {
+      node.appendChild(h('<div class="eyebrow" style="margin:20px 0 10px">Sent for review</div>'));
+      var sentList = h('<div class="list"></div>');
+      sent.slice(0, 6).forEach(function (s) {
+        sentList.appendChild(h('<div class="row"><div class="ri">⏳</div><div class="rm"><b>' + esc(s.name) +
+          "</b><small>" + esc(s.category || "Exercise") + " · " +
+          (s.status === "pending" ? "waiting for review" : esc(s.status)) + "</small></div></div>"));
+      });
+      node.appendChild(sentList);
+    }
+
+    node.appendChild(weeklySummary(p));
+
     node.appendChild(h('<p class="faint small mt center">Everything you add here is saved to your account and syncs across your devices.</p>'));
 
     shell("workout", "My Routine", node);
+  }
+
+  /* How the routine is going: how many movements are planned, how many are
+     done, and how many days are left this week. */
+  function weeklySummary(p) {
+    var planned = 0, done = 0;
+    p.days.forEach(function (d) {
+      (d.items || []).forEach(function (it) {
+        planned++;
+        if (it.done) done++;
+      });
+    });
+    var thisWeek = p.days.filter(function (d) { return inThisWeek(d.date); });
+    var weekLeft = thisWeek.filter(function (d) {
+      return (d.items || []).some(function (it) { return !it.done; });
+    }).length;
+    var card = h('<div class="card mt"><h3>Where your week stands</h3>' +
+      '<div class="statgrid">' +
+      '<div class="stat"><b>' + planned + "</b><small>Movements planned</small></div>" +
+      '<div class="stat"><b>' + done + "</b><small>Marked done</small></div>" +
+      '<div class="stat"><b>' + weekLeft + "</b><small>Days left this week</small></div>" +
+      "</div>" +
+      (planned ? '<div class="macro"><div class="mlabel"><span>Progress</span><b>' + done + " / " + planned + "</b></div>" +
+        '<div class="mbar"><i style="width:' + Math.round((done / planned) * 100) + '%"></i></div></div>' : "") +
+      "</div>");
+    return card;
+  }
+
+  /* Add a movement to the day the member is looking at, or to the first
+     day if none is chosen. Used from The Guides screen. */
+  function addToRoutine(ex) {
+    var p = plan();
+    var day = dayById(p, p.currentDay) || p.days[0];
+    if (!day) return null;
+    var already = (day.items || []).some(function (it) { return it.ex === ex.id; });
+    if (already) return null;
+    day.items = day.items || [];
+    day.items.push({
+      ex: ex.id,
+      sets: 3,
+      reps: ex.reps || (ex.type === "time" ? "60 seconds" : "10 reps"),
+      rest: ex.rest || "",
+      note: "",
+      done: false
+    });
+    savePlan(p);
+    return day.name;
   }
 
   /* Which days are in view for the chosen range. */
@@ -229,7 +404,7 @@
 
     function paint(q) {
       results.innerHTML = "";
-      var rows = D.exercises.concat(S.myExercises ? S.myExercises() : []).filter(function (e) {
+      var rows = D.exercises.concat(S.myExercises()).filter(function (e) {
         return !q || e.name.toLowerCase().indexOf(q.toLowerCase()) > -1;
       }).slice(0, 40);
       if (!rows.length) {
@@ -378,19 +553,31 @@
     send.onclick = function () {
       var name = $("#sbName", panel).value.trim();
       if (!name) return toast("Give your exercise a name");
-      var pending = S.get().submissions || [];
-      pending.unshift({
-        id: "s" + Date.now().toString(36),
+      var sub = {
         name: name,
         category: $("#sbCat", panel).value,
         purpose: $("#sbPurpose", panel).value.trim(),
-        steps: $("#sbSteps", panel).value.trim(),
-        status: "pending",
-        at: new Date().toISOString()
+        steps: $("#sbSteps", panel).value.trim()
+      };
+      /* Keep a local copy, then send it to the review queue on the server.
+         It is never published for everyone until an administrator approves it. */
+      S.addSubmission(sub);
+      send.disabled = true;
+      send.textContent = "Sending…";
+      fetch("/api/exercises/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(sub)
+      }).then(function (r) {
+        return r.json().then(function (j) { return { ok: r.ok, j: j }; });
+      }).then(function (res) {
+        overlay.remove();
+        if (res.ok) toast("Sent for review — we will let you know");
+        else toast((res.j && res.j.error) || "Saved on this device — we will send it when you are back online");
+      }).catch(function () {
+        overlay.remove();
+        toast("Saved on this device — we will send it when you are back online");
       });
-      S.set({ submissions: pending });
-      overlay.remove();
-      toast("Sent for review — we will let you know");
     };
     panel.appendChild(send);
     $("#sbX", panel).onclick = function () { overlay.remove(); };
@@ -398,5 +585,8 @@
     document.body.appendChild(overlay);
   }
 
-  global.GBPlan = { screen: screen, plan: plan, savePlan: savePlan, exById: exById, dateKey: dateKey };
+  global.GBPlan = {
+    screen: screen, plan: plan, savePlan: savePlan, exById: exById, dateKey: dateKey,
+    addToRoutine: addToRoutine
+  };
 })(typeof window !== "undefined" ? window : this);

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>Get the app — Gym Badge</title>
+<meta name="description" content="Install Gym Badge on your phone. Works on iPhone and Android, installs to your home screen, and keeps working offline.">
+<link rel="icon" href="/assets/img/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="/app/assets/img/icon-180.png">
+<link rel="manifest" href="/app/manifest.webmanifest">
+<link rel="stylesheet" href="/web/assets/css/site.css">
+<link rel="stylesheet" href="/assets/shared.css">
+<script src="/assets/i18n-ext.js"></script>
+<script src="/assets/i18n.js"></script>
+<script src="/assets/countries.js"></script>
+<script src="/app/assets/js/chat.js"></script>
+<script src="/assets/pw.js"></script>
+<script src="/assets/theme.js"></script>
+</head>
+<body>
+
+<div class="wrap page-head">
+  <span class="eyebrow">Get the app</span>
+  <h1>Gym Badge on your <span class="power">phone</span></h1>
+  <p>One link, then it lives on your home screen. It opens straight into your routine, remembers every set, and keeps working when the gym has no signal.</p>
+</div>
+
+<div class="wrap">
+  <div class="dl-grid">
+
+    <div class="summary" style="position:static">
+      <h3>Scan or tap</h3>
+      <p class="muted" style="margin:6px 0 18px">Point your phone camera at the code, or tap the button. The app is served over HTTPS, so it installs like a normal app from your browser.</p>
+      <div class="qr" id="qr" aria-label="QR code linking to the Gym Badge app"></div>
+      <a class="btn btn-primary" id="openApp" href="/app/" style="margin-top:18px;justify-self:start">Open Gym Badge on this device</a>
+      <p class="faint small" style="margin-top:14px">Already installed? Open it from your home screen. Nothing to download from a store, and no account needed to look around.</p>
+    </div>
+
+    <div class="summary" style="position:static">
+      <h3>Add it to your home screen</h3>
+      <div class="steps" style="margin-top:14px">
+        <div class="step" id="stepIos">
+          <div class="n">iPhone</div>
+          <h4>Safari</h4>
+          <p>Open the link in Safari, tap the <b>Share</b> button, then <b>Add to Home Screen</b>.</p>
+        </div>
+        <div class="step" id="stepAndroid">
+          <div class="n">Android</div>
+          <h4>Chrome</h4>
+          <p>Open the link, then use the browser menu and choose <b>Install app</b> or <b>Add to Home screen</b>.</p>
+        </div>
+        <div class="step" id="stepDesktop">
+          <div class="n">Desktop</div>
+          <h4>Chrome or Edge</h4>
+          <p>Open the link and use the install icon in the address bar, or the <b>Install app</b> button in the footer.</p>
+        </div>
+      </div>
+      <div class="secure-note" style="margin-top:20px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.5l8 3.5v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6l8-3.5z"/></svg>
+        <span>Installed from your browser over HTTPS. Your data stays on your device unless you sign in, and it syncs across your devices when you do.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="summary" style="position:static;margin-top:26px">
+    <h3>What you get once it is installed</h3>
+    <ul class="plist good" style="margin-top:12px">
+      <li><b>My Routine</b> — your own training week, built day by day, with the movements you actually do.</li>
+      <li><b>The Guides</b> — every movement explained: purpose, muscles, equipment, step by step, breathing, the mistakes people make and easier versions.</li>
+      <li><b>My Workout Log</b> — log a set and it hands you the number to beat next time.</li>
+      <li><b>My Plate Truth</b> — photograph a plate and get carbs, protein, fat and fibre, in plain language.</li>
+      <li><b>My Trainer</b> — browse verified coaches and book a session in person or online.</li>
+      <li><b>Gym Equipment</b> — tap a machine and see if it is usable before you queue for it.</li>
+    </ul>
+    <p class="faint small" style="margin-top:14px">It works offline. Your logs, photos and routine are saved on the device and sync when you sign in.</p>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="/assets/people.js"></script>
+<script src="/assets/theme.js"></script>
+<script src="/assets/qr.js"></script>
+<script src="/web/assets/js/pricing.js"></script>
+<script src="/web/assets/js/data.js"></script>
+<script src="/web/assets/js/store.js"></script>
+<script src="/web/assets/js/render.js"></script>
+<script src="/web/assets/js/chrome.js"></script>
+<script>
+(function () {
+  var APP_URL = location.origin + "/app/";
+
+  /* A real, scannable QR code for the app link, so a desktop visitor can
+     send the app straight to their phone. */
+  var qr = document.getElementById("qr");
+  if (qr && window.GBQR) qr.innerHTML = GBQR.svg(APP_URL, { size: 220 });
+
+  /* The install button works where the browser supports it, and falls back
+     to opening the app, which is what iOS wants anyway. */
+  var deferred = null;
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    deferred = e;
+  });
+
+  var open = document.getElementById("openApp");
+  if (open) {
+    open.addEventListener("click", function (e) {
+      if (!deferred) return;                 // let the browser follow the link
+      e.preventDefault();
+      deferred.prompt();
+      deferred.userChoice.then(function () { deferred = null; });
+    });
+  }
+
+  GBChrome.observeReveals();
+  GBChrome.mount();
+})();
+</script>
+</body>
+</html>

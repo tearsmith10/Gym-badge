@@ -271,7 +271,85 @@ def api_translate(body: dict, headers, environ=None) -> tuple[int, dict]:
 # Trainers
 # --------------------------------------------------------------------------
 
+# The coaches we launch with. They are here so the trainer directory is
+# never empty on a fresh install — a member who opens My Trainer should
+# see real coaches they can book. New trainers are added through the
+# application and review flow below.
+SEED_TRAINERS = [
+    {
+        "id": "ada-okafor", "name": "Ada Okafor",
+        "headline": "Strength coach for people who want to lift heavier for good",
+        "specialty": "Strength & Power", "city": "Lagos", "area": "Lagos, Nigeria",
+        "modes": ["in-person", "online"],
+        "certs": ["NSCA-CSCS", "UK Strength & Conditioning Assoc."],
+        "years": 9, "rating": 4.9, "status": "verified",
+        "bio": "Ex collegiate thrower turned strength and conditioning coach. I build strength that shows up in life, not just in a mirror.",
+        "rate": "₦12,000 per session",
+    },
+    {
+        "id": "tunde-bakare", "name": "Tunde Bakare",
+        "headline": "Fat loss without the crash diet",
+        "specialty": "Fat Loss & Conditioning", "city": "Lagos", "area": "Lagos, Nigeria",
+        "modes": ["in-person", "online"],
+        "certs": ["NASM-CPT", "Precision Nutrition L1"],
+        "years": 7, "rating": 4.8, "status": "verified",
+        "bio": "Sustainable fat loss without crash diets. Habits first, aesthetics follow.",
+        "rate": "₦9,000 per session",
+    },
+    {
+        "id": "zainab-musa", "name": "Zainab Musa",
+        "headline": "Safe, strong training through pregnancy and after",
+        "specialty": "Pre & Post Natal", "city": "Abuja", "area": "Abuja, Nigeria",
+        "modes": ["in-person"],
+        "certs": ["Girls Gone Strong CPS", "NASM-CPT"],
+        "years": 6, "rating": 5.0, "status": "verified",
+        "bio": "Safe, strong pregnancy and postpartum training. Every plan is built around your stage.",
+        "rate": "₦11,000 per session",
+    },
+    {
+        "id": "kwame-asante", "name": "Kwame Asante",
+        "headline": "Evidence based muscle building",
+        "specialty": "Hypertrophy", "city": "Accra", "area": "Accra, Ghana",
+        "modes": ["in-person", "online"],
+        "certs": ["ISSA Bodybuilding Specialist", "NASM-CPT"],
+        "years": 8, "rating": 4.9, "status": "verified",
+        "bio": "Evidence based muscle building. Progressive overload, tracked to the rep.",
+        "rate": "$2,400 per session",
+    },
+    {
+        "id": "naledi-dlamini", "name": "Naledi Dlamini",
+        "headline": "Mobility and rehabilitation for real life",
+        "specialty": "Mobility & Rehab", "city": "Cape Town", "area": "Cape Town, South Africa",
+        "modes": ["in-person", "online"],
+        "certs": ["BSc Physiotherapy", "FRC Mobility Specialist"],
+        "years": 11, "rating": 4.9, "status": "verified",
+        "bio": "Physiotherapist and mobility coach. I get you moving well again, then keep you that way.",
+        "rate": "R2,600 per session",
+    },
+    {
+        "id": "amara-nwosu", "name": "Amara Nwosu",
+        "headline": "Beginner strength and confidence in the gym",
+        "specialty": "Beginner Strength", "city": "Lagos", "area": "Lagos, Nigeria",
+        "modes": ["in-person", "online"],
+        "certs": ["NASM-CPT", "Pre & Postnatal Fitness certified"],
+        "years": 5, "rating": 4.9, "status": "verified",
+        "bio": "I coach people who have never lifted before. No jargon, no judgement, just a plan that fits your life.",
+        "rate": "₦8,000 per session",
+    },
+]
+
+
+def _ensure_seed_trainers() -> None:
+    """Put the launch coaches in place the first time the server runs."""
+    db = _core()._DB
+    if db.get("trainers"):
+        return
+    db["trainers"] = [dict(t) for t in SEED_TRAINERS]
+    _core().db_save()
+
+
 def api_trainers(body: dict, headers, environ=None) -> tuple[int, dict]:
+    _ensure_seed_trainers()
     trainers = _core()._DB.get("trainers") or []
     public = []
     for t in trainers:
@@ -289,6 +367,8 @@ def api_trainers(body: dict, headers, environ=None) -> tuple[int, dict]:
             "years": t.get("years", 0),
             "rating": t.get("rating", 5),
             "status": "verified",
+            "bio": t.get("bio", ""),
+            "rate": t.get("rate", ""),
             "photo": t.get("photo", ""),
         })
     return (200, {"ok": True, "trainers": public})

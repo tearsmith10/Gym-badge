@@ -193,11 +193,23 @@
       listBox.innerHTML = "";
       empty.hidden = rows.length > 0;
       rows.forEach(function (t) {
-        var r = h('<button class="row"><div class="ri">🧑‍🏫</div><div class="rm"><b>' + esc(t.name) +
+        var fav = S.isFavourite("trainers", t.id);
+        var r = h('<div class="row"><div class="ri">🧑‍🏫</div>' +
+          '<button class="rm row-main" type="button"><b>' + esc(t.name) +
           (t.status === "verified" ? ' <span class="pill ok" style="font-size:.6rem">Verified</span>' : "") +
-          '</b><small>' + esc(t.specialty || "") + " · " + esc(t.city || "") + " · ★ " + (t.rating || 5) + "</small></div>" +
-          '<div class="rr"><span class="chev">›</span></div></button>');
-        r.onclick = function () { go("trainer", t.id); };
+          '</b><small>' + esc(t.specialty || "") + " · " + esc(t.city || "") + " · ★ " + (t.rating || 5) + "</small></button>" +
+          '<button class="fav-btn' + (fav ? " on" : "") + '" type="button" aria-label="' +
+          (fav ? "Remove from favourites" : "Add to favourites") + '">★</button>' +
+          '<div class="rr"><span class="chev">›</span></div></div>');
+        r.querySelector(".row-main").onclick = function () { go("trainer", t.id); };
+        r.querySelector(".fav-btn").onclick = function () {
+          S.toggleFavourite("trainers", t.id);
+          paint();
+        };
+        r.onclick = function (e) {
+          if (e.target && e.target.closest && e.target.closest(".fav-btn")) return;
+          go("trainer", t.id);
+        };
         listBox.appendChild(r);
       });
     }
@@ -254,6 +266,24 @@
       (t.rate ? esc(t.rate) : "—") + "</div></div>"));
     node.appendChild(facts);
 
+    /* What members said about this trainer. */
+    var review = S.reviewFor(t.id);
+    if (review) {
+      node.appendChild(h('<div class="card mt"><h3>What members said</h3>' +
+        '<div class="row" style="padding:0 0 10px"><div class="ri">★</div><div class="rm">' +
+        "<b>" + review.rating + " out of 5</b><small>" + esc(review.text) + "</small></div></div>" +
+        '<p class="faint small">Reviewed by a member who booked a session.</p></div>'));
+    }
+
+    var favBtn = h('<button class="btn btn-ghost mt">★ Save this trainer</button>');
+    if (S.isFavourite("trainers", t.id)) favBtn.textContent = "★ Saved";
+    favBtn.onclick = function () {
+      var on = S.toggleFavourite("trainers", t.id);
+      favBtn.textContent = on ? "★ Saved" : "★ Save this trainer";
+      toast(on ? "Saved to your trainers" : "Removed from your trainers");
+    };
+    node.appendChild(favBtn);
+
     var book = h('<button class="btn btn-primary btn-lg mt">Book a session</button>');
     book.onclick = function () { bookSheet(t, function () { go("profile"); }); };
     node.appendChild(book);
@@ -261,10 +291,46 @@
     shell("exercise", t.name, node, { back: true });
   }
 
+  /* The slots a trainer offers over the next two weeks. */
+  function availableSlots() {
+    var out = [];
+    var base = new Date();
+    base.setHours(0, 0, 0, 0);
+    for (var d = 1; d <= 14 && out.length < 8; d++) {
+      var day = new Date(base.getTime() + d * 86400000);
+      /* Weekends are quieter, so fewer slots are offered. */
+      var weekend = day.getDay() === 0 || day.getDay() === 6;
+      var hours = weekend ? [10] : [9, 11, 16, 18];
+      hours.forEach(function (hour) {
+        if (out.length >= 8) return;
+        var when = new Date(day.getTime());
+        when.setHours(hour, 0, 0, 0);
+        if (when.getTime() <= Date.now()) return;
+        out.push(when);
+      });
+    }
+    return out;
+  }
+
   function bookSheet(t, done) {
     var overlay = h('<div class="sheet-bg"><div class="sheet"></div></div>');
     var panel = overlay.firstChild;
     panel.appendChild(h('<div class="sheet-head"><h3>Book with ' + esc(t.name) + "</h3><button class=\"iconbtn\" style=\"margin-left:auto\" id=\"bkX\">✕</button></div>"));
+
+    /* Pick one of the slots the trainer offers, or choose your own time. */
+    panel.appendChild(h('<div class="field"><label>Available slots</label><div class="chips" id="bkSlots"></div></div>'));
+    var slotRow = panel.querySelector("#bkSlots");
+    availableSlots().forEach(function (when) {
+      var label = when.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }) +
+        " · " + String(when.getHours()).padStart(2, "0") + ":00";
+      var c = h('<button class="chip">' + esc(label) + "</button>");
+      c.onclick = function () {
+        slotRow.querySelectorAll(".chip").forEach(function (x) { x.classList.remove("on"); });
+        c.classList.add("on");
+        $("#bkWhen", panel).value = when.toISOString().slice(0, 16);
+      };
+      slotRow.appendChild(c);
+    });
 
     panel.appendChild(h('<div class="field"><label>Date and time</label><input id="bkWhen" type="datetime-local" value="' +
       new Date(defaultSlot()).toISOString().slice(0, 16) + '"></div>'));
@@ -288,6 +354,45 @@
     };
     panel.appendChild(go2);
     $("#bkX", panel).onclick = function () { overlay.remove(); };
+    overlay.onclick = function (e) { if (e.target === overlay) overlay.remove(); };
+    document.body.appendChild(overlay);
+  }
+
+  /* ---------------- leave a review ---------------- */
+  function reviewSheet(trainerId, trainerName, done) {
+    var overlay = h('<div class="sheet-bg"><div class="sheet"></div></div>');
+    var panel = overlay.firstChild;
+    panel.appendChild(h('<div class="sheet-head"><h3>Rate ' + esc(trainerName) + "</h3>" +
+      '<button class="iconbtn" style="margin-left:auto" id="rvX">✕</button></div>'));
+    panel.appendChild(h('<p class="sub mb">Your review is shown on their profile. Keep it about the session.</p>'));
+
+    var rating = 5;
+    var starRow = h('<div class="chips mb"></div>');
+    [1, 2, 3, 4, 5].forEach(function (n) {
+      var c = h('<button class="chip' + (n === 5 ? " on" : "") + '">★ ' + n + "</button>");
+      c.onclick = function () {
+        rating = n;
+        starRow.querySelectorAll(".chip").forEach(function (x) { x.classList.remove("on"); });
+        c.classList.add("on");
+      };
+      starRow.appendChild(c);
+    });
+    panel.appendChild(starRow);
+
+    panel.appendChild(h('<div class="field"><label>How was the session?</label><textarea id="rvText" rows="3" placeholder="What was helpful, what could be better"></textarea></div>'));
+
+    var send = h('<button class="btn btn-primary">Post review</button>');
+    send.onclick = function () {
+      var text = ($("#rvText", panel).value || "").trim();
+      if (text.length < 5) return toast("Write a few words about the session");
+      S.addReview({ trainerId: trainerId, trainerName: trainerName, rating: rating, text: text });
+      overlay.remove();
+      toast("Thanks — your review is up");
+      done();
+    };
+    panel.appendChild(send);
+
+    $("#rvX", panel).onclick = function () { overlay.remove(); };
     overlay.onclick = function (e) { if (e.target === overlay) overlay.remove(); };
     document.body.appendChild(overlay);
   }
@@ -459,9 +564,16 @@
       past.slice(0, 6).forEach(function (b) {
         var row = h('<div class="row"><div class="ri">✅</div><div class="rm"><b>' + esc(b.trainerName || "Your trainer") + "</b><small>" +
           esc(fmtWhen(b.when)) + " · " + (b.mode === "online" ? "Online" : "In person") + "</small></div></div>");
+        var acts = h('<div class="rr"></div>');
         var view = h('<button class="btn btn-ghost btn-sm">Details</button>');
         view.onclick = function () { sessionSheet(b, find(b.trainerId)); };
-        row.querySelector(".rm").after(h('<div class="rr"></div>')).after(view);
+        var rate = h('<button class="btn btn-ghost btn-sm">Rate</button>');
+        rate.onclick = function () {
+          reviewSheet(b.trainerId, b.trainerName || "your trainer", function () { rerenderProfile(); });
+        };
+        acts.appendChild(view);
+        if (!S.reviewFor(b.trainerId)) acts.appendChild(rate);
+        row.querySelector(".rm").after(acts);
         wrap.appendChild(row);
       });
     }
@@ -494,6 +606,21 @@
       open.style.textDecoration = "none";
       panel.appendChild(open);
     }
+
+    /* Rate the coach from the session itself. */
+    var already = S.reviewFor(b.trainerId);
+    if (already) {
+      panel.appendChild(h('<div class="card mt"><h3>Your review</h3>' +
+        "<b>" + already.rating + " out of 5</b><p class=\"sub\" style=\"margin-top:6px\">" + esc(already.text) + "</p></div>"));
+    } else {
+      var rate = h('<button class="btn btn-ghost mt">★ Rate this session</button>');
+      rate.onclick = function () {
+        overlay.remove();
+        reviewSheet(b.trainerId, b.trainerName || "your trainer", function () { rerenderProfile(); });
+      };
+      panel.appendChild(rate);
+    }
+
     $("#ssX", panel).onclick = function () { overlay.remove(); };
     overlay.onclick = function (e) { if (e.target === overlay) overlay.remove(); };
     document.body.appendChild(overlay);

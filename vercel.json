@@ -91,6 +91,9 @@
     { "src": "/reviews", "dest": "/web/reviews.html" },
     { "src": "/faq", "dest": "/web/faq.html" },
     { "src": "/support", "dest": "/web/support.html" },
+    { "src": "/download", "dest": "/web/download.html" },
+    { "src": "/app-download", "dest": "/web/download.html" },
+    { "src": "/get-the-app", "dest": "/web/download.html" },
     { "src": "/account", "dest": "/web/account.html" },
     { "src": "/privacy", "dest": "/web/privacy.html" },
     { "src": "/terms", "dest": "/web/terms.html" }

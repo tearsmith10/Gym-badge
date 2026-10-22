@@ -133,6 +133,11 @@ import gymbadge_content as content  # noqa: E402  (needs _DB and db_save)
 _LOCK = threading.RLock()
 _DB: dict = {"users": {}, "sessions": {}, "verify": {}, "reset": {}, "revoked": {}}
 
+# The account tables are dictionaries; the review queues and the trainer
+# directory are lists. Both have to survive a restart.
+_DICT_KEYS = ("users", "sessions", "verify", "reset", "revoked")
+_LIST_KEYS = ("trainers", "trainerApplications", "exerciseSubmissions")
+
 
 def _token_digest(token: str) -> str:
     """A short, non-reversible fingerprint of a token, safe to store."""
@@ -176,11 +181,16 @@ def db_load() -> None:
                 if raw:
                     data = json.loads(raw)
                     if isinstance(data, dict):
-                        for key in ("users", "sessions", "verify", "reset", "revoked"):
+                        for key in _DICT_KEYS:
                             if isinstance(data.get(key), dict):
                                 _DB[key] = data[key]
-                for key in ("users", "sessions", "verify", "reset", "revoked"):
+                        for key in _LIST_KEYS:
+                            if isinstance(data.get(key), list):
+                                _DB[key] = data[key]
+                for key in _DICT_KEYS:
                     _DB.setdefault(key, {})
+                for key in _LIST_KEYS:
+                    _DB.setdefault(key, [])
                 return
             except Exception as exc:
                 print(f"[db] could not read the remote store: {exc!r}", file=sys.stderr)
@@ -188,15 +198,20 @@ def db_load() -> None:
             with open(DB_PATH, "r", encoding="utf-8") as fh:
                 data = json.load(fh)
             if isinstance(data, dict):
-                for key in ("users", "sessions", "verify", "reset", "revoked"):
+                for key in _DICT_KEYS:
                     if isinstance(data.get(key), dict):
+                        _DB[key] = data[key]
+                for key in _LIST_KEYS:
+                    if isinstance(data.get(key), list):
                         _DB[key] = data[key]
         except FileNotFoundError:
             pass
         except Exception as exc:
             print(f"[db] could not read {DB_PATH}: {exc}", file=sys.stderr)
-        for key in ("users", "sessions", "verify", "reset", "revoked"):
+        for key in _DICT_KEYS:
             _DB.setdefault(key, {})
+        for key in _LIST_KEYS:
+            _DB.setdefault(key, [])
 
 
 # --------------------------------------------------------------------------

@@ -69,8 +69,8 @@
     return nav;
   }
   /* ---------------- coming soon ----------------
-     A short, honest note at the foot of every screen about what is being
-     built next. It sits under the content and above the tab bar. */
+     One short, honest note about what is being built next. It lives at the
+     foot of the profile screen, once, rather than on every screen. */
   var SOON = [
     "Going live with other Gymbadgers around the world, for daily, weekly, monthly and yearly routines.",
     "Yoga exercises with trainers."
@@ -94,7 +94,6 @@
     }
     if (opts.banner) scr.appendChild(h('<div class="banner">' + opts.banner + "</div>"));
     scr.appendChild(body);
-    if (opts.soon !== false) scr.appendChild(soonBlock());
     root.appendChild(scr);
     root.appendChild(tabbar(active));
   }
@@ -120,43 +119,10 @@
   /* =======================================================================
      SEED DATA — the training plan, photographs and tools
   ======================================================================= */
-  var PLAN = {
-    "Day 1": {
-      week: "Week 1/5 · Foundations",
-      title: "Full Body",
-      mins: 53,
-      items: [
-        { ex:"gobletsquat", name:"Goblet Squat",  img:"ex/goblet-squat.jpg",  sets:"3 sets × 10 reps" },
-        { ex:"latpulldown", name:"Lat Pulldown",  img:"ex/lat-pulldown.jpg",  sets:"3 sets × 12 reps" },
-        { ex:"benchdips",   name:"Bench Dips",    img:"ex/bench-dips.jpg",    sets:"3 sets × 12 reps" },
-        { ex:"legcurl",     name:"Leg Curl",      img:"ex/leg-curl.jpg",      sets:"3 sets × 12 reps" },
-        { ex:"crunches",    name:"Crunches",      img:"ex/crunches.jpg",      sets:"3 sets × 20 reps" },
-        { ex:"inclinepress",name:"Incline Press", img:"ex/incline-press.jpg", sets:"3 sets × 10 reps" },
-        { ex:"dumbbellrow", name:"Dumbbell Row",  img:"ex/dumbbell-row.jpg",  sets:"3 sets × 12 reps" }
-      ]
-    },
-    "Day 2": {
-      week: "Week 1/5 · Build",
-      title: "Push · Pull · Legs",
-      mins: 46,
-      items: [
-        { ex:"squat",       name:"Barbell Squat", img:"ex/squat.jpg",        sets:"4 sets × 8 reps" },
-        { ex:"dumbbellrow", name:"Dumbbell Row",  img:"ex/dumbbell-row.jpg", sets:"4 sets × 10 reps" },
-        { ex:"pushup",      name:"Full Body Push",img:"ex/full-body.jpg",    sets:"3 sets × 15 reps" },
-        { ex:"cycling",     name:"Cardio Blast",  img:"ex/cardio.jpg",       sets:"12 min" },
-        { ex:"legpress",    name:"Leg Day",       img:"ex/legs.jpg",         sets:"4 sets × 10 reps" },
-        { ex:"burpee",      name:"Calisthenics",  img:"ex/calisthenics.jpg", sets:"3 sets × 12 reps" }
-      ]
-    }
-  };
-  var PROGRAMS = [
-    { name:"Overall Fitness", sub:"Full Body Split",   tag:"ovf",  img:"lib/program-1.jpg", days:"2 Days a Week" },
-    { name:"Get Lean",        sub:"Upper/Lower Split", tag:"lean", img:"lib/program-3.jpg", days:"3 Days a Week" },
-    { name:"Build Muscle",    sub:"Push/Pull Split",   tag:"mus",  img:"lib/program-5.jpg", days:"4 Days a Week" },
-    { name:"Athletic Power",  sub:"Full Body Split",   tag:"ovf",  img:"lib/program-2.jpg", days:"3 Days a Week" },
-    { name:"Conditioning",    sub:"Upper/Lower Split", tag:"lean", img:"lib/program-7.jpg", days:"4 Days a Week" },
-    { name:"Strength Base",   sub:"Push/Pull Split",   tag:"mus",  img:"lib/program-9.jpg", days:"2 Days a Week" }
-  ];
+  /* The training programs live in programs.js, so the routine screen and
+     the program covers read one source. Loading a program writes its days
+     and movements into the member's own My Routine, so a new member opens
+     a real, usable week rather than an empty screen. */
   var MUSCLES = [
     { n:"Cardio",     x:18, y:16 }, { n:"Shoulders", x:74, y:20 }, { n:"Chest", x:72, y:29 },
     { n:"Biceps",     x:80, y:35 }, { n:"Forearm",   x:84, y:44 }, { n:"Abs",   x:70, y:44 },
@@ -224,21 +190,11 @@
     if (fn) r.onclick = fn;
     return r;
   }
+  /* A real, scannable QR code for the member's badge code. The encoder
+     lives in assets/qr.js so the website and the app share one. */
   function qrSvg(code) {
-    var hsh = 0;
-    for (var i = 0; i < code.length; i++) hsh = (hsh * 17 + code.charCodeAt(i)) >>> 0;
-    var rnd = function () { hsh = (hsh * 1103515245 + 12345) >>> 0; return hsh / 4294967296; };
-    function finder(x, y) {
-      return '<rect x="' + x + '" y="' + y + '" width="7" height="7" fill="#0f172a"/>' +
-        '<rect x="' + (x + 1) + '" y="' + (y + 1) + '" width="5" height="5" fill="#fff"/>' +
-        '<rect x="' + (x + 2) + '" y="' + (y + 2) + '" width="3" height="3" fill="#0f172a"/>';
-    }
-    var cells = finder(0, 0) + finder(14, 0) + finder(0, 14);
-    for (var y = 0; y < 21; y++) for (var x = 0; x < 21; x++) {
-      var inF = (x < 8 && y < 8) || (x > 12 && y < 8) || (x < 8 && y > 12);
-      if (!inF && rnd() < 0.45) cells += '<rect x="' + x + '" y="' + y + '" width="1" height="1" fill="#0f172a"/>';
-    }
-    return '<svg viewBox="0 0 21 21">' + cells + "</svg>";
+    if (window.GBQR) return window.GBQR.svg(code, { size: 190 });
+    return "";
   }
   function badgeCode(seed) {
     var x = 0, s = String(seed || "athlete");
@@ -379,12 +335,72 @@
     var node = h("<div></div>");
     node.appendChild(h('<p class="sub mb">Pick an exercise — Gym Badge remembers your last number so you can beat it.</p>'));
     if (!S.isPremium() && S.trialsLeft() <= 5) node.appendChild(h('<div class="banner">' + S.trialsLeft() + ' free logs left today. <a href="#/pricing">Upgrade for unlimited →</a></div>'));
+
+    /* With a catalogue this size, search is the fastest way in. */
+    var q = "";
+    var onlyFav = false;
+    var search = h('<div class="search">🔍<input id="logQ" placeholder="Search the exercises" autocomplete="off"></div>');
+    node.appendChild(search);
+
+    var chipRow = h('<div class="chips mb"></div>');
+    var favChip = h('<button class="chip">★ Favourites</button>');
+    favChip.onclick = function () {
+      onlyFav = !onlyFav;
+      favChip.classList.toggle("on", onlyFav);
+      paint();
+    };
+    chipRow.appendChild(favChip);
+    node.appendChild(chipRow);
+
+    var count = h('<p class="faint small mb"></p>');
+    node.appendChild(count);
+
     var list = h('<div class="list"></div>');
-    D.exercises.forEach(function (ex) {
-      var last = S.lastFor(ex.id);
-      list.appendChild(rowBtn(exIcon(ex.type), ex.name, last ? "Last: " + last.val + " " + ex.unit + " · " + relDay(last.date) : "Not logged yet", function () { go("logdetail", ex.id); }));
-    });
     node.appendChild(list);
+
+    var empty = h('<div class="empty" hidden><b>Nothing matches that</b><br>Try a different word, or clear the filter.</div>');
+    node.appendChild(empty);
+
+    function paint() {
+      var rows = D.exercises.concat(S.myExercises()).filter(function (ex) {
+        if (onlyFav && !S.isFavourite("exercises", ex.id)) return false;
+        if (!q) return true;
+        var hay = (ex.name + " " + (ex.category || "") + " " + (ex.muscles || []).join(" ") + " " +
+                   (ex.equipment || []).join(" ")).toLowerCase();
+        return hay.indexOf(q.toLowerCase()) >= 0;
+      });
+      count.textContent = rows.length + (rows.length === 1 ? " exercise" : " exercises");
+      list.innerHTML = "";
+      empty.hidden = rows.length > 0;
+      rows.forEach(function (ex) {
+        var last = S.lastFor(ex.id);
+        var fav = S.isFavourite("exercises", ex.id);
+        var sub = last ? "Last: " + last.val + " " + ex.unit + " · " + relDay(last.date) : "Not logged yet";
+        var r = h('<div class="row"><div class="ri">' + exIcon(ex.type) + '</div>' +
+          '<button class="rm row-main" type="button"><b>' + esc(ex.name) + "</b><small>" + esc(sub) + "</small></button>" +
+          '<button class="fav-btn' + (fav ? " on" : "") + '" type="button" aria-label="' +
+          (fav ? "Remove from favourites" : "Add to favourites") + '">★</button>' +
+          '<div class="rr"><span class="chev">›</span></div></div>');
+        r.querySelector(".row-main").onclick = function () { go("logdetail", ex.id); };
+        r.querySelector(".fav-btn").onclick = function () {
+          S.toggleFavourite("exercises", ex.id);
+          paint();
+        };
+        /* The whole row opens the log, except the star. */
+        r.onclick = function (e) {
+          if (e.target && e.target.closest && e.target.closest(".fav-btn")) return;
+          go("logdetail", ex.id);
+        };
+        list.appendChild(r);
+      });
+    }
+
+    setTimeout(function () {
+      var input = $("#logQ", node);
+      if (input) input.oninput = function () { q = input.value; paint(); };
+    }, 0);
+
+    paint();
     shell("workout", "My Workout Log", node, { back: true });
   });
 
@@ -511,6 +527,7 @@
     node.appendChild(h('<h2 class="headline" style="margin-bottom:4px">The <span class="hl">vault</span></h2>'));
     node.appendChild(h('<p class="sub mb">Structured plans and every tool, one tap away.</p>'));
 
+    var PROGRAMS = window.GBPrograms ? window.GBPrograms.list() : [];
     var FILTERS = ["All plans", "2 days", "3 days", "4 days"];
     var active = "All plans";
     var chips = h('<div class="chips mb"></div>');
@@ -519,19 +536,51 @@
     function paint() {
       grid.innerHTML = "";
       var byDays = {};
-      PROGRAMS.filter(function (p) { return active === "All plans" || parseInt(p.days, 10) === parseInt(active, 10); }).forEach(function (p) {
-        (byDays[p.days] = byDays[p.days] || []).push(p);
+      PROGRAMS.filter(function (p) { return active === "All plans" || p.days === parseInt(active, 10); }).forEach(function (p) {
+        (byDays[p.daysLabel] = byDays[p.daysLabel] || []).push(p);
       });
       if (!Object.keys(byDays).length) { grid.appendChild(h('<p class="sub center">No plans for that rhythm yet.</p>')); return; }
       Object.keys(byDays).forEach(function (d) {
         grid.appendChild(h('<div class="eyebrow" style="margin:18px 0 10px">' + esc(d) + "</div>"));
         var covers = h('<div class="covers"></div>');
         byDays[d].forEach(function (p) {
-          var c = h('<div class="cover">' + img(p.img, p.name) + '<div class="ov"><div class="tag ' + p.tag + '">' + esc(p.name) + '</div><div class="sub2">' + esc(p.sub) + "</div></div></div>");
-          c.onclick = function () { toast("Loaded “" + p.name + "” into My Routine"); S.set({ planDay: "Day 1" }); go("workout"); };
+          var c = h('<button class="cover">' + img(p.img, p.name) + '<div class="ov"><div class="tag ' + p.tag + '">' + esc(p.name) + '</div><div class="sub2">' + esc(p.sub) + "</div></div></button>");
+          c.onclick = function () { openProgram(p); };
           covers.appendChild(c);
         });
         grid.appendChild(covers);
+      });
+    }
+
+    /* Loading a program writes its days and movements into the member's own
+       My Routine. It changes their plan, so it asks first. */
+    function openProgram(p) {
+      var now = Date.now();
+      var days = p.split.map(function (d, i) {
+        var when = new Date();
+        when.setDate(when.getDate() + i);
+        var y = when.getFullYear();
+        var m = String(when.getMonth() + 1).padStart(2, "0");
+        var day = String(when.getDate()).padStart(2, "0");
+        return {
+          id: "pd" + p.id + i + now.toString(36),
+          name: d.name,
+          date: y + "-" + m + "-" + day,
+          items: d.items.map(function (it) {
+            return { ex: it.ex, sets: it.sets, reps: it.reps, rest: it.rest, note: "", done: false };
+          })
+        };
+      });
+      var total = days.reduce(function (n, d) { return n + d.items.length; }, 0);
+      GBDialog.confirm(p.name + " runs " + p.daysLabel.toLowerCase() + " with " + total +
+        " movements. It replaces the days in your routine, and you can change anything afterwards.", {
+        title: "Load this program",
+        okLabel: "Load program"
+      }).then(function (yes) {
+        if (!yes) return;
+        S.setRoutine({ days: days, view: "week", currentDay: days[0].id });
+        toast("Loaded “" + p.name + "” into My Routine");
+        go("workout");
       });
     }
 
@@ -597,9 +646,37 @@
       node.appendChild(h('<div class="banner">' + S.foodScansLeft() + " free scans left today · <a href=\"#/pricing\">upgrade</a></div>"));
     }
 
+    /* Recently eaten, so the food you eat most is one tap away. */
+    var recent = S.recentFoods(5);
+    if (recent.length) {
+      node.appendChild(h('<div class="eyebrow" style="margin:18px 0 10px">Recently eaten</div>'));
+      var recentRow = h('<div class="food-grid"></div>');
+      recent.forEach(function (f) {
+        var c = h('<button class="food-tile"><div class="ph">' +
+          img((D.foods[f.name] && D.foods[f.name].photo) || "meal/meal-1.jpg", f.name) + "</div><b>" + esc(f.name) + "</b></button>");
+        c.onclick = function () { openFood(f.name); };
+        recentRow.appendChild(c);
+      });
+      node.appendChild(recentRow);
+    }
+
     // Search + pick
     var search = h('<div class="search">🔍<input id="foodQ" placeholder="Search a food or meal" autocomplete="off"></div>');
     node.appendChild(search);
+
+    var chipRow = h('<div class="chips mb"></div>');
+    var onlyFav = false;
+    var favChip = h('<button class="chip">★ Favourites</button>');
+    favChip.onclick = function () {
+      onlyFav = !onlyFav;
+      favChip.classList.toggle("on", onlyFav);
+      paint($("#foodQ", node) ? $("#foodQ", node).value.trim() : "");
+    };
+    chipRow.appendChild(favChip);
+    var customBtn = h('<button class="chip">+ Add your own food</button>');
+    customBtn.onclick = function () { customFoodSheet(); };
+    chipRow.appendChild(customBtn);
+    node.appendChild(chipRow);
 
     var grid = h('<div class="food-grid"></div>');
     node.appendChild(grid);
@@ -611,6 +688,7 @@
       grid.innerHTML = "";
       list.innerHTML = "";
       var names = Object.keys(D.foods).filter(function (n) {
+        if (onlyFav && !S.isFavourite("foods", n)) return false;
         return !q || n.toLowerCase().indexOf(q.toLowerCase()) > -1;
       });
       // Photo tiles for the most common foods
@@ -623,14 +701,26 @@
       });
       names.forEach(function (name) {
         var f = D.foods[name];
-        var r = h('<button class="row"><div class="ri">🍽️</div><div class="rm"><b>' + esc(name) +
-          "</b><small>" + esc(f.portion || "") + " · " + f.kcal + " kcal</small></div>" +
-          '<div class="rr"><span class="chev">›</span></div></button>');
-        r.onclick = function () { openFood(name); };
+        var fav = S.isFavourite("foods", name);
+        var r = h('<div class="row"><div class="ri">🍽️</div>' +
+          '<button class="rm row-main" type="button"><b>' + esc(name) +
+          "</b><small>" + esc(f.portion || "") + " · " + f.kcal + " kcal</small></button>" +
+          '<button class="fav-btn' + (fav ? " on" : "") + '" type="button" aria-label="' +
+          (fav ? "Remove from favourites" : "Add to favourites") + '">★</button>' +
+          '<div class="rr"><span class="chev">›</span></div></div>');
+        r.querySelector(".row-main").onclick = function () { openFood(name); };
+        r.querySelector(".fav-btn").onclick = function () {
+          S.toggleFavourite("foods", name);
+          paint(q);
+        };
+        r.onclick = function (e) {
+          if (e.target && e.target.closest && e.target.closest(".fav-btn")) return;
+          openFood(name);
+        };
         list.appendChild(r);
       });
       if (!names.length) {
-        list.appendChild(h('<div class="row"><div class="rm"><b>No food found</b><small>Try a different word.</small></div></div>'));
+        list.appendChild(h('<div class="row"><div class="rm"><b>No food found</b><small>Try a different word, or add the food yourself.</small></div></div>'));
       }
     }
     paint("");
@@ -646,7 +736,16 @@
       var hist = h('<div class="list"></div>');
       S.foodLogs().slice(0, 10).forEach(function (f) {
         ["kcal","carbs","protein","fat","fiber"].forEach(function (k) { tot[k] += f[k] || 0; });
-        hist.appendChild(h('<div class="row"><div class="rm"><b>' + esc(f.name) + '</b><small>' + f.kcal + " kcal · C " + f.carbs + "g · P " + f.protein + "g · F " + f.fat + 'g</small></div><div class="rr">' + verdictPill(f.verdict) + "</div></div>"));
+        var row = h('<div class="row"><div class="rm"><b>' + esc(f.name) + '</b><small>' +
+          f.kcal + " kcal · C " + f.carbs + "g · P " + f.protein + "g · F " + f.fat + 'g</small></div>' +
+          '<div class="rr">' + verdictPill(f.verdict) +
+          '<button class="row-del" aria-label="Remove">✕</button></div></div>');
+        row.querySelector(".row-del").onclick = function () {
+          S.removeFood(f.id);
+          toast("Removed from today's intake");
+          render();
+        };
+        hist.appendChild(row);
       });
       node.appendChild(h('<div class="eyebrow" style="margin:18px 0 10px">Today\'s intake</div>'));
       node.appendChild(hist);
@@ -723,7 +822,81 @@
       };
       panel.appendChild(log);
 
+      /* Star it, so the food you eat often is always one tap away. */
+      var favBtn = h('<button class="btn btn-ghost mt">★ Add to favourites</button>');
+      if (S.isFavourite("foods", name)) favBtn.textContent = "★ In your favourites";
+      favBtn.onclick = function () {
+        var on = S.toggleFavourite("foods", name);
+        favBtn.textContent = on ? "★ In your favourites" : "★ Add to favourites";
+        toast(on ? "Saved to your favourites" : "Removed from your favourites");
+      };
+      panel.appendChild(favBtn);
+
       $("#fdX", panel).onclick = function () { sheet.remove(); };
+      sheet.onclick = function (e) { if (e.target === sheet) sheet.remove(); };
+      document.body.appendChild(sheet);
+    }
+
+    /* ---------------- a food the member adds themselves ----------------
+       Some food is not in our list, or the numbers on the packet are
+       different. Add it once and it is yours from then on. */
+    function customFoodSheet() {
+      var sheet = h('<div class="sheet-bg"><div class="sheet"></div></div>');
+      var panel = sheet.firstChild;
+      panel.appendChild(h('<div class="sheet-head"><h3>Add your own food</h3>' +
+        '<button class="iconbtn" style="margin-left:auto" id="cfX">✕</button></div>'));
+      panel.appendChild(h('<p class="sub mb">Use the numbers on the packet. We will work out the rest.</p>'));
+      panel.appendChild(h('<div class="field"><label>Name of the food</label><input id="cfName" type="text" placeholder="e.g. Suya skewer"></div>'));
+      panel.appendChild(h('<div class="field"><label>How much you ate (portion)</label><input id="cfPortion" type="text" placeholder="e.g. 2 skewers"></div>'));
+      panel.appendChild(h('<div class="field"><label>Calories (kcal)</label><input id="cfKcal" type="number" inputmode="numeric" placeholder="420"></div>'));
+      panel.appendChild(h('<div class="field"><label>Carbs (g)</label><input id="cfCarbs" type="number" inputmode="decimal" placeholder="40"></div>'));
+      panel.appendChild(h('<div class="field"><label>Protein (g)</label><input id="cfProtein" type="number" inputmode="decimal" placeholder="28"></div>'));
+      panel.appendChild(h('<div class="field"><label>Fat (g)</label><input id="cfFat" type="number" inputmode="decimal" placeholder="18"></div>'));
+      panel.appendChild(h('<div class="field"><label>Fibre (g)</label><input id="cfFiber" type="number" inputmode="decimal" placeholder="4"></div>'));
+
+      var save = h('<button class="btn btn-primary btn-lg mt">Save this food</button>');
+      save.onclick = function () {
+        var name = ($("#cfName", panel).value || "").trim();
+        if (!name) return toast("Give the food a name");
+        var kcal = parseFloat($("#cfKcal", panel).value);
+        if (!kcal || kcal <= 0) return toast("Enter the calories");
+        var carbs = parseFloat($("#cfCarbs", panel).value) || 0;
+        var protein = parseFloat($("#cfProtein", panel).value) || 0;
+        var fat = parseFloat($("#cfFat", panel).value) || 0;
+        var fiber = parseFloat($("#cfFiber", panel).value) || 0;
+        var portion = ($("#cfPortion", panel).value || "").trim() || "1 serving";
+
+        /* Work out a simple verdict from the numbers, the same way the
+           built-in foods are judged. */
+        var verdict = "fine";
+        if (protein < 8 && carbs > 45) verdict = "watch";
+        if (fiber >= 6 && protein >= 15) verdict = "good";
+
+        D.foods[name] = {
+          kcal: Math.round(kcal), carbs: Math.round(carbs), protein: Math.round(protein),
+          fat: Math.round(fat), fiber: Math.round(fiber), verdict: verdict,
+          portion: portion,
+          simple: "A food you added yourself.",
+          what: name + ", as you added it, with the numbers from the packet.",
+          contributions: ["Carbs " + Math.round(carbs) + "g for energy",
+                          "Protein " + Math.round(protein) + "g to repair and build muscle",
+                          "Fat " + Math.round(fat) + "g for hormones and fullness",
+                          "Fibre " + Math.round(fiber) + "g for digestion"],
+          goals: "How it fits your goal depends on the rest of your day and how much of it you eat.",
+          servings: "Use the portion you wrote above.",
+          swaps: "Wholegrain or higher-fibre versions usually carry more fibre for the same energy.",
+          allergens: "Check the packet if you react to any common allergen."
+        };
+        S.addFood({ name: name, kcal: Math.round(kcal), carbs: Math.round(carbs),
+                    protein: Math.round(protein), fat: Math.round(fat),
+                    fiber: Math.round(fiber), verdict: verdict });
+        sheet.remove();
+        toast("Added — it is in your list now");
+        render();
+      };
+      panel.appendChild(save);
+
+      $("#cfX", panel).onclick = function () { sheet.remove(); };
       sheet.onclick = function (e) { if (e.target === sheet) sheet.remove(); };
       document.body.appendChild(sheet);
     }
@@ -740,7 +913,7 @@
       var c = h('<div class="opt" style="flex-direction:column;text-align:center;gap:6px;padding:12px 8px"><div class="oi" style="width:40px;height:40px">' + a.icon + "</div><b style=\"font-size:.82rem\">" + esc(a.name) + "</b></div>");
       c.onclick = function () {
         arch.querySelectorAll(".opt").forEach(function (x) { x.classList.remove("on"); });
-        c.classList.add("on"); S.set({ goalArch: a.id });
+        c.classList.add("on"); S.setGoalArch(a.id);
       };
       arch.appendChild(c);
     });
@@ -765,7 +938,7 @@
 
     var gen = h('<button class="btn btn-primary btn-lg mt">Generate my projection</button>');
     gen.onclick = function () {
-      if (!S.get().goalArch) return toast("Pick a goal physique first");
+      if (!S.goalArch()) return toast("Pick a goal physique first");
       if (!S.canProject()) return toast("Free limit reached — upgrade for unlimited");
       go("projection");
     };
@@ -775,7 +948,7 @@
 
   route("projection", function () {
     var arch = D.archetypes[0];
-    D.archetypes.forEach(function (a) { if (a.id === S.get().goalArch) arch = a; });
+    D.archetypes.forEach(function (a) { if (a.id === S.goalArch()) arch = a; });
     var u = S.user() || {};
     var node = h("<div></div>");
     node.appendChild(h('<div class="ph" style="aspect-ratio:3/4;position:relative">' + img(u.gender === "Female" ? "coach/model-female.jpg" : "coach/model-male.jpg", arch.name) + '<div style="position:absolute;inset:auto 0 0 0;padding:16px;background:linear-gradient(to top,rgba(0,0,0,.65),transparent);color:#fff"><b style="font-size:1.05rem">' + esc(arch.name) + " — you, in ~12 weeks</b></div></div>"));
@@ -815,10 +988,68 @@
     if (S.logs().length) {
       node.appendChild(h('<div class="eyebrow" style="margin:18px 0 10px">Recent sessions</div>'));
       var hist = h('<div class="list"></div>');
-      S.logs().slice(0, 12).forEach(function (l) {
-        hist.appendChild(h('<div class="row"><div class="ri">' + exIcon("count") + '</div><div class="rm"><b>' + esc(exName(l.ex)) + " · " + l.val + " " + esc(exUnit(l.ex)) + '</b><small>' + relDay(l.date) + "</small></div></div>"));
-      });
+
+      /* Filter the history down to one movement. */
+      var used = {};
+      S.logs().forEach(function (l) { used[l.ex] = true; });
+      var filter = "";
+      if (Object.keys(used).length > 1) {
+        var chips = h('<div class="chips mb"></div>');
+        var allChip = h('<button class="chip on">Everything</button>');
+        allChip.onclick = function () {
+          filter = "";
+          chips.querySelectorAll(".chip").forEach(function (c) { c.classList.remove("on"); });
+          allChip.classList.add("on");
+          paintHist();
+        };
+        chips.appendChild(allChip);
+        Object.keys(used).forEach(function (id) {
+          var c = h('<button class="chip">' + esc(exName(id)) + "</button>");
+          c.onclick = function () {
+            filter = id;
+            chips.querySelectorAll(".chip").forEach(function (x) { x.classList.remove("on"); });
+            c.classList.add("on");
+            paintHist();
+          };
+          chips.appendChild(c);
+        });
+        node.appendChild(chips);
+      }
+
+      function paintHist() {
+        hist.innerHTML = "";
+        var rows = S.logs().filter(function (l) { return !filter || l.ex === filter; }).slice(0, 20);
+        rows.forEach(function (l) {
+          var row = h('<div class="row"><div class="ri">' + exIcon("count") + '</div><div class="rm"><b>' +
+            esc(exName(l.ex)) + " · " + l.val + " " + esc(exUnit(l.ex)) + "</b><small>" + relDay(l.date) +
+            (l.edited ? " · edited" : "") + "</small></div></div>");
+          var acts = h('<div class="rr"></div>');
+          var del = h('<button class="row-del" aria-label="Delete this entry">✕</button>');
+          del.onclick = function () {
+            S.removeLog(l.id);
+            toast("Entry removed");
+            render();
+          };
+          acts.appendChild(del);
+          row.querySelector(".rm").after(acts);
+          hist.appendChild(row);
+        });
+        if (!rows.length) {
+          hist.appendChild(h('<div class="row"><div class="rm"><b>Nothing here</b><small>No entries for that movement yet.</small></div></div>'));
+        }
+      }
+      paintHist();
       node.appendChild(hist);
+
+      /* How much work went in this week. */
+      var vol = S.volumeThisWeek();
+      node.appendChild(h('<div class="card mt"><h3>This week</h3>' +
+        '<div class="statgrid">' +
+        '<div class="stat"><b>' + vol.sets + "</b><small>Sets logged</small></div>" +
+        '<div class="stat"><b>' + vol.total + "</b><small>Total volume</small></div>" +
+        '<div class="stat"><b>' + S.streak() + "</b><small>Day streak</small></div>" +
+        "</div>" +
+        '<p class="faint small mt">Total volume is the sum of what you logged. It is a rough measure of effort, not a score.</p></div>'));
     } else {
       node.appendChild(h('<div class="card center"><div style="font-size:2.4rem">📅</div><h3 class="mt">Your workout history will show up here</h3><p class="sub mb">Log your first set to start the timeline.</p><button class="btn btn-primary" id="goWorkout">Go to workout</button></div>'));
     }
@@ -991,6 +1222,9 @@
     var out = h('<button class="btn btn-danger mt">Log out</button>');
     out.onclick = function () { S.set({ user: null }); go("welcome"); };
     node.appendChild(out);
+
+    /* The foot of the app: what is coming, and the version line. */
+    node.appendChild(soonBlock());
     node.appendChild(h('<p class="faint small center mt">Gym Badge v2 · <a href="#" id="resetAll">Reset demo data</a></p>'));
 
     shell("profile", "Profile", node);

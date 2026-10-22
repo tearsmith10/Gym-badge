@@ -1,5 +1,5 @@
 /* GYM BADGE — service worker (offline first, self-updating) */
-var CACHE = "gymbadge-v16";
+var CACHE = "gymbadge-v17";
 var IMGS = [
   "/app/assets/img/avatar.jpg",
   "/app/assets/img/coach/model-male.jpg",
@@ -34,6 +34,7 @@ var ASSETS = [
   "/assets/theme.js",
   "/assets/auth.js",
   "/assets/people.js",
+  "/assets/qr.js",
   "/assets/i18n.js",
   "/assets/i18n-ext.js",
   "/assets/countries.js",
@@ -42,6 +43,8 @@ var ASSETS = [
   "/assets/shared.css",
   "/app/assets/css/app.css",
   "/app/assets/js/data.js",
+  "/app/assets/js/exercises-more.js",
+  "/app/assets/js/programs.js",
   "/app/assets/js/store.js",
   "/app/assets/js/payments.js",
   "/app/assets/js/settings.js",
@@ -91,6 +94,22 @@ self.addEventListener("fetch", function (e) {
   var url;
   try { url = new URL(req.url); } catch (err) { return; }
   if (url.origin !== self.location.origin) return; // leave cross-origin alone
+
+  // The API is never served from the cache. It is live data — the trainer
+  // directory, the review queues — and a stale copy would show members a
+  // directory that has already changed. The app keeps its own offline copy
+  // in local storage, so the network is the only source here.
+  if (url.pathname.indexOf("/api/") === 0) {
+    e.respondWith(
+      fetch(req).catch(function () {
+        return new Response(JSON.stringify({ ok: false, offline: true }), {
+          status: 503,
+          headers: { "Content-Type": "application/json" }
+        });
+      })
+    );
+    return;
+  }
 
   if (isFresh(req)) {
     // Network-first: newest app shell + code whenever we are online.

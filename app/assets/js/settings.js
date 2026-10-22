@@ -431,7 +431,7 @@
       .sort(function (a, b) { return b.n - a.n; }).slice(0, 5);
   }
   function exName(id) {
-    var all = (D.exercises || []).concat(S.myExercises ? S.myExercises() : []);
+    var all = (D.exercises || []).concat(S.myExercises());
     for (var i = 0; i < all.length; i++) if (all[i].id === id) return all[i].name;
     return null;
   }
