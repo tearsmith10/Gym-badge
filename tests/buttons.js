@@ -380,6 +380,14 @@ for (const f of FILES) {
   check("the images are loaded in a working order",
     html.indexOf("equipment-data.js") < html.indexOf("equipment.js") &&
     html.indexOf("store.js") < html.indexOf("equipment.js"));
+
+  /* A movement's page points at the machine it is actually done on. */
+  const libSrc = fs.readFileSync(path.join(APP, "library.js"), "utf8");
+  const wanted = [...libSrc.matchAll(/\["[a-z ]+", "(eq\d+)"\]/g)].map((m) => m[1]);
+  check("the guide links a movement to its machine", wanted.length >= 10, String(wanted.length));
+  const unknown = wanted.filter((id) => !items.some((i) => i.id === id));
+  check("every machine the guide links to is on the floor", unknown.length === 0, unknown.join(", "));
+  check("the guide shows the machine's live status", /On the floor:/.test(libSrc));
 }
 
 /* --- 19. every food has its own real photograph --------------------------- */

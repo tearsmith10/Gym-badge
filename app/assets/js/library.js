@@ -232,6 +232,57 @@
   }
 
   /* ---------------- one exercise, in full ---------------- */
+  /* Which machine on the gym floor a movement is done on, if any. The order
+     matters: "bench press" is checked before "bench", so a bench press
+     movement points at the bench press and a bench dip points at the flat
+     bench. */
+  var MACHINE_WORDS = [
+    ["treadmill", "eq1"],
+    ["rowing machine", "eq14"],
+    ["elliptical", "eq9"],
+    ["spin bike", "eq10"],
+    ["exercise bike", "eq10"],
+    ["stationary bike", "eq10"],
+    ["battle rope", "eq21"],
+    ["bench press", "eq4"],
+    ["bench", "eq15"],
+    ["lat pulldown", "eq5"],
+    ["pulldown", "eq5"],
+    ["leg press", "eq6"],
+    ["leg curl", "eq22"],
+    ["leg extension", "eq23"],
+    ["cable crossover", "eq8"],
+    ["shoulder press machine", "eq24"],
+    ["chest press", "eq26"],
+    ["cable", "eq25"],
+    ["dumbbell", "eq3"],
+    ["trap bar", "eq16"],
+    ["dip", "eq18"],
+    ["kettlebell", "eq19"],
+    ["plyometric", "eq20"],
+    ["suspension", "eq27"],
+    ["trx", "eq27"],
+    ["stair", "eq13"]
+  ];
+
+  function machineFor(ex) {
+    /* The movement's own name is the strongest hint — a "Bench Press" is done
+       at the bench press, even though its kit list just says "bench". */
+    var name = (ex.name || "").toLowerCase();
+    var words = (ex.equipment || []).join(" ").toLowerCase();
+    var sources = [name, words];
+    for (var s = 0; s < sources.length; s++) {
+      if (!sources[s]) continue;
+      for (var i = 0; i < MACHINE_WORDS.length; i++) {
+        if (sources[s].indexOf(MACHINE_WORDS[i][0]) === -1) continue;
+        var found = null;
+        (D.equipment || []).forEach(function (e) { if (e.id === MACHINE_WORDS[i][1]) found = e; });
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
   function detail(shell, go, id) {
     var ex = null;
     D.exercises.concat(S.myExercises()).forEach(function (e) {
@@ -257,6 +308,20 @@
     // Equipment
     node.appendChild(h('<div class="card mt"><h3>Equipment</h3><p class="sub">' +
       esc((ex.equipment && ex.equipment.length ? ex.equipment : ["None needed"]).join(", ")) + "</p></div>"));
+
+    /* When the movement needs a machine that is on this gym's floor, show the
+       machine's live status and let the member open it. Knowing the lat
+       pulldown is down before you walk over is the whole point of the floor. */
+    var machine = machineFor(ex);
+    if (machine) {
+      var m = (D.statusMeta && D.statusMeta[machine.status]) || { label: machine.status, pill: "", icon: "•" };
+      var link = h('<button class="btn btn-ghost mt" style="width:100%;text-align:left">' +
+        '<span style="font-size:1.1rem;margin-right:8px">' + m.icon + "</span>" +
+        "On the floor: <b>" + esc(machine.name) + "</b> — " + esc(m.label) +
+        '<span class="chev" style="float:right">›</span></button>');
+      link.onclick = function () { go("equipment", machine.id); };
+      node.appendChild(link);
+    }
 
     // Start position
     node.appendChild(h('<div class="card mt"><h3>Starting position</h3><p class="sub">' + esc(ex.start || "") + "</p></div>"));

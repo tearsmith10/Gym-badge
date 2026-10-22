@@ -140,6 +140,10 @@ You can filter by zone or ask for **everything that needs attention**, and
 open any machine for the reason it is down, what was reported, when it is
 expected back, the safety notice, the next action and who is dealing with it.
 
+The guide and the floor are connected: open a movement and the guide shows
+**the machine it is done on and whether that machine is usable right now**, so
+you know the lat pulldown is out of service before you walk over to it.
+
 The photographs came from the Figma board, Pexels and Wikimedia Commons. The
 same rule applies as everywhere else: the picture shows the machine it is
 labelled as, and no picture of one machine stands in for another.
