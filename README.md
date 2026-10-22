@@ -88,7 +88,7 @@ every category:
 | Category | Movements |
 |----------|-----------|
 | Upper body | 14 |
-| Lower body | 13 |
+| Lower body | 15 |
 | Core | 10 |
 | Cardio | 7 |
 | Shoulders | 3 |
@@ -98,10 +98,31 @@ Every movement has the full coaching guide: purpose, muscles, equipment,
 starting position, step by step, sets and rest, breathing, the mistakes
 people make, safety notes and easier versions.
 
-Photographs are only used where the photo really shows that movement. Each
-of the twelve demonstration photographs is used once, on the movement it
-actually shows, and a movement without a photo says so plainly rather than
-borrowing an unrelated picture.
+### 📸 The photographs
+The library carries **147 demonstration photographs across 54 of the 55
+movements**, so the gallery can be flipped right and left through a real set
+of pictures rather than one photo and four placeholders.
+
+Every photograph was looked at before it was placed. A picture is only ever
+used on the movement it actually shows — no photograph is shared between two
+different movements, and none is borrowed from somewhere else. The one
+movement without a photograph says so plainly instead of pretending.
+
+Where they came from:
+
+- the **Gym Badge Figma board**, which held a large set of genuine gym
+  photographs that were not being used
+- **Pexels** and **Wikimedia Commons** for the movements the board did not
+  cover, including cycling, treadmill, jump rope, high knees, the cat cow,
+  the bird dog, the bicycle crunch, the hollow hold, step ups, wall push ups
+  and the wall slide
+
+They are resized to 1000 pixels and re-encoded on the way in, so the app
+ships about 10 MB of pictures rather than 18. Every one is listed with its
+source in [`app/assets/img/ex/CREDITS.md`](app/assets/img/ex/CREDITS.md).
+
+The website's people photographs are real too — the coaches, members, gym
+floors and training scenes now show photographs instead of generated tiles.
 
 ### ✨ More from every feature
 - **My Routine** — rename, copy and delete a day; reorder the movements

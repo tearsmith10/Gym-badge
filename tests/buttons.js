@@ -198,6 +198,18 @@ for (const f of FILES) {
   const diffs = [...new Set(all.map((e) => e.difficulty))];
   check("every difficulty has a filter chip",
     diffs.every((d) => /"Beginner", "Intermediate", "Advanced"/.test(lib)), diffs.join(", "));
+
+  /* Almost every movement should have a real photograph, so the gallery can
+     be flipped through rather than showing one picture and four
+     placeholders. */
+  const noPhoto = all.filter((e) => !(e.gallery || []).length).map((e) => e.id);
+  check("at least fifty movements have a photograph", all.length - noPhoto.length >= 50,
+    noPhoto.join(", "));
+  const onePhoto = all.filter((e) => (e.gallery || []).length === 1).length;
+  check("no more than twelve movements have a single photograph", onePhoto <= 12, String(onePhoto));
+  const totalPhotos = all.reduce((n, e) => n + (e.gallery || []).length, 0);
+  check("the library carries at least a hundred and twenty photographs", totalPhotos >= 120,
+    String(totalPhotos));
 }
 
 /* --- 11. the five features have their sub-features --- */
@@ -278,8 +290,7 @@ for (const f of FILES) {
   check("the trainer directory survives a restart", /_LIST_KEYS/.test(core));
 }
 
-/* --- 16. local data can never be deployed --- */
-{
+/* --- 16. local data can never be deployed --- */{
   const ignorePath = path.join(ROOT, ".vercelignore");
   check("there is a .vercelignore", fs.existsSync(ignorePath));
   if (fs.existsSync(ignorePath)) {
@@ -295,6 +306,38 @@ for (const f of FILES) {
     blocked.every((r) => r.dest === "/api/index.py"), JSON.stringify(blocked));
   check("the data directory is blocked before the filesystem handler",
     routes.findIndex((r) => /\/data\//.test(r.src || "")) < routes.findIndex((r) => r.handle === "filesystem"));
+}
+
+/* --- 17. the photographs are real, licensed and credited --- */
+{
+  const credits = path.join(ROOT, "app/assets/img/ex/CREDITS.md");
+  check("the photographs are credited", fs.existsSync(credits));
+  if (fs.existsSync(credits)) {
+    const c = fs.readFileSync(credits, "utf8");
+    check("the credits name Pexels", /Pexels/.test(c));
+    check("the credits name Wikimedia Commons", /Wikimedia Commons/.test(c));
+    check("the credits list every photograph",
+      /pexels-photo-/.test(c) || /-1\.jpg/.test(c));
+  }
+
+  /* Every people photograph the website asks for must exist. */
+  const peopleDir = path.join(ROOT, "assets/img/people/");
+  check("the people photographs are installed", fs.existsSync(peopleDir));
+  if (fs.existsSync(peopleDir)) {
+    const site = fs.readFileSync(path.join(ROOT, "web/assets/js/data.js"), "utf8");
+    const wanted = [...new Set((site.match(/photo:\s*"(trainer-\d|member-\d|member-[a-z]+|gym-floor|coach-hero)"/g) || [])
+      .map((s) => s.replace(/photo:\s*"/, "").replace(/"/, "")))];
+    const missing = wanted.filter((id) => !fs.existsSync(path.join(peopleDir, id + ".jpg")));
+    check("every people photograph on the site exists", missing.length === 0, missing.join(", "));
+  }
+
+  /* The coaches in the app's directory must have their own photographs. */
+  const content = fs.readFileSync(path.join(ROOT, "gymbadge_content.py"), "utf8");
+  const coachPhotos = [...content.matchAll(/"id": "([a-z-]+)"[\s\S]{0,900}?"photo": "([^"]+)"/g)];
+  check("every launch coach has a photograph", coachPhotos.length >= 6, String(coachPhotos.length));
+  const missingCoach = coachPhotos.filter((m) => !fs.existsSync(path.join(ROOT, m[2].replace(/^\//, ""))));
+  check("every coach photograph exists", missingCoach.length === 0,
+    missingCoach.map((m) => m[1]).join(", "));
 }
 
 console.log("\n" + "=".repeat(52));

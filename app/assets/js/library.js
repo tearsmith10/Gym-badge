@@ -50,7 +50,9 @@
       s.querySelector("img").src = "/app/assets/img/" + src;
       return s;
     });
-    /* Honest padding: one "more coming" tile, never a substitute photo. */
+    /* Honest padding: one "more coming" tile, never a substitute photo.
+       Every real photograph is shown, so the carousel can be flipped right
+       and left through the whole set. */
     if (slides.length < want) {
       slides.push(h('<div class="gal-slide gal-missing"><span>📷</span><small>More demonstration photos coming soon</small></div>'));
     }

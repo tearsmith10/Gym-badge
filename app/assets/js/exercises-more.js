@@ -44,7 +44,7 @@
         "Stand closer to the wall so the angle is smaller.",
         "Do the movement on a very slow count — two seconds down, two seconds up."
       ],
-      gallery: []
+      gallery: ["ex/wallpushup-1.jpg", "ex/wallpushup-2.jpg", "ex/wallpushup-3.jpg"]
     },
     {
       id: "dumbbellpress", name: "Dumbbell Press", unit: "kg", type: "weight",
@@ -78,7 +78,7 @@
         "Do the press standing, with no bench at all.",
         "Halve the weight and double the reps."
       ],
-      gallery: []
+      gallery: ["ex/dumbbellpress-1.jpg", "ex/dumbbellpress-2.jpg"]
     },
     {
       id: "bentoverrow", name: "Bent Over Row", unit: "kg", type: "weight",
@@ -111,7 +111,7 @@
         "Use a light weight and focus on squeezing your shoulder blades together.",
         "Do one arm at a time with your hand braced on the bench."
       ],
-      gallery: []
+      gallery: ["ex/bentoverrow-1.jpg"]
     },
     {
       id: "renegaderow", name: "Renegade Row", unit: "kg", type: "weight",
@@ -144,7 +144,7 @@
         "Hold your weight with one hand and row, using the other hand on the floor for support.",
         "Do a plank with your hands on a bench and only hold the position."
       ],
-      gallery: ["ex/full-body.jpg"]
+      gallery: ["ex/renegaderow-1.jpg", "ex/renegaderow-2.jpg"]
     },
     {
       id: "chinup", name: "Chin Ups", unit: "reps", type: "count",
@@ -177,7 +177,7 @@
         "Negative chin ups — jump up and lower yourself as slowly as you can.",
         "Chin ups on an angled bar or a low bar, with your feet on the floor."
       ],
-      gallery: []
+      gallery: ["ex/chinup-1.jpg", "ex/chinup-2.jpg", "ex/chinup-3.jpg"]
     },
     /* ---------------- shoulders ---------------- */
     {
@@ -244,7 +244,7 @@
         "Do the movement with no equipment at all — pull your elbows back and squeeze your shoulder blades.",
         "Halve the reps and slow the movement down."
       ],
-      gallery: []
+      gallery: ["ex/facepull-1.jpg"]
     },
     /* ---------------- core ---------------- */
     {
@@ -278,7 +278,7 @@
         "Drop your bottom knee to the floor between holds and rest longer.",
         "Hold the position against a wall for support."
       ],
-      gallery: []
+      gallery: ["ex/sideplank-1.jpg", "ex/sideplank-2.jpg", "ex/sideplank-3.jpg"]
     },
     {
       id: "deadbug", name: "Dead Bug", unit: "reps", type: "count",
@@ -311,7 +311,7 @@
         "Keep your legs bent and only move your arms.",
         "Hold the starting position and practise keeping your back flat."
       ],
-      gallery: []
+      gallery: ["ex/deadbug-1.jpg", "ex/deadbug-2.jpg"]
     },
     {
       id: "birddog", name: "Bird Dog", unit: "reps", type: "count",
@@ -344,7 +344,7 @@
         "Keep the leg bent and lift the knee a few centimetres.",
         "Hold on to a wall with one hand if you need help with balance."
       ],
-      gallery: []
+      gallery: ["ex/birddog-1.jpg", "ex/birddog-2.jpg"]
     },
     {
       id: "lyinglegraise", name: "Lying Leg Raise", unit: "reps", type: "count",
@@ -377,7 +377,7 @@
         "Lift the legs one at a time.",
         "Do the movement on a slight decline with your feet on a chair."
       ],
-      gallery: ["ex/crunches.jpg"]
+      gallery: ["ex/lyinglegraise-1.jpg", "ex/lyinglegraise-2.jpg"]
     },
     {
       id: "bicyclecrunch", name: "Bicycle Crunch", unit: "reps", type: "count",
@@ -410,7 +410,7 @@
         "Lift your shoulders a little less.",
         "Move more slowly."
       ],
-      gallery: []
+      gallery: ["ex/bicyclecrunch-1.jpg", "ex/bicyclecrunch-2.jpg"]
     },
     {
       id: "russiantwist", name: "Russian Twist", unit: "reps", type: "count",
@@ -443,7 +443,7 @@
         "Sit more upright and reduce the lean back.",
         "Tap the floor beside your hip with each hand instead of holding a weight."
       ],
-      gallery: []
+      gallery: ["ex/russiantwist-1.jpg", "ex/russiantwist-2.jpg", "ex/russiantwist-3.jpg"]
     },
     {
       id: "hollowhold", name: "Hollow Hold", unit: "sec", type: "time",
@@ -476,7 +476,7 @@
         "Tuck your arms by your sides instead of overhead.",
         "Hold your arms forward rather than overhead."
       ],
-      gallery: []
+      gallery: ["ex/hollowhold-1.jpg", "ex/hollowhold-2.jpg"]
     },
     /* ---------------- lower body ---------------- */
     {
@@ -511,10 +511,10 @@
         "Hold the dumbbells at your shoulders instead of at your sides.",
         "Do a wall sit instead, which is gentler on the joints."
       ],
-      gallery: ["ex/squat.jpg"]
+      gallery: ["ex/dumbbellsquat-1.jpg", "ex/dumbbellsquat-2.jpg", "ex/dumbbellsquat-3.jpg"]
     },
     {
-      id: "romaniandeadlift", name: "Romanian Deadlift", unit: "kg", type: "weight",
+      id: "romanianandeadlift", name: "Romanian Deadlift", unit: "kg", type: "weight",
       category: "Lower body", difficulty: "Intermediate",
       muscles: ["Hamstrings", "Glutes", "Lower back", "Core"],
       equipment: ["A pair of dumbbells or a barbell"],
@@ -545,7 +545,7 @@
         "Do it with a shorter range of motion, stopping just below the knee.",
         "Hold a wall or a chair for balance while you learn it."
       ],
-      gallery: []
+      gallery: ["ex/romanianandeadlift-1.jpg"]
     },
     {
       id: "bulgariansplitsquat", name: "Bulgarian Split Squat", unit: "kg", type: "weight",
@@ -578,7 +578,7 @@
         "Do the movement with no weight at all.",
         "Shorten the range and stop higher."
       ],
-      gallery: []
+      gallery: ["ex/bulgariansplitsquat-1.jpg"]
     },
     {
       id: "walkinglunge", name: "Walking Lunge", unit: "reps", type: "count",
@@ -611,7 +611,7 @@
         "Hold a chair or a wall for support.",
         "Do the movement without any weight."
       ],
-      gallery: []
+      gallery: ["ex/walkinglunge-1.jpg", "ex/walkinglunge-2.jpg"]
     },
     {
       id: "stepup", name: "Step Up", unit: "kg", type: "weight",
@@ -644,7 +644,7 @@
         "Hold a wall for balance.",
         "Do the step up holding a light weight in both hands."
       ],
-      gallery: []
+      gallery: ["ex/stepup-1.jpg", "ex/stepup-2.jpg", "ex/stepup-3.jpg", "ex/stepup-4.jpg"]
     },
     {
       id: "glutebridge", name: "Glute Bridge", unit: "reps", type: "count",
@@ -676,7 +676,7 @@
         "Hold the squeeze for longer rather than doing more reps.",
         "Squeeze a ball between your knees if that helps you feel your glutes."
       ],
-      gallery: []
+      gallery: ["ex/glutebridge-1.jpg", "ex/glutebridge-2.jpg"]
     },
     {
       id: "calfraise", name: "Calf Raise", unit: "reps", type: "count",
@@ -708,7 +708,7 @@
         "Do half range lifts only.",
         "Keep both hands on the back of a chair for balance."
       ],
-      gallery: []
+      gallery: ["ex/calfraise-1.jpg", "ex/calfraise-2.jpg", "ex/calfraise-3.jpg"]
     },
     /* ---------------- cardio ---------------- */
     {
@@ -742,7 +742,7 @@
         "Do 20 jumps, then 20 seconds of rest, and repeat.",
         "Do the movement for 30 seconds at a time and build up."
       ],
-      gallery: []
+      gallery: ["ex/jumprope-1.jpg", "ex/jumprope-2.jpg", "ex/jumprope-3.jpg", "ex/jumprope-4.jpg"]
     },
     {
       id: "highknees", name: "High Knees", unit: "sec", type: "time",
@@ -775,7 +775,7 @@
         "Do 10 seconds on, 10 seconds off, and repeat.",
         "Hold a wall for balance while you build the rhythm."
       ],
-      gallery: []
+      gallery: ["ex/highknees-1.jpg", "ex/highknees-2.jpg", "ex/highknees-3.jpg"]
     },
     {
       id: "mountainclimber", name: "Mountain Climbers", unit: "sec", type: "time",
@@ -808,7 +808,7 @@
         "Hold a plank for 30 seconds between sets instead.",
         "Keep one foot on the floor and switch sides."
       ],
-      gallery: []
+      gallery: ["ex/mountainclimber-1.jpg"]
     },
     /* ---------------- mobility ---------------- */
     {
@@ -842,7 +842,7 @@
         "Bend the back knee to lower the stretch on the hamstring.",
         "Do it beside a wall for balance."
       ],
-      gallery: []
+      gallery: ["ex/worldsgreateststretch-1.jpg", "ex/worldsgreateststretch-2.jpg"]
     },
     {
       id: "shoulderwallslide", name: "Shoulder Wall Slide", unit: "reps", type: "count",
@@ -875,7 +875,7 @@
         "Slide only halfway up.",
         "Use a resistance band between your hands if you want more work."
       ],
-      gallery: []
+      gallery: ["ex/shoulderwallslide-1.jpg", "ex/shoulderwallslide-2.jpg", "ex/shoulderwallslide-3.jpg", "ex/shoulderwallslide-4.jpg"]
     },
     {
       id: "hipcircle", name: "Hip Circles", unit: "reps", type: "count",
@@ -908,7 +908,7 @@
         "Make the circles half the size.",
         "Hold a chair for support."
       ],
-      gallery: []
+      gallery: ["ex/hipcircle-1.jpg", "ex/hipcircle-2.jpg", "ex/hipcircle-3.jpg"]
     },
     {
       id: "thoracicrotation", name: "Thoracic Spine Rotation", unit: "reps", type: "count",
@@ -941,7 +941,75 @@
         "Lower the elbow towards the floor first and work up from there.",
         "Do 5 reps per side and build up over time."
       ],
-      gallery: []
+      gallery: ["ex/thoracicrotation-1.jpg", "ex/thoracicrotation-2.jpg", "ex/thoracicrotation-3.jpg", "ex/thoracicrotation-4.jpg"]
+    },
+    {
+      id: "legextension", name: "Leg Extension", unit: "kg", type: "weight",
+      category: "Lower body", difficulty: "Beginner",
+      muscles: ["Quads", "Hip flexors"],
+      equipment: ["A leg extension machine"],
+      purpose: "The leg extension isolates the front of the thigh. It is the safest way to work the quads on a machine, and it suits knees that dislike squatting depth.",
+      start: "Sit in the machine with the backs of your knees against the pad and the roller pad just above your ankles. Adjust the seat so the pad sits in the middle of your shin.",
+      steps: [
+        "Hold the handles beside your hips and keep your back flat against the seat.",
+        "Lift the pad by straightening your knees until your legs are almost level with the floor.",
+        "Squeeze your quads at the top and hold for a moment.",
+        "Lower the weight slowly until your knees are bent to about 90 degrees.",
+        "Keep your knees tracking in line with your hips the whole way."
+      ],
+      sets: "3 sets of 12 to 15 reps", reps: "12 to 15 reps", rest: "60 to 90 seconds",
+      breathing: "Breathe out as you lift the weight and breathe in as you lower it.",
+      mistakes: [
+        "Swinging the weight up instead of lifting it under control.",
+        "Locking your knees hard at the top.",
+        "Letting the roller pad roll up past your shin.",
+        "Going too heavy and losing the last third of the range."
+      ],
+      safety: [
+        "Stop if you feel sharp pain in your knee.",
+        "Line the machine's pivot up with your knee joint before you start.",
+        "Use a light weight until you can control the lowering phase."
+      ],
+      easier: [
+        "Hold both legs together and lift them at the same time.",
+        "Use the machine's lighter setting to begin with.",
+        "Do the last few reps one leg at a time."
+      ],
+      gallery: ["ex/legextension-1.jpg"]
+    },
+    {
+      id: "wallsit", name: "Wall Sit", unit: "sec", type: "time",
+      category: "Lower body", difficulty: "Beginner",
+      muscles: ["Quads", "Glutes", "Core"],
+      equipment: ["A wall"],
+      purpose: "The wall sit builds the quads without any impact on your joints. It is a good first step towards squatting, and it steadies the knees.",
+      start: "Stand with your back flat against a wall and your feet a short step forward from it.",
+      steps: [
+        "Slide your back down the wall until your knees are bent to about 90 degrees.",
+        "Keep your whole back flat against the wall, from your shoulders to your tailbone.",
+        "Keep your knees directly above your ankles, not in front of them.",
+        "Hold the position, breathing normally.",
+        "Push through your heels to stand back up."
+      ],
+      sets: "3 sets of 20 to 45 seconds", reps: "Hold 20 to 45 seconds", rest: "45 seconds",
+      breathing: "Keep breathing steadily. Holding your breath will end the set early.",
+      mistakes: [
+        "Letting your bottom creep forward away from the wall.",
+        "Holding the position longer than your quads can manage.",
+        "Holding your breath.",
+        "Letting your knees drift inwards."
+      ],
+      safety: [
+        "Stop if you feel sharp pain in your knees.",
+        "Slide higher up the wall if the position is too hard on your knees.",
+        "Keep the weight through your heels, not your toes."
+      ],
+      easier: [
+        "Slide only part way down the wall.",
+        "Hold for 15 seconds at a time and build up.",
+        "Do it with your back against a chair rather than a wall."
+      ],
+      gallery: ["ex/wallsit-1.jpg"]
     }
   ];
 

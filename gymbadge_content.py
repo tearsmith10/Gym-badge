@@ -285,6 +285,7 @@ SEED_TRAINERS = [
         "years": 9, "rating": 4.9, "status": "verified",
         "bio": "Ex collegiate thrower turned strength and conditioning coach. I build strength that shows up in life, not just in a mirror.",
         "rate": "₦12,000 per session",
+        "photo": "/app/assets/img/coach/coach-ada-okafor.jpg",
     },
     {
         "id": "tunde-bakare", "name": "Tunde Bakare",
@@ -295,6 +296,7 @@ SEED_TRAINERS = [
         "years": 7, "rating": 4.8, "status": "verified",
         "bio": "Sustainable fat loss without crash diets. Habits first, aesthetics follow.",
         "rate": "₦9,000 per session",
+        "photo": "/app/assets/img/coach/coach-tunde-bakare.jpg",
     },
     {
         "id": "zainab-musa", "name": "Zainab Musa",
@@ -305,6 +307,7 @@ SEED_TRAINERS = [
         "years": 6, "rating": 5.0, "status": "verified",
         "bio": "Safe, strong pregnancy and postpartum training. Every plan is built around your stage.",
         "rate": "₦11,000 per session",
+        "photo": "/app/assets/img/coach/coach-zainab-musa.jpg",
     },
     {
         "id": "kwame-asante", "name": "Kwame Asante",
@@ -315,6 +318,7 @@ SEED_TRAINERS = [
         "years": 8, "rating": 4.9, "status": "verified",
         "bio": "Evidence based muscle building. Progressive overload, tracked to the rep.",
         "rate": "$2,400 per session",
+        "photo": "/app/assets/img/coach/coach-kwame-asante.jpg",
     },
     {
         "id": "naledi-dlamini", "name": "Naledi Dlamini",
@@ -325,6 +329,7 @@ SEED_TRAINERS = [
         "years": 11, "rating": 4.9, "status": "verified",
         "bio": "Physiotherapist and mobility coach. I get you moving well again, then keep you that way.",
         "rate": "R2,600 per session",
+        "photo": "/app/assets/img/coach/coach-naledi-dlamini.jpg",
     },
     {
         "id": "amara-nwosu", "name": "Amara Nwosu",
@@ -335,6 +340,7 @@ SEED_TRAINERS = [
         "years": 5, "rating": 4.9, "status": "verified",
         "bio": "I coach people who have never lifted before. No jargon, no judgement, just a plan that fits your life.",
         "rate": "₦8,000 per session",
+        "photo": "/app/assets/img/coach/coach-amara-nwosu.jpg",
     },
 ]
 

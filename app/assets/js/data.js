@@ -62,7 +62,7 @@
         "Knee push ups — knees on the floor, body straight from knee to head.",
         "Elevated push ups — hands on a bench or sturdy chair."
       ],
-      gallery: []
+      gallery: ["ex/pushup-1.jpg", "ex/pushup-2.jpg", "ex/pushup-3.jpg", "ex/pushup-4.jpg"]
     },
     {
       id: "squat", name: "Squats", unit: "reps", type: "count",
@@ -96,7 +96,7 @@
         "Goblet squats — hold a weight at your chest to stay upright.",
         "Wall sits — hold a squat position against a wall."
       ],
-      gallery: []
+      gallery: ["ex/squat-1.jpg", "ex/squat-2.jpg", "ex/squat-3.jpg", "ex/squat-4.jpg"]
     },
     {
       id: "lunge", name: "Lunges", unit: "reps", type: "count",
@@ -128,7 +128,7 @@
         "Supported lunges — hold a counter with both hands.",
         "Static split squats — hold the bottom position without the step."
       ],
-      gallery: []
+      gallery: ["ex/lunge-1.jpg", "ex/lunge-2.jpg"]
     },
     {
       id: "plank", name: "Plank", unit: "sec", type: "time",
@@ -161,7 +161,7 @@
         "Straight arm plank against a wall.",
         "Short 10 second holds with a full rest between them."
       ],
-      gallery: []
+      gallery: ["ex/plank-1.jpg", "ex/plank-2.jpg", "ex/plank-3.jpg"]
     },
     {
       id: "pullup", name: "Pull Ups", unit: "reps", type: "count",
@@ -193,7 +193,7 @@
         "Negative pull ups — jump up, lower yourself slowly.",
         "Lat pulldown on a machine."
       ],
-      gallery: []
+      gallery: ["ex/pullup-1.jpg"]
     },
     {
       id: "situp", name: "Sit Ups", unit: "reps", type: "count",
@@ -225,7 +225,7 @@
         "Bend your knees and lift your feet to reduce neck strain.",
         "Dead bugs, which train the core without neck pressure."
       ],
-      gallery: []
+      gallery: ["ex/situp-1.jpg"]
     },
     {
       id: "burpee", name: "Burpees", unit: "reps", type: "count",
@@ -258,7 +258,7 @@
         "Burpees without the overhead reach.",
         "Elevated step ups onto a bench instead of a jump."
       ],
-      gallery: []
+      gallery: ["ex/burpee-1.jpg", "ex/burpee-2.jpg", "ex/burpee-3.jpg", "ex/burpee-4.jpg", "ex/burpee-5.jpg"]
     },
     {
       id: "dumbbellrow", name: "Dumbbell Row", unit: "reps", type: "count",
@@ -290,7 +290,7 @@
         "One arm row with a light dumbbell, hand braced on a chair.",
         "Seated cable row on a machine."
       ],
-      gallery: ["ex/dumbbell-row.jpg"]
+      gallery: ["ex/dumbbellrow-1.jpg", "ex/dumbbellrow-2.jpg", "ex/dumbbellrow-3.jpg", "ex/dumbbellrow-4.jpg"]
     },
     {
       id: "gobletsquat", name: "Goblet Squat", unit: "reps", type: "count",
@@ -322,7 +322,7 @@
         "Hold the weight lower, at your waist.",
         "Bodyweight squat with hands on your chest."
       ],
-      gallery: ["ex/goblet-squat.jpg"]
+      gallery: ["ex/gobletsquat-1.jpg", "ex/gobletsquat-2.jpg", "ex/gobletsquat-3.jpg", "ex/gobletsquat-4.jpg"]
     },
     {
       id: "benchdips", name: "Bench Dips", unit: "reps", type: "count",
@@ -354,7 +354,7 @@
         "Do the movement on a very low step.",
         "Use a resistance band and press down into it."
       ],
-      gallery: ["ex/bench-dips.jpg"]
+      gallery: ["ex/benchdips-1.jpg", "ex/benchdips-2.jpg", "ex/benchdips-3.jpg", "ex/benchdips-4.jpg"]
     },
     {
       id: "legcurl", name: "Leg Curl", unit: "kg", type: "weight",
@@ -386,7 +386,7 @@
         "Slider leg curl lying on your back.",
         "Single leg curl without weight, to learn the movement."
       ],
-      gallery: ["ex/leg-curl.jpg"]
+      gallery: ["ex/legcurl-1.jpg", "ex/legcurl-2.jpg", "ex/legcurl-3.jpg"]
     },
     {
       id: "crunches", name: "Crunches", unit: "reps", type: "count",
@@ -418,7 +418,7 @@
         "Short range crunches.",
         "Dead bugs, which build core strength without neck strain."
       ],
-      gallery: ["ex/calisthenics.jpg"]
+      gallery: ["ex/crunches-1.jpg", "ex/crunches-2.jpg", "ex/crunches-3.jpg"]
     },
     {
       id: "inclinepress", name: "Incline Press", unit: "kg", type: "weight",
@@ -450,7 +450,7 @@
         "A shallower incline, or push ups on an elevated surface.",
         "Machine chest press, which guides the path for you."
       ],
-      gallery: ["ex/incline-press.jpg"]
+      gallery: ["ex/inclinepress-1.jpg", "ex/inclinepress-2.jpg", "ex/inclinepress-3.jpg", "ex/inclinepress-4.jpg"]
     },
     {
       id: "treadmill", name: "Treadmill", unit: "min", type: "time",
@@ -483,7 +483,7 @@
         "Walk at a slow incline instead of a fast flat pace.",
         "Use the handrails briefly to steady yourself, then let go."
       ],
-      gallery: []
+      gallery: ["ex/treadmill-1.jpg", "ex/treadmill-2.jpg", "ex/treadmill-3.jpg", "ex/treadmill-4.jpg"]
     },
     {
       id: "cycling", name: "Cycling", unit: "min", type: "time",
@@ -515,7 +515,7 @@
         "Seated pedalling only, on flat terrain.",
         "Resistance bands around the legs on a stationary bike."
       ],
-      gallery: []
+      gallery: ["ex/cycling-1.jpg", "ex/cycling-2.jpg", "ex/cycling-3.jpg", "ex/cycling-4.jpg"]
     },
     {
       id: "rowing", name: "Rowing", unit: "min", type: "time",
@@ -549,7 +549,7 @@
         "Use an easy pace and focus on the leg drive.",
         "Try a resistance band row if there is no machine."
       ],
-      gallery: []
+      gallery: ["ex/rowing-1.jpg"]
     },
     {
       id: "benchpress", name: "Bench Press", unit: "kg", type: "weight",
@@ -582,7 +582,7 @@
         "Machine chest press.",
         "Push ups on a raised surface, or a lighter bar with more reps."
       ],
-      gallery: []
+      gallery: ["ex/benchpress-1.jpg", "ex/benchpress-2.jpg", "ex/benchpress-3.jpg", "ex/benchpress-4.jpg"]
     },
     {
       id: "deadlift", name: "Deadlift", unit: "kg", type: "weight",
@@ -615,7 +615,7 @@
         "Hip hinge with no weight, holding a broomstick for balance.",
         "Dumbbell deadlift, which is easier to control than a bar."
       ],
-      gallery: []
+      gallery: ["ex/deadlift-1.jpg", "ex/deadlift-2.jpg"]
     },
     {
       id: "shoulderpress", name: "Shoulder Press", unit: "kg", type: "weight",
@@ -648,7 +648,7 @@
         "Dumbbell press with a lighter weight.",
         "Push ups on a wall or a high bench."
       ],
-      gallery: []
+      gallery: ["ex/shoulderpress-1.jpg", "ex/shoulderpress-2.jpg", "ex/shoulderpress-3.jpg", "ex/shoulderpress-4.jpg"]
     },
     {
       id: "bicepcurl", name: "Bicep Curl", unit: "kg", type: "weight",
@@ -680,7 +680,7 @@
         "Resistance band curl.",
         "Hammer curls with your palms facing each other, which is easier on the wrists."
       ],
-      gallery: ["ex/cardio.jpg"]
+      gallery: ["ex/bicepcurl-1.jpg", "ex/bicepcurl-2.jpg", "ex/bicepcurl-3.jpg"]
     },
     {
       id: "latpulldown", name: "Lat Pulldown", unit: "kg", type: "weight",
@@ -712,7 +712,7 @@
         "Machine with a lighter stack.",
         "Assisted pull ups on the machine."
       ],
-      gallery: ["ex/lat-pulldown.jpg"]
+      gallery: ["ex/latpulldown-1.jpg", "ex/latpulldown-2.jpg", "ex/latpulldown-3.jpg", "ex/latpulldown-4.jpg", "ex/latpulldown-5.jpg"]
     },
     {
       id: "legpress", name: "Leg Press", unit: "kg", type: "weight",
@@ -745,7 +745,7 @@
         "Single leg press, half the load.",
         "Bodyweight squats if the machine is too intimidating."
       ],
-      gallery: ["ex/legs.jpg"]
+      gallery: ["ex/legpress-1.jpg", "ex/legpress-2.jpg"]
     },
     {
       id: "bandlateralraise", name: "Banded Lateral Raise", unit: "reps", type: "count",
@@ -777,7 +777,7 @@
         "Lighter band.",
         "Lateral raises lying on your side."
       ],
-      gallery: []
+      gallery: ["ex/bandlateralraise-1.jpg", "ex/bandlateralraise-2.jpg", "ex/bandlateralraise-3.jpg"]
     },
     {
       id: "catcow", name: "Cat Cow Stretch", unit: "sec", type: "time",
@@ -809,7 +809,7 @@
         "Smaller range of movement.",
         "Gentle rocking instead of the full stretch."
       ],
-      gallery: []
+      gallery: ["ex/catcow-1.jpg", "ex/catcow-2.jpg", "ex/catcow-3.jpg", "ex/catcow-4.jpg"]
     },
     {
       id: "hipflexorstretch", name: "Hip Flexor Stretch", unit: "sec", type: "time",
@@ -841,7 +841,7 @@
         "Lying quad stretch instead.",
         "Shorter holds with more repetitions."
       ],
-      gallery: []
+      gallery: ["ex/hipflexorstretch-1.jpg", "ex/hipflexorstretch-2.jpg"]
     }
   ];
 
