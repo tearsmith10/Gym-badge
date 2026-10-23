@@ -71,7 +71,7 @@
       "</div>" +
       '<header class="nav" id="nav"><div class="wrap nav-in">' +
         '<a class="brand" href="/">' +
-          '<img class="mark" src="/assets/img/logo.png?v=20" alt="Gym Badge logo"><span>Gym&nbsp;Badge</span>' +
+          '<img class="mark" src="/assets/img/logo.png?v=21" alt="Gym Badge logo"><span>Gym&nbsp;Badge</span>' +
         "</a>" +
         '<nav class="nav-links" aria-label="Primary">' + links + "</nav>" +
         '<div class="nav-tools">' +
@@ -97,7 +97,7 @@
       '<footer class="footer"><div class="wrap">' +
         '<div class="foot-grid">' +
           '<div class="foot-brand">' +
-            '<a class="brand" href="/"><img class="mark" src="/assets/img/logo.png?v=20" alt=""><span>Gym&nbsp;Badge</span></a>' +
+            '<a class="brand" href="/"><img class="mark" src="/assets/img/logo.png?v=21" alt=""><span>Gym&nbsp;Badge</span></a>' +
             "<p>The training companion that remembers every set, taps every machine, and shows you the body you're building.</p>" +
             '<div class="foot-social" aria-label="Social links">' +
               soc("X", '<path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1.6 2h6.4l4.4 5.9L18.9 2zm-1.1 18h1.7L7.1 3.9H5.3L17.8 20z"/>') +
@@ -286,7 +286,7 @@
     }
     if (!document.querySelector('link[rel="apple-touch-icon"]')) {
       var at = document.createElement("link");
-      at.rel = "apple-touch-icon"; at.href = "/app/assets/img/icon-180.png?v=20";
+      at.rel = "apple-touch-icon"; at.href = "/app/assets/img/icon-180.png?v=21";
       document.head.appendChild(at);
     }
     var _installEvt = null;

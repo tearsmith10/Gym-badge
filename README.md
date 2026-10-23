@@ -215,21 +215,28 @@ message toast. Every screen file uses them, so a toast can never fail
 because one file forgot to bring its own copy.
 
 ### 🎨 The official logo
-The mark is the Gym Badge hexagon: a signal-coral rim burning down into
-honeybadger tawny around a dark field, with a cream **GB** monogram. The
-hexagon is the badge itself; the monogram is the name. It is drawn as vector
-(`assets/img/logo.svg` and `assets/img/mark.svg`) so it stays crisp from a
-16px favicon to a press banner.
+The mark is **The Ascent**: the Gym Badge runner in a sprinter's crouch at the
+foot of three ascending tiers, with a summit flag marking the badge at the top
+of the climb. The runner is the detailed cream silhouette from the original
+Gym Badge identity, turned to face the climb; the tiers are signal coral,
+tawny and deep bronze; the flag is coral; the field is espresso. It is one
+drawing, not a monogram, so it reads as a story: start where you are, take the
+next tier, plant the flag.
 
 - **No white plate.** The tile version sits on a rounded espresso square that
   reads on all three dark themes; the bare SVG is transparent for any surface.
   `assets/img/mark.png` is the dark horizontal lockup used for press and
   social.
+- The SVG sources (`assets/img/logo.svg` and `assets/img/mark.svg`) keep the
+  mark crisp from a 16px favicon to a press banner; the display mark carries
+  the detailed traced runner, and the tile is the same on the site, app and
+  OAuth.
 - Shipped at 512, 192 and 180 for the icons, plus a full-bleed maskable
-  variant that keeps the hexagon inside the safe zone.
-- The site header, download page, app splash, welcome screen, OAuth page,
-  favicon and PWA icons all use the same files, so the brand cannot drift
-  between surfaces.
+  variant that keeps the runner and summit flag inside the safe zone while the
+  tiers bleed to the edge.
+- The site header, download page, app splash, welcome screen, Badge ID, OAuth
+  page, favicons and PWA icons all use the same files, so the brand cannot
+  drift between surfaces.
 
 ### 🌍 Language changes (35 languages, flags first)
 `assets/i18n.js` is one dictionary shared by the app and the site.
