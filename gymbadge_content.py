@@ -163,6 +163,136 @@ def api_chat(body: dict, headers, environ=None) -> tuple[int, dict]:
                   "ticket": _new_ticket(question, lang)})
 
 
+# --------------------------------------------------------------------------
+# Food vision — "My Plate Truth" scanner
+#
+# The scanner photographs a plate (food, drinks, or both) and asks a vision
+# model to identify everything on it and explain it fully. When no vision key
+# is configured the endpoint reports that clearly and the app falls back to
+# its offline colour matcher plus the bundled food guide, so the feature is
+# never broken -- it just gets smarter when a key is added.
+# --------------------------------------------------------------------------
+
+VISION_MODEL = os.environ.get("OPENAI_VISION_MODEL", OPENAI_MODEL)
+
+# One strict schema for every food or drink in the image. The app renders
+# these blocks directly, so the keys must stay stable.
+VISION_PROMPT = """You are the Gym Badge nutrition analyst. Look at the photo and identify EVERY distinct
+food and drink item visible (a plate may hold several; drinks count too).
+
+For EACH item return one object in a JSON array called "items". Use this exact
+schema and these exact keys:
+
+{
+  "name": "common English name of this single item",
+  "aliases": ["other names it is called in other countries or regions"],
+  "confidence": 0.0-1.0,
+  "category": "short class, e.g. 'Grain dish', 'Protein', 'Fruit', 'Sugary drink'",
+  "what": "1-2 sentences: what it is, plainly",
+  "ingredients": ["usual ingredients"],
+  "nutrition": {"kcal": number, "carbs": g, "protein": g, "fat": g, "fiber": g},
+  "gives": ["what nutrients/energy it gives, 2-4 short lines"],
+  "benefits": "how it helps the body, 1-2 sentences",
+  "goalFit": "how it fits common goals (fat loss, muscle, endurance), 1-2 sentences",
+  "servings": "practical serving sizes, plain",
+  "swaps": ["easy healthier swaps"],
+  "allergens": ["allergens to watch for, or 'none common'"],
+  "culture": "cultural/regional variations, 1-2 sentences",
+  "combinations": ["good meal combinations"],
+  "verdict": "good" | "watch" | "off"
+}
+
+Rules:
+- Nutrition is a sensible ESTIMATE for one normal serving. Use numbers, not ranges.
+- If you cannot confidently identify an item, still describe what it most likely is and
+  set a low confidence. Never refuse a normal food photo.
+- No medical claims. Plain, practical, kind tone.
+- Return ONLY the JSON object {"items": [...]} with no prose and no code fences."""
+
+
+def api_food_scan(body: dict, headers, environ=None) -> tuple[int, dict]:
+    """Identify and fully explain every food/drink in an uploaded photo."""
+    image = (body.get("image") or "").strip()
+    if not image:
+        return (400, {"ok": False, "error": "Send a photo of your plate."})
+    if not image.startswith("data:image"):
+        return (400, {"ok": False, "error": "That does not look like an image."})
+    # ~4MB of base64 is a very large photo; refuse before it costs anything.
+    if len(image) > 4_500_000:
+        return (413, {"ok": False, "error": "That photo is too large. Try a smaller one."})
+
+    if rate_limited(caller_key(environ, body), limit=12, window=60):
+        return (429, {"ok": False, "error": "Scanning too quickly. Give it a moment."})
+
+    if not OPENAI_API_KEY:
+        # No vision key: the app uses its offline matcher + bundled guide.
+        return (200, {"ok": False, "offline": True, "source": "offline"})
+
+    lang = (body.get("lang") or "en")
+    goal = (body.get("goal") or "").strip()
+    prompt = VISION_PROMPT + f"\n\nAnswer in this language for the text fields: {lang}."
+    if goal:
+        prompt += f"\nThe member's main goal is: {goal}. Tailor the 'goalFit' line to it."
+
+    try:
+        payload = {
+            "model": VISION_MODEL,
+            "temperature": 0.2,
+            "max_tokens": 1600,
+            "messages": [
+                {"role": "system", "content": "You are a careful nutrition analyst. Return only valid JSON."},
+                {"role": "user", "content": [
+                    {"type": "text", "text": prompt},
+                    {"type": "image_url", "image_url": {"url": image}},
+                ]},
+            ],
+        }
+        req = urllib.request.Request(
+            f"{OPENAI_BASE}/chat/completions",
+            data=json.dumps(payload).encode("utf-8"),
+            method="POST",
+            headers={
+                "Authorization": f"Bearer {OPENAI_API_KEY}",
+                "Content-Type": "application/json",
+            },
+        )
+        with urllib.request.urlopen(req, timeout=45) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        text = (data.get("choices") or [{}])[0].get("message", {}).get("content", "")
+        items = _parse_vision_items(text)
+        if not items:
+            return (200, {"ok": False, "offline": True, "source": "offline"})
+        return (200, {"ok": True, "source": "vision", "items": items})
+    except Exception as exc:
+        print(f"[food-scan] vision failed: {exc!r}", file=os.sys.stderr)
+        return (200, {"ok": False, "offline": True, "source": "offline"})
+
+
+def _parse_vision_items(text: str) -> list[dict]:
+    """Pull the {"items": [...]} array out of a model reply, tolerantly."""
+    if not text:
+        return []
+    t = text.strip()
+    # strip ```json fences if the model added them
+    if t.startswith("```"):
+        t = re.sub(r"^```[a-zA-Z]*\s*", "", t)
+        t = re.sub(r"\s*```$", "", t)
+    start = t.find("{")
+    end = t.rfind("}")
+    if start == -1 or end == -1 or end <= start:
+        return []
+    try:
+        obj = json.loads(t[start:end + 1])
+    except Exception:
+        return []
+    items = obj.get("items") if isinstance(obj, dict) else None
+    if items is None and isinstance(obj, list):
+        items = obj
+    if not isinstance(items, list):
+        return []
+    return [i for i in items if isinstance(i, dict) and i.get("name")]
+
+
 def _new_ticket(question: str, lang: str) -> str:
     ticket = "GB-" + time.strftime("%y%m%d") + "-" + os.urandom(3).hex().upper()
     tickets = _core()._DB.get("tickets") or []

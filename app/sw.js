@@ -1,5 +1,5 @@
 /* GYM BADGE — service worker (offline first, self-updating) */
-var CACHE = "gymbadge-v22";
+var CACHE = "gymbadge-v23";
 var IMGS = [
   "/app/assets/img/avatar.jpg",
   "/app/assets/img/coach/model-male.jpg",
@@ -119,12 +119,12 @@ var ASSETS = [
   "/app/assets/js/trainers.js",
   "/app/assets/js/chat.js",
   "/app/assets/js/app.js",
-  "/app/assets/img/logo.png?v=22",
-  "/app/assets/img/icon-192.png?v=22",
-  "/app/assets/img/icon-maskable-512.png?v=22",
-  "/assets/img/logo.png?v=22",
-  "/assets/img/logo.svg?v=22",
-  "/assets/img/favicon-32.png?v=22",
+  "/app/assets/img/logo.png?v=23",
+  "/app/assets/img/icon-192.png?v=23",
+  "/app/assets/img/icon-maskable-512.png?v=23",
+  "/assets/img/logo.png?v=23",
+  "/assets/img/logo.svg?v=23",
+  "/assets/img/favicon-32.png?v=23",
   "/assets/img/bg/aurora-1.jpg",
   "/assets/img/bg/aurora-2.jpg",
   "/assets/img/bg/aurora-3.jpg"

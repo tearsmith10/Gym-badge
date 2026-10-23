@@ -892,6 +892,8 @@ def api_dispatch(method: str, path: str, body: dict, headers, environ=None) -> t
         return content.api_exercise_review(body, headers, environ)
     if method == "POST" and path == "/api/equipment":
         return content.api_equipment_update(body, headers, environ)
+    if method == "POST" and path == "/api/food-scan":
+        return content.api_food_scan(body, headers, environ)
 
     fn = ROUTE_TABLE.get(f"{method} {path}")
     if fn:

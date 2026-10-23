@@ -172,6 +172,19 @@ function analyseLogo(buf) {
   r = await api("/api/chat", { message: "What is your policy for something never written down?", lang: "en" });
   check("refuses to invent an answer", r.status === 200 && /do not have|email gymbadgesupport/i.test(r.j.answer || ""), r.j);
 
+  section("FOOD SCAN (My Plate Truth)");
+  r = await api("/api/food-scan", {});
+  check("a scan needs a photo", r.status === 400, r.j);
+  r = await api("/api/food-scan", { image: "not-an-image" });
+  check("rejects a non-image", r.status === 400, r.j);
+  r = await api("/api/food-scan", { image: "data:image/jpeg;base64,AAAA" });
+  check("scan responds 200 for a real image", r.status === 200, r.j);
+  check("without a vision key it reports offline (falls back to the local matcher)",
+        r.status === 200 && (r.j.offline === true || (r.j.ok === true && Array.isArray(r.j.items))), r.j);
+  if (r.j && r.j.ok) {
+    check("vision items carry a name", r.j.items.every(i => typeof i.name === "string" && i.name.length), r.j);
+  }
+
   section("TRAINERS, MODERATION AND EQUIPMENT");
   r = await api("/api/trainers", undefined, "GET");
   check("trainers -> 200", r.status === 200 && r.j.ok, r.j);
@@ -194,7 +207,7 @@ function analyseLogo(buf) {
   check("translate returns a mapping", r.j && r.j.translations && Object.keys(r.j.translations).length >= 1, r.j);
 
   section("THE OFFICIAL LOGO");
-  for (const [url, label] of [["/assets/img/mark.png?v=22", "mark"], ["/assets/img/logo.png?v=22", "logo"]]) {
+  for (const [url, label] of [["/assets/img/mark.png?v=23", "mark"], ["/assets/img/logo.png?v=23", "logo"]]) {
     const res = await fetch(BASE + url);
     check(label + " loads", res.status === 200);
     if (res.status !== 200) continue;
@@ -205,10 +218,10 @@ function analyseLogo(buf) {
     check(label + " carries the honeybadger tawny (" + a.tawny + " px)", a.tawny > 500);
     check(label + " carries the honeybadger cream (" + a.cream + " px)", a.cream > 200);
   }
-  const logoSvg = await get("/assets/img/logo.svg?v=22");
+  const logoSvg = await get("/assets/img/logo.svg?v=23");
   check("the vector logo loads", logoSvg.status === 200);
   check("the vector logo is the badge", /aria-label="Gym Badge"/.test(logoSvg.text));
-  const markSvg = await get("/assets/img/mark.svg?v=22");
+  const markSvg = await get("/assets/img/mark.svg?v=23");
   check("the bare mark loads", markSvg.status === 200);
   const siteCss = (await get("/web/assets/css/site.css")).text;
   check("secure note icons stay icon sized", /\.secure-note svg\{width:20px/.test(siteCss));

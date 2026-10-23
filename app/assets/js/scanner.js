@@ -86,14 +86,14 @@
     });
   }
 
-  /* Optional server vision, used only to improve the first suggestion. */
-  function serverGuess(dataUrl) {
+  /* Server vision: identify every food and drink in the photo and explain it
+     fully. Returns { ok, source, items } or null when offline / it failed. */
+  function serverScan(dataUrl, goal, lang) {
     return fetch("/api/food-scan", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ image: dataUrl })
+      body: JSON.stringify({ image: dataUrl, goal: goal || "", lang: lang || "en" })
     }).then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (j) { return (j && j.ok && j.name) ? j.name : null; })
       .catch(function () { return null; });
   }
 
@@ -170,19 +170,57 @@
         var sig;
         try { sig = signature(img); } catch (e) { sig = null; }
         var local = sig ? rank(sig) : Promise.resolve([]);
-        Promise.all([local, serverGuess(dataUrl)]).then(function (res) {
+        var goal = "", lang = "en";
+        try {
+          var me = S.user ? S.user() : null;
+          goal = (me && (me.goal || me.mainGoal)) ? (me.goal || me.mainGoal) : (S.goalArch ? S.goalArch() : "");
+          lang = S.lang ? S.lang() : (document.documentElement.lang || "en");
+        } catch (e) {}
+        Promise.all([local, serverScan(dataUrl, goal, lang)]).then(function (res) {
           var ranked = res[0];
-          var serverName = res[1];
+          var scan = res[1];
+          // Vision succeeded: show the full analysis straight away.
+          if (scan && scan.ok && scan.items && scan.items.length) {
+            showVisionItems(dataUrl, scan.items);
+            return;
+          }
+          // Offline: fall back to the local colour-match shortlist.
           var names = ranked.map(function (r) { return r.name; });
-          if (serverName && names.indexOf(serverName) === -1) names.unshift(serverName);
-          if (!names.length) names = Object.keys(D.foods);
+          if (!names.length) names = Object.keys(D.foods).filter(function (n) { return D.foods[n].photo; });
           showShortlist(dataUrl, names.slice(0, 6));
         });
       };
       img.onerror = function () {
-        showShortlist(dataUrl, Object.keys(D.foods).slice(0, 6));
+        showShortlist(dataUrl, Object.keys(D.foods).filter(function (n) { return D.foods[n].photo; }).slice(0, 6));
       };
       img.src = dataUrl;
+    }
+
+    /* The vision model identified the plate: list every item it found, and a
+       tap opens the complete guide for that item. */
+    function showVisionItems(dataUrl, items) {
+      stage.innerHTML = "";
+      stage.appendChild(h('<div class="scan-shot"><img alt="Your meal" src="' + dataUrl + '"></div>'));
+      var lead = h('<p class="scan-status">We found ' + items.length +
+        (items.length === 1 ? " item on your plate. Tap it for the full breakdown." :
+          " items on your plate. Tap one for the full breakdown.") + "</p>");
+      stage.appendChild(lead);
+      var grid = h('<div class="scan-picks"></div>');
+      items.forEach(function (item) {
+        var food = D.visionToFood(item);
+        var label = food.name + (food.confidence != null ? " (" + Math.round(food.confidence * 100) + "%)" : "");
+        var b = h('<button class="scan-pick"><div class="ph">' + thumbFor(food, food.name) +
+          "</div><b>" + esc(label) + "</b></button>");
+        b.onclick = function () { overlay.remove(); onPick(food.name, food); };
+        grid.appendChild(b);
+      });
+      stage.appendChild(grid);
+      var again = h('<button class="btn btn-ghost mt">Take another photo</button>');
+      again.onclick = function () { startCamera(); };
+      stage.appendChild(again);
+      var manual = h('<button class="btn btn-ghost mt">Choose from the list instead</button>');
+      manual.onclick = function () { overlay.remove(); onPick(null); };
+      stage.appendChild(manual);
     }
 
     function showShortlist(dataUrl, names) {
@@ -194,7 +232,7 @@
       names.forEach(function (name) {
         var f = D.foods[name];
         var b = h('<button class="scan-pick"><div class="ph">' +
-          img2(f.photo || "meal/jollof-rice-1.jpg", name) + "</div><b>" + esc(name) + "</b></button>");
+          thumbFor(f, name) + "</div><b>" + esc(name) + "</b></button>");
         b.onclick = function () {
           overlay.remove();
           onPick(name);
@@ -208,6 +246,12 @@
       var manual = h('<button class="btn btn-ghost mt">Choose from the list instead</button>');
       manual.onclick = function () { overlay.remove(); onPick(null); };
       stage.appendChild(manual);
+    }
+
+    function thumbFor(f, alt) {
+      if (f && f.photo) return img2(f.photo, alt);
+      var emo = (f && f.emoji) || "🍽️";
+      return '<span class="food-emoji" aria-hidden="true">' + emo + "</span>";
     }
 
     function img2(src, alt) {

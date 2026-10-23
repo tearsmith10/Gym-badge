@@ -22,6 +22,14 @@
   var toast = window.GBUI.toast;
   function img(src, alt, cls) { return '<img class="' + (cls || "") + '" src="' + IMG + src + '" alt="' + esc(alt || "") + '" decoding="async">'; }
 
+  /* A food's thumbnail: the photo when we have one, otherwise its emoji on a
+     soft tile, so every food in the guide still shows something recognisable. */
+  function foodThumb(f, name) {
+    if (f && f.photo) return img(f.photo, name);
+    var emo = (f && f.emoji) || "🍽️";
+    return '<span class="food-emoji" aria-hidden="true">' + emo + "</span>";
+  }
+
   /* ---------------- router ---------------- */
   var routes = {};
   function route(name, fn) { routes[name] = fn; }
@@ -251,7 +259,7 @@
   route("welcome", function () {
     var s = h('<div class="screen"><div class="welcome"></div></div>');
     var w = s.firstChild;
-    w.appendChild(h('<img class="logo" src="/assets/img/logo.png?v=22" alt="Gym Badge">'));
+    w.appendChild(h('<img class="logo" src="/assets/img/logo.png?v=23" alt="Gym Badge">'));
     w.appendChild(h('<div class="brandbig">Gymbadge</div><p class="tagline">Train · Track · Triumph</p>'));
     w.appendChild(h('<div class="hero-photos" style="margin-top:26px">' +
       '<div class="ph">' + img(modelImage("welcome"), modelAlt()) + "</div>" +
@@ -635,7 +643,7 @@
     tools.appendChild(tool("/assets/img/people/member-lift.jpg", "Body Goals", "Meet the body you're building", "future"));
     tools.appendChild(tool("/assets/img/people/gym-floor.jpg", "Find a Gym", "Find a gym and book a slot", "find"));
     tools.appendChild(tool("coach/coach-ada-okafor.jpg", "My Trainer", "Coaches you can trust", "trainers"));
-    tools.appendChild(tool("/app/assets/img/logo.png?v=22", "Your Badge ID", "Profile, streak and settings", "profile"));
+    tools.appendChild(tool("/app/assets/img/logo.png?v=23", "Your Badge ID", "Profile, streak and settings", "profile"));
     node.appendChild(tools);
 
     shell("library", "Workout Programs", node);
@@ -656,7 +664,7 @@
     var scanBtn = h('<button class="btn btn-primary btn-lg">Scan my meal</button>');
     scanBtn.onclick = function () {
       if (window.GBScanner) {
-        window.GBScanner.open(function (name) { if (name) openFood(name); else render(); });
+        window.GBScanner.open(function (name, food) { if (name) openFood(name, food); else render(); });
       } else {
         toast("The scanner is unavailable, pick a food from the list");
       }
@@ -665,7 +673,7 @@
     var photoBtn = h('<button class="btn btn-ghost mt">📁 Use a photo from my device</button>');
     photoBtn.onclick = function () {
       if (window.GBScanner) {
-        window.GBScanner.open(function (name) { if (name) openFood(name); else render(); });
+        window.GBScanner.open(function (name, food) { if (name) openFood(name, food); else render(); });
       } else {
         toast("The scanner is unavailable, pick a food from the list");
       }
@@ -685,7 +693,7 @@
       recent.forEach(function (f) {
         var rf = D.foods[f.name] || {};
         var c = h('<button class="food-tile"><div class="ph">' +
-          img(rf.photo || "meal/jollof-rice-1.jpg", f.name) + "</div><b>" + esc(f.name) + "</b></button>");
+          foodThumb(rf, f.name) + "</div><b>" + esc(f.name) + "</b></button>");
         c.onclick = function () { openFood(f.name); };
         recentRow.appendChild(c);
       });
@@ -721,21 +729,30 @@
       list.innerHTML = "";
       var names = Object.keys(D.foods).filter(function (n) {
         if (onlyFav && !S.isFavourite("foods", n)) return false;
-        return !q || n.toLowerCase().indexOf(q.toLowerCase()) > -1;
+        if (!q) return true;
+        var needle = q.toLowerCase();
+        if (n.toLowerCase().indexOf(needle) > -1) return true;
+        // Match the international / regional names too, so searching
+        // "fufu", "doner" or "french fries" finds the right food.
+        var al = D.foods[n].aliases || [];
+        for (var a = 0; a < al.length; a++) {
+          if (al[a].toLowerCase().indexOf(needle) > -1) return true;
+        }
+        return false;
       });
       // A photograph of each food, so you can see what you are tapping.
       names.forEach(function (name) {
         var f = D.foods[name];
         var c = h('<button class="food-tile"><div class="ph">' +
-          img(f.photo || "meal/jollof-rice-1.jpg", name) + "</div><b>" + esc(name) + "</b></button>");
+          foodThumb(f, name) + "</div><b>" + esc(name) + "</b></button>");
         c.onclick = function () { openFood(name); };
         grid.appendChild(c);
       });
       names.forEach(function (name) {
         var f = D.foods[name];
         var fav = S.isFavourite("foods", name);
-        var r = h('<div class="row"><div class="ri"><span class="thumb"><img alt="" src="/app/assets/img/' +
-          esc(f.photo || "meal/jollof-rice-1.jpg") + '" decoding="async"></span></div>' +
+        var r = h('<div class="row"><div class="ri"><span class="thumb">' +
+          foodThumb(f, name) + "</span></div>" +
           '<button class="rm row-main" type="button"><b>' + esc(name) +
           "</b><small>" + esc(f.portion || "") + " · " + f.kcal + " kcal</small></button>" +
           '<button class="fav-btn' + (fav ? " on" : "") + '" type="button" aria-label="' +
@@ -796,9 +813,10 @@
     shell("library", "My Plate Truth", node, { back: true, backTo: "library" });
 
     /* ---------------- one food, explained ---------------- */
-    function openFood(name) {
-      var f = D.foods[name];
+    function openFood(name, foodOverride) {
+      var f = foodOverride || D.foods[name];
       if (!f) return;
+      name = (foodOverride && foodOverride.name) || name;
       var sheet = h('<div class="sheet-bg"><div class="sheet"></div></div>');
       var panel = sheet.firstChild;
 
@@ -861,6 +879,7 @@
       }
 
       block("What it is", f.what);
+      listBlock("Also called in other countries", f.aliases);
       listBlock("Usual ingredients", f.ingredients);
       block("Portion size", f.portion);
       listBlock("What it gives you", f.contributions);
@@ -1213,7 +1232,7 @@
 
     // Digital Badge ID
     var code = badgeCode(u.username || u.name || "athlete");
-    node.appendChild(h('<div class="card center mt"><div class="badge-mark"><img src="/assets/img/logo.png?v=22" alt="Gym Badge"></div><h3 style="font-size:1.1rem">Your Badge ID</h3><div class="sub">Scan at any GymBadge partner gym</div><div class="qr">' + qrSvg(code) + '</div><div style="margin-top:10px"><span class="mono-code">' + esc(code) + '</span></div><button class="btn btn-ghost btn-sm" id="copyBadge" style="margin-top:12px">Copy code</button></div>'));
+    node.appendChild(h('<div class="card center mt"><div class="badge-mark"><img src="/assets/img/logo.png?v=23" alt="Gym Badge"></div><h3 style="font-size:1.1rem">Your Badge ID</h3><div class="sub">Scan at any GymBadge partner gym</div><div class="qr">' + qrSvg(code) + '</div><div style="margin-top:10px"><span class="mono-code">' + esc(code) + '</span></div><button class="btn btn-ghost btn-sm" id="copyBadge" style="margin-top:12px">Copy code</button></div>'));
 
     node.appendChild(h('<div class="list mt">' +
       '<div class="row"><div class="ri">🎯</div><div class="rm"><b>Goal</b><small>' + esc(u.goal || "Not set") + '</small></div></div>' +

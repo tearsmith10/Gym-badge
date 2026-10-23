@@ -955,6 +955,8 @@
       kcal: 380, carbs: 58, protein: 9, fat: 12, fiber: 3, verdict: "watch",
       photos: ["meal/jollof-rice-1.jpg", "meal/jollof-rice-2.jpg", "meal/jollof-rice-3.jpg", "meal/jollof-rice-4.jpg"],
       photo: "meal/jollof-rice-1.jpg",
+      aliases: ["Jollof", "Party jollof", "Benachin", "Riz au gras", "Thieboudienne rice"],
+      portion: "One bowl (about 250g)",
       ingredients: ["Rice", "Tomatoes", "Onions", "Cooking oil", "Seasoning", "Sometimes peppers"],
       what: "Jollof rice is rice cooked down in a seasoned tomato sauce until the grains are soft and coated in flavour.",
       contributions: [
@@ -975,6 +977,8 @@
       kcal: 165, carbs: 0, protein: 31, fat: 3.6, fiber: 0, verdict: "good",
       photos: ["meal/grilled-chicken-1.jpg", "meal/grilled-chicken-2.jpg"],
       photo: "meal/grilled-chicken-1.jpg",
+      aliases: ["Chicken breast", "Grilled chicken breast", "Roast chicken", "Chicken fillet"],
+      portion: "One breast (about 150g)",
       ingredients: ["Chicken breast", "Olive oil", "Salt", "Pepper", "Lemon or herbs"],
       what: "Chicken breast grilled over heat with a little oil and seasoning, and nothing else added.",
       contributions: [
@@ -995,6 +999,8 @@
       kcal: 240, carbs: 40, protein: 13, fat: 1, fiber: 12, verdict: "good",
       photos: ["meal/beans-1.jpg", "meal/beans-2.jpg"],
       photo: "meal/beans-1.jpg",
+      aliases: ["Cooked beans", "Baked beans", "Black beans", "Pinto beans", "Kidney beans", "Ewa agoyin"],
+      portion: "One cup cooked (about 170g)",
       ingredients: ["Beans", "Water or stock", "Onions", "Tomatoes", "Spices"],
       what: "Beans are seeds from plants, cooked slowly until they are soft and creamy.",
       contributions: [
@@ -1015,6 +1021,8 @@
       kcal: 105, carbs: 27, protein: 1.3, fat: 0.4, fiber: 3, verdict: "good",
       photos: ["meal/banana-1.jpg", "meal/banana-2.jpg", "meal/banana-3.jpg"],
       photo: "meal/banana-1.jpg",
+      aliases: ["Bananas", "Dessert banana", "Table banana"],
+      portion: "One medium banana",
       ingredients: ["Banana"],
       what: "A banana is the fruit of a banana plant, and it is picked green and ripens after it is picked.",
       contributions: [
@@ -1035,6 +1043,8 @@
       kcal: 285, carbs: 36, protein: 12, fat: 10, fiber: 2.5, verdict: "off",
       photos: ["meal/pizza-1.jpg", "meal/pizza-2.jpg", "meal/pizza-3.jpg"],
       photo: "meal/pizza-1.jpg",
+      aliases: ["Pizza slice", "Flatbread pizza", "Neapolitan pizza", "Italian pizza"],
+      portion: "Two slices",
       ingredients: ["Flour base", "Tomato sauce", "Cheese", "Toppings", "Oil"],
       what: "Pizza is a flat bread base with tomato sauce, cheese and other toppings baked together.",
       contributions: [
@@ -1055,6 +1065,8 @@
       kcal: 550, carbs: 42, protein: 26, fat: 29, fiber: 3, verdict: "off",
       photos: ["meal/burger-1.jpg", "meal/burger-2.jpg", "meal/burger-3.jpg"],
       photo: "meal/burger-1.jpg",
+      aliases: ["Hamburger", "Beef burger", "Cheeseburger", "Burger and bun"],
+      portion: "One burger",
       ingredients: ["Bread bun", "Beef patty", "Cheese", "Sauce", "Lettuce and tomato"],
       what: "A burger is a patty of ground meat in a bun, usually with cheese, sauce and salad.",
       contributions: [
@@ -1075,6 +1087,8 @@
       kcal: 120, carbs: 10, protein: 3, fat: 7, fiber: 4, verdict: "good",
       photos: ["meal/salad-1.jpg", "meal/salad-2.jpg", "meal/salad-3.jpg"],
       photo: "meal/salad-1.jpg",
+      aliases: ["Green salad", "Garden salad", "Side salad", "Mixed salad", "Vegetable salad"],
+      portion: "One large bowl",
       ingredients: ["Leafy greens", "Tomatoes", "Cucumber", "Onion", "Olive oil and vinegar"],
       what: "A salad is a mix of raw vegetables, usually with a simple dressing of oil and vinegar.",
       contributions: [
@@ -1095,6 +1109,8 @@
       kcal: 290, carbs: 5, protein: 28, fat: 18, fiber: 1, verdict: "watch",
       photos: ["meal/suya-1.jpg", "meal/suya-2.jpg", "meal/suya-3.jpg"],
       photo: "meal/suya-1.jpg",
+      aliases: ["Suya", "Tsire", "Kilishi", "Yaji beef", "Beef skewers", "Meat sticks"],
+      portion: "Three to five skewers",
       ingredients: ["Beef", "Groundnut", "Chilli pepper", "Ginger", "Spices"],
       what: "Suya is spiced, seasoned skewered beef, usually coated with groundnut and chilli and cooked over charcoal.",
       contributions: [
@@ -1115,6 +1131,8 @@
       kcal: 320, carbs: 70, protein: 3, fat: 1, fiber: 2, verdict: "watch",
       photos: ["meal/swallow-1.jpg", "meal/swallow-2.jpg"],
       photo: "meal/swallow-1.jpg",
+      aliases: ["Fufu", "Eba", "Amala", "Pounded yam", "Semo", "Wheat swallow", "Banku"],
+      portion: "One piece",
       ingredients: ["Cassava flour", "Water", "Coconut"],
       what: "Swallow is a smooth, stretchy dough made from cassava flour and water, eaten with a soup or stew.",
       contributions: [
@@ -1135,6 +1153,8 @@
       kcal: 78, carbs: 0.6, protein: 6, fat: 5, fiber: 0, verdict: "good",
       photos: ["meal/egg-1.jpg", "meal/egg-2.jpg", "meal/egg-3.jpg"],
       photo: "meal/egg-1.jpg",
+      aliases: ["Boiled egg", "Fried egg", "Scrambled egg", "Eggs", "Omelette"],
+      portion: "One to three eggs",
       ingredients: ["Egg"],
       what: "An egg is a simple, complete food. It has protein, fat and a little carbohydrate, plus a wide range of vitamins and minerals.",
       contributions: [
@@ -1155,6 +1175,8 @@
       kcal: 150, carbs: 27, protein: 5, fat: 3, fiber: 4, verdict: "good",
       photos: ["meal/oatmeal-1.jpg", "meal/oatmeal-2.jpg", "meal/oatmeal-3.jpg"],
       photo: "meal/oatmeal-1.jpg",
+      aliases: ["Oats", "Porridge", "Oat porridge", "Oat porridge", "Britten", "Pap"],
+      portion: "One cup cooked",
       ingredients: ["Oats", "Water or milk", "Optional fruit, nuts and cinnamon"],
       what: "Oatmeal is rolled oats cooked in water or milk until they thicken into a warm porridge.",
       contributions: [
@@ -1170,6 +1192,706 @@
       culture: "Oats have been eaten in Scotland and the north of England for centuries, and are now a breakfast staple worldwide.",
       combinations: ["Oats with milk, banana and cinnamon", "Overnight oats with yoghurt and berries", "Oats with a boiled egg on the side"],
       simple: "Oats are slow energy that keeps you full. Make it with milk and add fruit and you have a genuinely balanced breakfast."
+    },
+    "white rice": {
+      kcal: 205, carbs: 45, protein: 4, fat: 0.4, fiber: 0.6, verdict: "watch", emoji: "🍚",
+      aliases: ["Rice", "Steamed rice", "Boiled rice", "White rice grains"],
+      portion: "One cup cooked (about 158g)",
+      ingredients: ["White rice", "Water", "Salt"],
+      what: "White rice is rice with the husk, bran and germ removed, then cooked until soft.",
+      contributions: [
+        "Carbohydrate, your body's main and quickest source of training energy.",
+        "Very little protein or fat, so it needs a protein beside it.",
+        "Almost no fibre, because the bran layer is what gets removed."
+      ],
+      benefits: "Easy to digest, cheap, and a dependable energy base for almost any meal, especially around training.",
+      goals: "Good fuel before or after a session. If you are losing weight, keep the portion to a fist size and load the plate with protein and vegetables.",
+      servings: "One cup cooked is a normal portion. Half a cup if it is a side dish.",
+      swaps: ["Brown rice for more fibre", "Cauliflower rice for far fewer calories", "Add beans, chicken or egg for protein"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Rice is the staple for more than half the world, from Japanese steamed rice to Nigerian party rice and Indian basmati.",
+      combinations: ["Rice and beans", "Rice with chicken and vegetables", "Rice with fish and a side salad"],
+      simple: "White rice is clean energy. Add a protein and something green and the plate is balanced."
+    },
+    "fried rice": {
+      kcal: 340, carbs: 42, protein: 10, fat: 14, fiber: 2, verdict: "watch", emoji: "🍛",
+      aliases: ["Stir fried rice", "Chinese fried rice", "Party fried rice"],
+      portion: "One plate (about 250g)",
+      ingredients: ["Rice", "Oil", "Egg", "Vegetables", "Soy sauce", "Sometimes meat"],
+      what: "Fried rice is cooked rice stir fried in oil with egg, vegetables and often meat or shrimp.",
+      contributions: [
+        "Carbohydrate from the rice for energy.",
+        "Protein from the egg and any meat mixed through it.",
+        "Fat from the oil it is fried in, which is where many of the calories sit."
+      ],
+      benefits: "A full meal in one pan, and a good way to use up leftover rice and vegetables.",
+      goals: "Fine in a moderate portion. Ask for less oil if you can, and add extra egg or chicken to raise the protein.",
+      servings: "One plate is a full meal. Share a takeaway portion if it is very large.",
+      swaps: ["Brown rice for more fibre", "Extra vegetables for volume", "More egg or chicken for protein"],
+      allergens: ["Egg", "Soy", "Gluten in soy sauce", "Shellfish in some versions"],
+      culture: "Fried rice is claimed across Asia, from Chinese chǎofàn to Nigerian fried rice served at parties and celebrations.",
+      combinations: ["Fried rice with a protein side", "Fried rice with steamed vegetables", "Fried rice with a simple salad"],
+      simple: "Fried rice is energy with a bit of protein. Watch the oil, and make the portion honest."
+    },
+    "bread": {
+      kcal: 265, carbs: 49, protein: 9, fat: 3.2, fiber: 2.7, verdict: "watch", emoji: "🍞",
+      aliases: ["Loaf", "Sliced bread", "White bread", "Wholewheat bread", "Wheat bread"],
+      portion: "Two slices",
+      ingredients: ["Flour", "Water", "Yeast", "Salt", "Sometimes sugar and oil"],
+      what: "Bread is a baked food made from a dough of flour and water, risen with yeast.",
+      contributions: [
+        "Carbohydrate, which is your main energy.",
+        "A little protein from the wheat.",
+        "Some fibre, more in wholemeal than in white."
+      ],
+      benefits: "Cheap, filling and easy to pair with protein. Wholegrain versions keep you full for longer.",
+      goals: "Useful quick energy. Choose wholegrain for more fibre, and pair with egg, fish or beans to make it a meal.",
+      servings: "Two slices is a normal portion. One slice if it is a side.",
+      swaps: ["Wholegrain or brown bread for more fibre", "Egg or avocado on top for protein and healthy fat", "A thinner slice to cut the carbs"],
+      allergens: ["Gluten", "Wheat", "Sometimes sesame or soy in seeded loaves"],
+      culture: "Bread is a staple on every continent, from Nigerian Agege bread to French baguette, Indian naan and American sandwich bread.",
+      combinations: ["Bread with egg and avocado", "Bread with beans", "Bread with tuna and salad"],
+      simple: "Bread is quick energy. Make it wholegrain and put something protein on top."
+    },
+    "indomie": {
+      kcal: 380, carbs: 52, protein: 8, fat: 14, fiber: 2, verdict: "off", emoji: "🍜",
+      aliases: ["Instant noodles", "Noodles", "Indomie noodles", "Cup noodles", "Ramen"],
+      portion: "One packet",
+      ingredients: ["Wheat noodles", "Palm oil", "Salt", "Seasoning", "Sometimes chilli"],
+      what: "Indomie and other instant noodles are pre cooked, dried wheat noodles with a packet of oil and seasoning.",
+      contributions: [
+        "Carbohydrate from the wheat, which is the bulk of it.",
+        "A little protein, though far less than a real protein source.",
+        "A lot of salt and a fair amount of oil, and very little else."
+      ],
+      benefits: "Fast, cheap and filling. It is comfort food rather than fuel, and it works as an occasional meal.",
+      goals: "Not ideal for fat loss or muscle building on its own. Add an egg or some chicken and vegetables to make it worth eating.",
+      servings: "One packet is a portion. Half a packet with added protein is the smarter move.",
+      swaps: ["Add a boiled or fried egg for protein", "Throw in vegetables", "Try a wholegrain or lower salt noodle"],
+      allergens: ["Gluten", "Wheat", "Soy", "Sometimes egg in the noodles"],
+      culture: "Instant noodles are a global convenience food, eaten plainly in Nigeria, as ramen in Japan and with spice in Korea.",
+      combinations: ["Noodles with a boiled egg", "Noodles with chicken and vegetables", "Noodles with a side salad"],
+      simple: "Instant noodles are mostly salt and carbs. Add an egg and some vegetables and it becomes a real meal."
+    },
+    "spaghetti": {
+      kcal: 220, carbs: 43, protein: 8, fat: 1.3, fiber: 2.5, verdict: "watch", emoji: "🍝",
+      aliases: ["Pasta", "Noodles", "Macaroni", "Spaghetti bolognese", "Pasta noodles"],
+      portion: "One cup cooked (about 140g)",
+      ingredients: ["Durum wheat pasta", "Water", "Salt"],
+      what: "Spaghetti is a long, thin pasta made from durum wheat and water, boiled until soft.",
+      contributions: [
+        "Carbohydrate, which is steady, useful energy.",
+        "A modest amount of protein from the wheat.",
+        "A little fibre, more in wholewheat pasta."
+      ],
+      benefits: "A reliable energy base that pairs with any sauce, and a good pre-training carbohydrate.",
+      goals: "Great before a hard session. Keep the portion to a cup and load the sauce with vegetables and lean meat.",
+      servings: "One cup cooked is a normal portion. It doubles when cooked, so measure it dry.",
+      swaps: ["Wholewheat pasta for more fibre", "Add lean mince, chicken or tuna", "Use a tomato base rather than a creamy one"],
+      allergens: ["Gluten", "Wheat", "Check fresh pasta for egg"],
+      culture: "Pasta is Italian at heart and now eaten everywhere, from spaghetti bolognese to Nigerian spaghetti jollof.",
+      combinations: ["Pasta with a tomato and meat sauce", "Pasta with tuna and vegetables", "Pasta with a green salad"],
+      simple: "Pasta is steady energy. Keep the portion honest and make the sauce do the nutritional work."
+    },
+    "plantain": {
+      kcal: 122, carbs: 31, protein: 1.3, fat: 0.3, fiber: 2.3, verdict: "good", emoji: "🍌",
+      aliases: ["Fried plantain", "Boiled plantain", "Dodo", "Cooking banana", "Alocado"],
+      portion: "One medium piece",
+      ingredients: ["Plantain", "Sometimes oil for frying"],
+      what: "Plantain is a starchy relative of the banana, eaten cooked rather than raw.",
+      contributions: [
+        "Carbohydrate, which is your main energy.",
+        "Potassium, which supports normal muscle function.",
+        "A little fibre, especially when it is less ripe."
+      ],
+      benefits: "Filling, energising and easy to cook in many ways. Boiling keeps the calories far lower than frying.",
+      goals: "Good energy around training. Boil rather than fry if you are managing your weight.",
+      servings: "One medium plantain is a normal portion. A few fried slices is a side.",
+      swaps: ["Boil or grill instead of frying", "Pair with beans or egg for protein", "Use a ripe one for natural sweetness instead of sugar"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Plantain is a staple across West Africa, the Caribbean and Latin America, from fried dodo to boiled plantain and tostones.",
+      combinations: ["Plantain and beans", "Boiled plantain with a vegetable soup", "Plantain with egg"],
+      simple: "Plantain is warm, useful energy. Boil it, and add a protein to complete the plate."
+    },
+    "yam": {
+      kcal: 118, carbs: 28, protein: 1.5, fat: 0.1, fiber: 3.9, verdict: "good", emoji: "🍠",
+      aliases: ["Boiled yam", "Fried yam", "Pounded yam", "Yam porridge", "Dioscorea"],
+      portion: "One cup cubed",
+      ingredients: ["Yam", "Water", "Sometimes oil"],
+      what: "Yam is a starchy tuber with dry, white flesh, cooked by boiling, frying or pounding.",
+      contributions: [
+        "Carbohydrate for steady energy.",
+        "Fibre, more than most white staples, which helps with fullness.",
+        "Vitamin C and potassium in useful amounts."
+      ],
+      benefits: "A wholesome, filling staple that gives slow energy and pairs well with soups and stews.",
+      goals: "A good everyday carbohydrate. Keep the portion to a cup and pair it with a protein-rich soup.",
+      servings: "One cup cubed is a normal portion.",
+      swaps: ["Boil instead of fry", "Pair with a bean or fish soup", "Try yam and vegetables for a lighter plate"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Yam is central to West African food, celebrated at yam festivals and eaten as pounded yam, porridge and fried yam.",
+      combinations: ["Yam with egg sauce", "Yam with a vegetable soup", "Yam and beans"],
+      simple: "Yam is slow, honest energy with real fibre. Pair it with a soup that has protein."
+    },
+    "potato": {
+      kcal: 161, carbs: 37, protein: 4.3, fat: 0.2, fiber: 3.8, verdict: "good", emoji: "🥔",
+      aliases: ["Boiled potato", "Baked potato", "Jacket potato", "Sweet potato", "Mashed potato"],
+      portion: "One medium potato",
+      ingredients: ["Potato", "Sometimes butter or oil"],
+      what: "The potato is a starchy tuber, boiled, baked, mashed or fried, and one of the most eaten foods on earth.",
+      contributions: [
+        "Carbohydrate for energy.",
+        "More potassium than a banana, which helps muscles work normally.",
+        "Fibre, especially in the skin, which helps you feel full."
+      ],
+      benefits: "Filling, versatile and genuinely satisfying. A plain boiled or baked potato is one of the most fullness-per-calorie foods there is.",
+      goals: "Excellent around training. Keep the skin on and go easy on the butter if you are losing weight.",
+      servings: "One medium potato is a normal portion.",
+      swaps: ["Bake or boil instead of frying", "Keep the skin on for more fibre", "Use yoghurt instead of butter for a lighter mash"],
+      allergens: ["Gluten free", "Dairy free unless mashed with milk", "No common allergens"],
+      culture: "Potatoes feed the world, from Irish champ to Nigerian fried potato and South American papas.",
+      combinations: ["Potato with grilled fish or chicken", "Baked potato with beans", "Potato with a vegetable salad"],
+      simple: "Potato is filling energy that keeps you satisfied. Keep it simple and keep the skin on."
+    },
+    "salmon": {
+      kcal: 208, carbs: 0, protein: 20, fat: 13, fiber: 0, verdict: "good", emoji: "🐟",
+      aliases: ["Grilled salmon", "Smoked salmon", "Baked salmon", "Fish fillet"],
+      portion: "One fillet (about 120g)",
+      ingredients: ["Salmon", "Lemon", "Herbs", "A little oil"],
+      what: "Salmon is an oily fish, grilled, baked or smoked, known for its rich flavour and pink flesh.",
+      contributions: [
+        "High quality protein to repair and build muscle.",
+        "Omega-3 fats, which are good for the heart, the brain and recovery.",
+        "Vitamin D and B12, which many people fall short on."
+      ],
+      benefits: "One of the best proteins you can eat. The omega-3s also help with the inflammation that training causes.",
+      goals: "Excellent for muscle building and general health, and a smart fatty fish to eat twice a week.",
+      servings: "One fillet is a normal portion.",
+      swaps: ["Canned salmon for a cheaper option", "Mackerel or sardines for similar omega-3", "Add a potato or rice for energy"],
+      allergens: ["Fish", "Dairy free", "Gluten free"],
+      culture: "Salmon is eaten from Japanese sashimi to Scottish smoked salmon and grilled fillets across the West.",
+      combinations: ["Salmon with rice and vegetables", "Salmon with a potato and salad", "Salmon in a wrap with greens"],
+      simple: "Salmon is top tier protein with healthy fats. It repairs muscle and looks after your heart."
+    },
+    "tuna": {
+      kcal: 130, carbs: 0, protein: 28, fat: 1, fiber: 0, verdict: "good", emoji: "🐟",
+      aliases: ["Canned tuna", "Tinned tuna", "Tuna fish", "Raw tuna", "Tataki"],
+      portion: "One can drained (about 120g)",
+      ingredients: ["Tuna", "Sometimes water or oil", "Salt"],
+      what: "Tuna is a lean, firm fish, eaten fresh or canned in water or oil.",
+      contributions: [
+        "A lot of lean protein, which makes it one of the most efficient protein foods.",
+        "Very little fat if it is packed in water.",
+        "Selenium and vitamin B12."
+      ],
+      benefits: "Cheap, long lasting and almost pure protein. It is the easiest way to raise the protein on any plate.",
+      goals: "Brilliant for muscle building and fat loss, because it is very high in protein for very few calories.",
+      servings: "One can drained is a normal portion.",
+      swaps: ["Choose tuna in water over oil to cut calories", "Add it to a salad or a sandwich", "Mix with yoghurt instead of mayonnaise"],
+      allergens: ["Fish", "Gluten free", "Dairy free"],
+      culture: "Tuna is eaten worldwide, from Japanese sushi to Nigerian tuna sauce and Mediterranean salads.",
+      combinations: ["Tuna and salad", "Tuna in a sandwich with vegetables", "Tuna with rice and beans"],
+      simple: "Tuna is lean, cheap protein. It is the fastest way to make any plate more filling."
+    },
+    "goat meat": {
+      kcal: 143, carbs: 0, protein: 27, fat: 3, fiber: 0, verdict: "good", emoji: "🍖",
+      aliases: ["Goat", "Mutton", "Bush meat", "Asun", "Roasted goat"],
+      portion: "One serving (about 120g)",
+      ingredients: ["Goat meat", "Spices", "Sometimes onions"],
+      what: "Goat meat is the meat of a goat, roasted, grilled or cooked down in a stew.",
+      contributions: [
+        "High quality protein to build and repair muscle.",
+        "Iron and zinc, which support energy and the immune system.",
+        "Less fat than many other red meats."
+      ],
+      benefits: "A strong, lean red meat that is lower in fat than beef and rich in iron.",
+      goals: "Good for muscle building. Choose grilled or stewed over fried, and keep the portion sensible.",
+      servings: "One palm-sized serving is a normal portion.",
+      swaps: ["Grill instead of frying", "Chicken breast for an even leaner option", "Add vegetables to the stew"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Goat meat is prized across West Africa, the Caribbean and the Middle East, from asun to curry goat and mutton stew.",
+      combinations: ["Goat with rice and salad", "Goat in a vegetable soup", "Goat with yam or plantain"],
+      simple: "Goat is lean, iron-rich red meat. It builds muscle without the extra fat of beef."
+    },
+    "turkey": {
+      kcal: 135, carbs: 0, protein: 30, fat: 1, fiber: 0, verdict: "good", emoji: "🦃",
+      aliases: ["Turkey breast", "Ground turkey", "Minced turkey", "Roast turkey"],
+      portion: "One serving (about 120g)",
+      ingredients: ["Turkey", "Herbs", "A little oil"],
+      what: "Turkey is a lean poultry, most often the breast, grilled, roasted or minced.",
+      contributions: [
+        "Very high quality protein, more per serving than most meats.",
+        "Very little fat, especially from the breast.",
+        "B vitamins that help turn food into energy."
+      ],
+      benefits: "One of the leanest proteins available. It is filling, versatile and easy to prepare in bulk.",
+      goals: "Ideal for both muscle building and fat loss, since the protein is high and the fat is very low.",
+      servings: "One palm-sized serving is a normal portion.",
+      swaps: ["Chicken breast as a close alternative", "Minced turkey for quick cooking", "Add a starch for energy"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Turkey is eaten worldwide, from American Thanksgiving roast to Turkish kebabs and everyday grilled breast.",
+      combinations: ["Turkey with rice and vegetables", "Turkey in a wrap with salad", "Turkey with potatoes"],
+      simple: "Turkey is lean, high protein fuel. It is one of the easiest foods to build a muscle meal around."
+    },
+    "milk": {
+      kcal: 122, carbs: 12, protein: 8, fat: 4.8, fiber: 0, verdict: "good", emoji: "🥛",
+      aliases: ["Cow milk", "Whole milk", "Semi skimmed milk", "Fresh milk", " dairy milk"],
+      portion: "One glass (about 240ml)",
+      ingredients: ["Milk"],
+      what: "Milk is the nourishing liquid produced by mammals, most often a cow, drunk plain or used in cooking.",
+      contributions: [
+        "Protein, including both casein and whey, which support muscle.",
+        "Calcium, which keeps bones and teeth strong.",
+        "Vitamin B12 and riboflavin."
+      ],
+      benefits: "A simple way to add protein and calcium. It is useful after training or as the base of a filling breakfast.",
+      goals: "Good for muscle building. Choose semi skimmed or skimmed if you are watching calories.",
+      servings: "One glass is a normal serving.",
+      swaps: ["Semi skimmed or skimmed milk to cut fat", "Unsweetened soy milk for a plant option", "Add it to oats or a smoothie"],
+      allergens: ["Dairy", "Lactose", "Gluten free"],
+      culture: "Milk is drunk plain across the world and is central to chai, horchata, and many cereal and cooking traditions.",
+      combinations: ["Milk with oats", "Milk in a fruit smoothie", "Milk with a protein shake"],
+      simple: "Milk is protein and calcium in a glass. It is an easy way to add to your daily protein."
+    },
+    "yoghurt": {
+      kcal: 100, carbs: 7, protein: 17, fat: 0.7, fiber: 0, verdict: "good", emoji: "🥣",
+      aliases: ["Yogurt", "Greek yoghurt", "Plain yoghurt", "Curd", "Dahi"],
+      portion: "One pot (about 170g)",
+      ingredients: ["Milk", "Live cultures"],
+      what: "Yoghurt is milk fermented with friendly bacteria, plain or flavoured, and Greek yoghurt is strained to be thicker and higher in protein.",
+      contributions: [
+        "A lot of protein, especially in the Greek style, which keeps you full.",
+        "Calcium for bones.",
+        "Live cultures that support gut health."
+      ],
+      benefits: "One of the best snack proteins. It is filling, good for the gut, and endlessly useful in cooking and breakfasts.",
+      goals: "Excellent for muscle building and fat loss. Choose plain, unsweetened yoghurt to avoid added sugar.",
+      servings: "One pot is a normal snack. Two is a light meal with fruit.",
+      swaps: ["Greek yoghurt for more protein", "Add fruit and a spoon of oats", "Use it in place of cream or mayonnaise"],
+      allergens: ["Dairy", "Lactose", "Gluten free"],
+      culture: "Yoghurt is eaten from plain dahi in India to Turkish ayran and strained labneh across the Middle East.",
+      combinations: ["Yoghurt with berries and honey", "Yoghurt with banana and nuts", "Yoghurt as a sauce for savoury dishes"],
+      simple: "Yoghurt is high protein and good for your gut. Keep it plain and add your own fruit."
+    },
+    "cheese": {
+      kcal: 113, carbs: 0.9, protein: 7, fat: 9, fiber: 0, verdict: "watch", emoji: "🧀",
+      aliases: ["Cheddar", "Mozzarella", "Gouda", "Processed cheese", "Cheese slice"],
+      portion: "One slice or about 30g",
+      ingredients: ["Milk", "Cultures", "Salt", "Rennet"],
+      what: "Cheese is milk pressed and aged into a solid food, in hundreds of styles from soft to hard.",
+      contributions: [
+        "Protein, which supports muscle.",
+        "Calcium and vitamin D for bones.",
+        "A lot of fat, which is where most of the calories come from."
+      ],
+      benefits: "Tasty, filling and rich in calcium. A little goes a long way because it is so energy dense.",
+      goals: "Fine in small amounts. Grate rather than slice thickly if you are watching calories, and watch it on a diet.",
+      servings: "One small slice or 30g is a portion.",
+      swaps: ["A stronger cheese so you use less", "Low fat cheese", "Use nutritional yeast for a lower calorie topping"],
+      allergens: ["Dairy", "Lactose", "Gluten free"],
+      culture: "Cheese is made and loved everywhere, from Nigerian wara to French brie, Italian mozzarella and Dutch gouda.",
+      combinations: ["Cheese in an omelette", "Cheese with wholegrain bread", "Cheese and apple as a snack"],
+      simple: "Cheese is protein and calcium, but energy dense. Enjoy a little, not a lot."
+    },
+    "orange": {
+      kcal: 62, carbs: 15, protein: 1.2, fat: 0.2, fiber: 3.1, verdict: "good", emoji: "🍊",
+      aliases: ["Sweet orange", "Navel orange", "Tangerine", "Mandarin", "Clementine"],
+      portion: "One medium orange",
+      ingredients: ["Orange"],
+      what: "An orange is a citrus fruit with a sweet, juicy segmented flesh and a thick peel.",
+      contributions: [
+        "Vitamin C, which supports the immune system and helps recovery.",
+        "Fibre, which steadies the sugar and keeps you full.",
+        "Water, so it helps with hydration."
+      ],
+      benefits: "A genuinely useful snack: hydrating, high in vitamin C and easy to carry.",
+      goals: "Great as a pre workout snack or a sweet fix that is not candy. Whole fruit beats the juice every time.",
+      servings: "One orange is a normal portion.",
+      swaps: ["Eat it whole rather than juiced for the fibre", "Pair with nuts or yoghurt", "Try other citrus for variety"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Oranges are grown across the tropics and subtropics, from Nigerian sweet oranges to Spanish Valencia oranges.",
+      combinations: ["Orange with yoghurt", "Orange as a pre workout snack", "Orange in a fruit salad"],
+      simple: "An orange is vitamin C and fibre in a handy package. Whole fruit is always better than juice."
+    },
+    "apple": {
+      kcal: 95, carbs: 25, protein: 0.5, fat: 0.3, fiber: 4.4, verdict: "good", emoji: "🍎",
+      aliases: ["Green apple", "Red apple", "Fruit apple", "Eating apple"],
+      portion: "One medium apple",
+      ingredients: ["Apple"],
+      what: "An apple is a crisp pomaceous fruit with sweet or tart flesh and a thin skin.",
+      contributions: [
+        "Fibre, including pectin, which is good for the gut and for fullness.",
+        "Vitamin C and a range of antioxidants.",
+        "Slow release sugar for a gentle lift."
+      ],
+      benefits: "Portable, crunchy and genuinely filling. It is one of the easiest snacks to reach for instead of something sweet.",
+      goals: "A great snack for fat loss because the fibre and water fill you up for very few calories.",
+      servings: "One apple is a normal portion.",
+      swaps: ["Pair with peanut butter for protein", "Eat it with the skin on for more fibre", "Try it with a handful of nuts"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Apples are grown in temperate regions worldwide, from Nigerian apple treats to American pie and British cider.",
+      combinations: ["Apple with peanut butter", "Apple in a fruit salad", "Apple with yoghurt"],
+      simple: "An apple is fibre and natural sweetness. It is the easy snack that keeps you full."
+    },
+    "mango": {
+      kcal: 99, carbs: 25, protein: 1.4, fat: 0.6, fiber: 2.6, verdict: "good", emoji: "🥭",
+      aliases: ["Sweet mango", "Chunsa mango", "Alphonso", "Mangifera", "Mango fruit"],
+      portion: "One cup sliced",
+      ingredients: ["Mango"],
+      what: "Mango is a sweet tropical stone fruit with soft, orange flesh and a large flat seed.",
+      contributions: [
+        "Vitamin C and vitamin A, both good for immunity and the skin.",
+        "Natural sugar for quick energy.",
+        "Some fibre, which slows the sugar a little."
+      ],
+      benefits: "Sweet, hydrating and rich in vitamins. A good way to satisfy a sweet tooth naturally.",
+      goals: "A nice treat and a decent pre workout snack. Because it is sugary, enjoy a cup rather than a whole fruit if you are losing weight.",
+      servings: "One cup sliced is a normal portion.",
+      swaps: ["Eat it fresh rather than in syrup", "Pair with yoghurt for protein", "Try it in a smoothie with greens"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Mango is a beloved tropical fruit, from Indian alphonso mangoes to Nigerian sweet mango and Filipino carabao mango.",
+      combinations: ["Mango with yoghurt", "Mango in a smoothie", "Mango with chilli and lime as a snack"],
+      simple: "Mango is sweet, vitamin rich energy. Enjoy a cup, and let it stand in for candy."
+    },
+    "watermelon": {
+      kcal: 30, carbs: 7.6, protein: 0.6, fat: 0.2, fiber: 0.4, verdict: "good", emoji: "🍉",
+      aliases: ["Water melon", "Melon", "Seedless watermelon", "Tangra melon"],
+      portion: "One cup cubed",
+      ingredients: ["Watermelon"],
+      what: "Watermelon is a large, watery melon with sweet red flesh and a green rind.",
+      contributions: [
+        "A lot of water, so it hydrates you well.",
+        "Lycopene, an antioxidant linked with heart health.",
+        "Some vitamin C, for very few calories."
+      ],
+      benefits: "One of the most hydrating and lowest calorie foods you can eat. Perfect after training or on a hot day.",
+      goals: "Excellent for fat loss because you can eat a large amount for almost nothing. A great natural sweet fix.",
+      servings: "One or two cups is a normal portion.",
+      swaps: ["Eat it fresh rather than as juice", "Add a pinch of salt and lime after training", "Pair with feta and mint for a savoury twist"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Watermelon is eaten across the tropics and in summer everywhere, often shared cold from the whole fruit.",
+      combinations: ["Watermelon after a workout", "Watermelon with feta and mint", "Watermelon in a fruit salad"],
+      simple: "Watermelon is water and natural sugar. It hydrates and satisfies with almost no calories."
+    },
+    "pineapple": {
+      kcal: 82, carbs: 22, protein: 0.9, fat: 0.2, fiber: 2.3, verdict: "good", emoji: "🍍",
+      aliases: ["Pine apple", "Ananas", "Sweet pineapple", "Tropical pineapple"],
+      portion: "One cup chunks",
+      ingredients: ["Pineapple"],
+      what: "Pineapple is a tropical fruit with sweet, tangy yellow flesh and a spiky skin.",
+      contributions: [
+        "Vitamin C, which supports immunity and recovery.",
+        "Bromelain, an enzyme that helps digest protein.",
+        "Natural sugar for quick energy."
+      ],
+      benefits: "Sweet, juicy and rich in vitamin C. Bromelain may also help with the soreness after hard training.",
+      goals: "A good sweet snack and a decent pre workout food. Keep to a cup if you are watching sugar.",
+      servings: "One cup chunks is a normal portion.",
+      swaps: ["Eat it fresh rather than in syrup", "Add to a savoury dish with chicken", "Pair with yoghurt for protein"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Pineapple is a tropical staple, from Nigerian pineapple chunks to Brazilian caipirinha and Hawaiian pizza debates.",
+      combinations: ["Pineapple with yoghurt", "Pineapple with grilled chicken", "Pineapple in a fruit salad"],
+      simple: "Pineapple is sweet, tangy vitamin C. It also helps your body digest protein."
+    },
+    "grapes": {
+      kcal: 62, carbs: 16, protein: 0.6, fat: 0.2, fiber: 0.9, verdict: "good", emoji: "🍇",
+      aliases: ["Table grapes", "Red grapes", "Black grapes", "Green grapes", "Sultanas", "Raisins"],
+      portion: "One cup",
+      ingredients: ["Grapes"],
+      what: "Grapes are small, juicy fruits that grow in bunches, eaten fresh, dried as raisins, or pressed into wine.",
+      contributions: [
+        "Natural sugar for a quick energy lift.",
+        "Antioxidants such as resveratrol, linked with heart health.",
+        "Some water, so they help with hydration."
+      ],
+      benefits: "A sweet, portable snack that is easy to portion and nicer on blood sugar than candy.",
+      goals: "A good sweet fix and a handy pre workout snack. Watch the dried raisins, which are far more concentrated.",
+      servings: "One cup is a normal portion.",
+      swaps: ["Fresh grapes over dried raisins", "Freeze them for an ice-candy feel", "Pair with cheese or nuts"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Grapes are grown worldwide, from Mediterranean vineyards to Nigerian market bunches, and are central to wine culture.",
+      combinations: ["Grapes with cheese", "Grapes with nuts", "Grapes in a fruit salad"],
+      simple: "Grapes are natural sugar and antioxidants. A cup is a sweet snack that is not candy."
+    },
+    "broccoli": {
+      kcal: 55, carbs: 11, protein: 3.7, fat: 0.6, fiber: 5.1, verdict: "good", emoji: "🥦",
+      aliases: ["Broccoli florets", "Green broccoli", "Calabrese", "Cruciferous vegetable"],
+      portion: "One cup chopped",
+      ingredients: ["Broccoli", "Sometimes oil and garlic"],
+      what: "Broccoli is a green cruciferous vegetable with tight florets, eaten steamed, roasted or stir fried.",
+      contributions: [
+        "Fibre, which fills you and feeds your gut.",
+        "Vitamin C and vitamin K, both in useful amounts.",
+        "Folate and antioxidants."
+      ],
+      benefits: "One of the most nutritious vegetables there is. Low in calories, high in fibre and packed with vitamins.",
+      goals: "Excellent for fat loss because it adds real volume for very few calories. Add it to any plate to make it better.",
+      servings: "One or two cups is a normal portion.",
+      swaps: ["Steam or roast instead of frying", "Add garlic and a little olive oil", "Mix with other vegetables"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Broccoli is eaten across the world, from Chinese stir fried greens to roasted florets in the West.",
+      combinations: ["Broccoli with grilled chicken", "Broccoli with rice and fish", "Broccoli in a stir fry"],
+      simple: "Broccoli is a nutrition powerhouse. Add it to anything and the meal gets better."
+    },
+    "spinach": {
+      kcal: 23, carbs: 3.6, protein: 2.9, fat: 0.4, fiber: 2.2, verdict: "good", emoji: "🥬",
+      aliases: ["Green spinach", "Leafy greens", "Palak", "Efo riro"],
+      portion: "One cup raw",
+      ingredients: ["Spinach"],
+      what: "Spinach is a soft, dark green leafy vegetable eaten raw in salads or cooked into soups and stews.",
+      contributions: [
+        "Iron, which carries oxygen in your blood and matters for energy.",
+        "Vitamin K and vitamin A.",
+        "Folate and a little plant protein."
+      ],
+      benefits: "Extremely low in calories and dense in nutrients. It is an easy way to make any meal more nutritious.",
+      goals: "Superb for fat loss. Wilt it into sauces, eggs and stews so you barely notice you are eating more greens.",
+      servings: "One or two cups raw, or a handful cooked, is a normal portion.",
+      swaps: ["Wilt it into sauces and eggs", "Add to a smoothie", "Pair with vitamin C to help absorb the iron"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Spinach is eaten worldwide, from Nigerian efo riro to Indian palak paneer and Mediterranean salads.",
+      combinations: ["Spinach in an omelette", "Spinach with beans and stew", "Spinach in a smoothie with fruit"],
+      simple: "Spinach is free nutrition. Wilt it into anything and the meal quietly gets healthier."
+    },
+    "carrot": {
+      kcal: 41, carbs: 10, protein: 0.9, fat: 0.2, fiber: 2.8, verdict: "good", emoji: "🥕",
+      aliases: ["Carrots", "Sweet carrot", "Boiled carrot", "Carrot stick"],
+      portion: "One cup chopped",
+      ingredients: ["Carrot"],
+      what: "Carrot is a sweet, crunchy root vegetable, eaten raw, boiled, roasted or juiced.",
+      contributions: [
+        "Beta-carotene, which your body turns into vitamin A for your eyes.",
+        "Fibre, which helps with fullness.",
+        "Natural sweetness with very few calories."
+      ],
+      benefits: "Sweet, crunchy and genuinely useful. A good low calorie snack that also gives your eyes what they need.",
+      goals: "Great for fat loss as a snack or a cooked side. Keep it simple and skip the butter.",
+      servings: "One or two cups is a normal portion.",
+      swaps: ["Eat raw sticks as a snack", "Roast with a little oil", "Add to soups and stews"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Carrots are eaten everywhere, from raw sticks in lunchboxes to Nigerian carrot salad and Moroccan tagine.",
+      combinations: ["Carrot sticks with hummus", "Carrot in a vegetable soup", "Carrot roasted with chicken"],
+      simple: "Carrot is sweet, crunchy and low calorie. It is a snack that also looks after your eyes."
+    },
+    "soft drink": {
+      kcal: 150, carbs: 39, protein: 0, fat: 0, fiber: 0, verdict: "off", emoji: "🥤",
+      aliases: ["Soda", "Coke", "Fizzy drink", "Pop", "Carbonated drink", "Energy drink"],
+      portion: "One can (330ml)",
+      ingredients: ["Carbonated water", "Sugar", "Colour", "Flavour", "Caffeine in some"],
+      what: "A soft drink is a fizzy, sweetened beverage with sugar and no real nutrition.",
+      contributions: [
+        "A lot of sugar, which adds calories without filling you up.",
+        "No protein, fat, fibre, vitamins or minerals.",
+        "Caffeine in energy drinks and colas."
+      ],
+      benefits: "There is little nutritional benefit. They taste good and can be a quick energy hit, but they are empty calories.",
+      goals: "The easiest thing to cut for fat loss. Switching one a day to water makes a real difference over weeks.",
+      servings: "Zero is the best serving. One can occasionally is fine.",
+      swaps: ["Water or sparkling water with lime", "Unsweetened tea or coffee", "Diluted fruit juice"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Soft drinks are global, from Nigerian bottled drinks to American soda and Mexican cola made with real sugar.",
+      combinations: ["Better replaced with water", "Sparkling water with a squeeze of citrus", "A sugar free option if you need the fizz"],
+      simple: "Soft drink is sugar water. Swap it for water and your body notices within days."
+    },
+    "fruit juice": {
+      kcal: 112, carbs: 28, protein: 0.5, fat: 0.3, fiber: 0.2, verdict: "watch", emoji: "🧃",
+      aliases: ["Juice", "Orange juice", "Zobo", "Chapman", "Smoothie juice", "Fresh juice"],
+      portion: "One glass (250ml)",
+      ingredients: ["Fruit", "Sometimes added sugar", "Water"],
+      what: "Fruit juice is fruit with the fibre mostly removed and the sugar left behind, sometimes with sugar added.",
+      contributions: [
+        "Natural sugar, which hits your bloodstream faster without the fibre.",
+        "Some vitamin C.",
+        "Very little fibre, which is what makes whole fruit better."
+      ],
+      benefits: "A handy source of some vitamins, but whole fruit is almost always the better choice because of the fibre.",
+      goals: "Not ideal for fat loss, because you can drink a lot of sugar quickly. Choose whole fruit or a very small glass.",
+      servings: "One small glass at most. Whole fruit is better.",
+      swaps: ["Eat the whole fruit instead", "Choose no added sugar varieties", "Dilute with water"],
+      allergens: ["Gluten free", "Dairy free", "No common allergens"],
+      culture: "Juices are drunk worldwide, from Nigerian zobo and chapman to fresh orange juice and tropical blends.",
+      combinations: ["Better replaced by whole fruit", "A small glass with a meal", "Diluted with sparkling water"],
+      simple: "Juice is fruit with the fibre taken out. Eat the whole fruit and you get more from it."
+    },
+    "chocolate": {
+      kcal: 235, carbs: 26, protein: 3, fat: 14, fiber: 2, verdict: "off", emoji: "🍫",
+      aliases: ["Milk chocolate", "Dark chocolate", "Chocolate bar", "Candy bar", "Sweet"],
+      portion: "One small bar (about 45g)",
+      ingredients: ["Cocoa", "Sugar", "Milk solids", "Cocoa butter", "Vanilla"],
+      what: "Chocolate is a sweet food made from cocoa, sugar and milk, eaten as a bar or a treat.",
+      contributions: [
+        "Sugar, which is quick energy but easy to overdo.",
+        "Fat, which makes it calorie dense.",
+        "A little iron and antioxidants, more in dark chocolate."
+      ],
+      benefits: "It is a treat, not a health food. A little dark chocolate is fine and can even be a source of antioxidants.",
+      goals: "Enjoy a small piece rather than a whole bar. Dark chocolate with a high cocoa count is the smarter choice.",
+      servings: "One or two small squares is a portion.",
+      swaps: ["Dark chocolate with 70% cocoa or more", "A smaller bar", "Fruit and nuts when you want something sweet"],
+      allergens: ["Dairy", "Soy", "May contain nuts", "Gluten in some"],
+      culture: "Chocolate is loved worldwide, from Swiss and Belgian bars to West African cocoa, where much of it is grown.",
+      combinations: ["A square of dark chocolate after a meal", "Chocolate with a coffee", "Chocolate as an occasional treat"],
+      simple: "Chocolate is a treat, and that is fine. Choose dark, and keep it to a square or two."
+    },
+    "ice cream": {
+      kcal: 207, carbs: 24, protein: 3.5, fat: 11, fiber: 0.7, verdict: "off", emoji: "🍨",
+      aliases: ["Cream ice", "Gelato", "Frozen dessert", "Sherbet", "Ice cream cone"],
+      portion: "One scoop (about 66g)",
+      ingredients: ["Milk", "Cream", "Sugar", "Flavour"],
+      what: "Ice cream is a frozen dessert made from milk, cream and sugar, churned while freezing.",
+      contributions: [
+        "Sugar and fat, which make it very calorie dense.",
+        "A little protein from the milk.",
+        "Calcium, though you pay for it in sugar and fat."
+      ],
+      benefits: "It is a dessert, and a lovely one. There is little nutritional benefit, but a bowl now and then does no harm.",
+      goals: "Keep it occasional. A single scoop rather than a large bowl, and consider fruit as a cooler treat.",
+      servings: "One scoop is a portion.",
+      swaps: ["Frozen banana blended for a healthier option", "Frozen yoghurt with berries", "A smaller scoop"],
+      allergens: ["Dairy", "Lactose", "Egg in some", "Nuts in some flavours"],
+      culture: "Ice cream is a global dessert, from Italian gelato to Nigerian ice cream and American sundae culture.",
+      combinations: ["A scoop as an occasional treat", "With a piece of fruit", "As a small reward after a big effort"],
+      simple: "Ice cream is a dessert. Have a scoop, enjoy it, and do not make it a daily habit."
+    },
+    "chips": {
+      kcal: 312, carbs: 41, protein: 3.4, fat: 15, fiber: 3.8, verdict: "off", emoji: "🍟",
+      aliases: ["French fries", "Fried chips", "Potato chips", "Crisps", "Roasted plantain chips"],
+      portion: "One medium serving",
+      ingredients: ["Potato", "Oil", "Salt"],
+      what: "Chips are potatoes cut into strips and fried in oil, or thinly sliced and fried crisp as crisps.",
+      contributions: [
+        "Carbohydrate from the potato.",
+        "A lot of fat from the frying oil.",
+        "Salt, which can be high."
+      ],
+      benefits: "Tasty and filling, but the frying adds a lot of calories. They are best as an occasional side, not a daily food.",
+      goals: "Not ideal for fat loss. Choose baked or air fried, and keep the portion small.",
+      servings: "A small handful or one small portion.",
+      swaps: ["Bake or air fry instead of deep frying", "A smaller portion", "Swap for a boiled or roasted potato"],
+      allergens: ["Gluten free", "Dairy free", "Often cooked in shared oil"],
+      culture: "Chips are eaten everywhere, from British chip shops to American fries and Nigerian roasted plantain chips.",
+      combinations: ["Chips with a burger occasionally", "A small side with a grilled meal", "Baked chips as a better option"],
+      simple: "Chips are fried and salty. Enjoy them occasionally, and choose baked when you can."
+    },
+    "meat pie": {
+      kcal: 320, carbs: 32, protein: 9, fat: 17, fiber: 1.5, verdict: "off", emoji: "🥟",
+      aliases: ["Pie", "Chicken pie", "Beef pie", "Sausage roll", "Patty"],
+      portion: "One pie",
+      ingredients: ["Flour pastry", "Meat", "Potato", "Oil", "Seasoning"],
+      what: "A meat pie is a pastry case filled with seasoned minced meat and potato, baked until golden.",
+      contributions: [
+        "Carbohydrate from the pastry.",
+        "Some protein from the meat.",
+        "A lot of fat, from both the pastry and the filling."
+      ],
+      benefits: "Convenient and filling, but the pastry makes it high in fat and calories for what it is.",
+      goals: "An occasional treat rather than a meal. If you have one, keep the rest of the day light and add a salad.",
+      servings: "One pie is a portion.",
+      swaps: ["A smaller pie", "A salad or fruit on the side", "Homemade with less oil and more filling"],
+      allergens: ["Gluten", "Wheat", "Egg", "May contain milk"],
+      culture: "Meat pies are popular street food, from Nigerian meat pie to British pork pie and Jamaican patty.",
+      combinations: ["A pie as an occasional snack", "With a side salad", "With a piece of fruit"],
+      simple: "A meat pie is a tasty but fatty snack. Keep it occasional and add something fresh beside it."
+    },
+    "shawarma": {
+      kcal: 450, carbs: 45, protein: 25, fat: 19, fiber: 3, verdict: "watch", emoji: "🥙",
+      aliases: ["Shawarma", "Kebab", "Doner", "Gyro", "Chicken shawarma", "Beef shawarma"],
+      portion: "One wrap",
+      ingredients: ["Flatbread", "Grilled meat", "Vegetables", "Garlic sauce", "Sometimes fries"],
+      what: "Shawarma is spiced meat shaved off a vertical roast and wrapped in flatbread with salad and sauce.",
+      contributions: [
+        "Good protein from the meat.",
+        "Carbohydrate from the bread.",
+        "Fat from the meat and especially the sauce."
+      ],
+      benefits: "A filling, high protein meal that is easy to find on the move. The sauce and any fries are what push the calories up.",
+      goals: "A reasonable choice if you ask for more salad and less sauce, and skip the fries inside the wrap.",
+      servings: "One wrap is a full meal.",
+      swaps: ["Ask for extra salad and less sauce", "Skip the fries inside", "Choose chicken over fatty red meat"],
+      allergens: ["Gluten", "Wheat", "Dairy in some sauces", "Sesame"],
+      culture: "Shawarma is a Middle Eastern staple now loved worldwide, from Lagos shawarma stands to Greek gyros and Turkish doner.",
+      combinations: ["Shawarma with a salad", "Shawarma with a yoghurt drink", "Shawarma as a post training meal"],
+      simple: "Shawarma is solid protein and carbs. Ask for more salad, less sauce, and skip the fries inside."
+    },
+    "fried chicken": {
+      kcal: 490, carbs: 18, protein: 31, fat: 31, fiber: 1, verdict: "off", emoji: "🍗",
+      aliases: ["Chicken", "Crispy chicken", "Jerk chicken", "Fried poultry", "Chicken drumstick"],
+      portion: "Two pieces",
+      ingredients: ["Chicken", "Flour coating", "Oil", "Spices"],
+      what: "Fried chicken is chicken coated in seasoned flour and deep fried until crisp.",
+      contributions: [
+        "Good protein from the chicken.",
+        "A lot of fat absorbed from the frying oil.",
+        "Carbohydrate from the flour coating."
+      ],
+      benefits: "High in protein, but the deep frying makes it very calorie dense. Grilled chicken gets you the protein without the fat.",
+      goals: "Not ideal for fat loss. Choose grilled or roasted chicken, and if you fry it, keep it to one piece with a salad.",
+      servings: "One or two pieces is a portion.",
+      swaps: ["Grilled or baked chicken instead", "Remove the skin", "Add a large salad on the side"],
+      allergens: ["Gluten", "Wheat", "Egg in some batters", "Dairy in some"],
+      culture: "Fried chicken is loved worldwide, from American fried chicken to Nigerian fried chicken and Jamaican jerk.",
+      combinations: ["Grilled chicken with rice and salad", "Chicken with vegetables", "Chicken in a wrap"],
+      simple: "Fried chicken is protein drowned in fat. Grill it instead and keep the protein, lose the oil."
+    },
+    "groundnut": {
+      kcal: 161, carbs: 4.6, protein: 7.3, fat: 14, fiber: 2.4, verdict: "watch", emoji: "🥜",
+      aliases: ["Peanuts", "Ground nuts", "Kuli kuli", "Peanut butter", "Roasted groundnut"],
+      portion: "One handful (about 28g)",
+      ingredients: ["Groundnuts", "Sometimes salt or oil"],
+      what: "Groundnuts, or peanuts, are legumes eaten roasted, boiled, or ground into butter.",
+      contributions: [
+        "Plant protein, which supports muscle.",
+        "Healthy fats, which keep you full.",
+        "Fibre and a range of minerals."
+      ],
+      benefits: "A cheap, filling, high protein snack. Natural peanut butter with no added sugar or oil is the best form.",
+      goals: "Good for muscle building and satiety. Because they are calorie dense, stick to a small handful.",
+      servings: "One small handful or one tablespoon of butter.",
+      swaps: ["Unsalted roasted groundnuts", "Natural peanut butter with no added sugar", "A small portion with fruit"],
+      allergens: ["Peanut, a serious and common allergen", "Sometimes processed with tree nuts", "Check for added sugar"],
+      culture: "Groundnuts are a West African staple, from roasted groundnut to kuli kuli and groundnut soup.",
+      combinations: ["Groundnuts with banana", "Peanut butter on wholegrain bread", "Groundnut in a soup or stew"],
+      simple: "Groundnut is protein and healthy fat. It is filling, but keep it to a small handful."
+    },
+    "tea": {
+      kcal: 2, carbs: 0.3, protein: 0, fat: 0, fiber: 0, verdict: "good", emoji: "🍵",
+      aliases: ["Green tea", "Black tea", "Herbal tea", "Chai", "Zobo tea", "Mint tea"],
+      portion: "One cup",
+      ingredients: ["Tea leaves", "Hot water", "Optional milk or sugar"],
+      what: "Tea is a drink made by steeping leaves in hot water, drunk plain or with milk and sweetener.",
+      contributions: [
+        "Almost no calories when drunk plain.",
+        "Antioxidants called catechins, more in green tea.",
+        "A little caffeine, which can help focus and training."
+      ],
+      benefits: "A comforting, near-zero calorie drink that can support hydration and give a gentle lift.",
+      goals: "An excellent drink for fat loss because it is essentially free. Go easy on sugar and full-fat milk.",
+      servings: "Several cups a day is fine.",
+      swaps: ["Drink it without sugar", "Use a splash of milk", "Try herbal or green tea"],
+      allergens: ["Gluten free", "Dairy free unless milk is added", "No common allergens"],
+      culture: "Tea is one of the most drunk drinks on earth, from Nigerian zobo to British builder's tea, Indian chai and Moroccan mint tea.",
+      combinations: ["Tea without sugar as an everyday drink", "Green tea before a workout", "Herbal tea in the evening"],
+      simple: "Tea is a near-free calorie comfort. Take it without sugar and drink it freely."
+    },
+    "coffee": {
+      kcal: 5, carbs: 0, protein: 0.3, fat: 0, fiber: 0, verdict: "good", emoji: "☕",
+      aliases: ["Black coffee", "Espresso", "Cappuccino", "Latte", "Café", "Instant coffee"],
+      portion: "One cup",
+      ingredients: ["Coffee beans", "Hot water", "Optional milk and sugar"],
+      what: "Coffee is a drink brewed from roasted coffee beans, drunk black or with milk.",
+      contributions: [
+        "Almost no calories when black.",
+        "Caffeine, which boosts focus and can improve training performance.",
+        "Antioxidants."
+      ],
+      benefits: "A useful, low calorie lift. Black coffee is one of the best drinks for fat loss, and caffeine can genuinely help a workout.",
+      goals: "Great before training for the performance boost. Avoid loading it with sugar and cream.",
+      servings: "One to three cups a day is fine for most people.",
+      swaps: ["Drink it black", "Use a splash of milk instead of cream", "Skip the sugar"],
+      allergens: ["Gluten free", "Dairy free unless milk is added", "No common allergens"],
+      culture: "Coffee is global, from Nigerian coffee to Italian espresso, Ethiopian ceremony and American latte culture.",
+      combinations: ["Black coffee before a workout", "Coffee as an afternoon focus lift", "Coffee with a small snack"],
+      simple: "Black coffee is a free calorie, focus boosting lift. Take it before training and go easy on the sugar."
     }
   };
 
@@ -1187,11 +1909,43 @@
     trainer:  { name: "My Trainer",   tagline: "Coach, matched to your goal" }
   };
 
+  /* Map a vision-model item from /api/food-scan into the same shape the food
+     guide renders, so a scanned (unknown-to-us) food gets the full guide too. */
+  function visionToFood(item) {
+    var n = item.nutrition || {};
+    function num(v) { v = parseFloat(v); return isFinite(v) ? Math.round(v) : 0; }
+    var verdict = item.verdict;
+    if (verdict !== "good" && verdict !== "watch" && verdict !== "off") verdict = "watch";
+    return {
+      name: item.name || "Scanned food",
+      kcal: num(n.kcal), carbs: num(n.carbs), protein: num(n.protein),
+      fat: num(n.fat), fiber: num(n.fiber),
+      verdict: verdict,
+      aliases: item.aliases || [],
+      category: item.category || "",
+      confidence: (typeof item.confidence === "number") ? item.confidence : null,
+      portion: item.servings || "",
+      ingredients: item.ingredients || [],
+      what: item.what || "",
+      contributions: item.gives || [],
+      benefits: item.benefits || "",
+      goals: item.goalFit || "",
+      servings: item.servings || "",
+      swaps: item.swaps || [],
+      allergens: item.allergens || [],
+      culture: item.culture || "",
+      combinations: item.combinations || [],
+      simple: item.benefits || item.what || "",
+      fromVision: true
+    };
+  }
+
   global.GBData = {
     exercises: EXERCISES,
     equipment: EQUIPMENT,
     statusMeta: STATUS_META,
     foods: FOODS,
+    visionToFood: visionToFood,
     features: FEATURES,
     goals: ["Lose weight", "Build muscle", "Get toned", "Improve endurance", "General fitness", "Strength & power"],
     archetypes: [
