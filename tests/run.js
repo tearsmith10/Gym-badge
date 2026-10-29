@@ -13,7 +13,8 @@
      • the AI assistant answers, refuses to guess and escalates
      • the trainer and exercise moderation workflows behave
      • the language and country pickers are in place
-     • the official logo has no white plate and carries the brand palette
+     • the official logo is the cream mark on every surface, with no white plate
+     • every food in the guide has its own real photograph
      • no hyphen reaches the reader
    ========================================================================== */
 "use strict";
@@ -185,6 +186,40 @@ function analyseLogo(buf) {
     check("vision items carry a name", r.j.items.every(i => typeof i.name === "string" && i.name.length), r.j);
   }
 
+  section("THE FOOD LIBRARY");
+  const foodData = (await get("/app/assets/js/data.js")).text;
+  const fstart = foodData.indexOf("var FOODS = {");
+  const fblock = foodData.slice(fstart, foodData.indexOf("\n  };", fstart));
+  const fchunks = fblock.split(/\n    "([a-z ]+)": \{/);   // name, body, name, body...
+  const lib = [];
+  for (let i = 1; i + 1 < fchunks.length; i += 2) {
+    lib.push({
+      name: fchunks[i],
+      photo: (fchunks[i + 1].match(/photo: "(meal\/[^"]+)"/) || [])[1] || null
+    });
+  }
+  check("the guide carries every food", lib.length >= 46, String(lib.length));
+  const libNoPhoto = lib.filter(f => !f.photo);
+  check("every food has its own photograph", libNoPhoto.length === 0,
+    libNoPhoto.map(f => f.name).join(", "));
+  // served: a food added in this release, an older gallery shot, and the
+  // food that was rephotographed for this release
+  for (const p of [
+    "/app/assets/img/meal/white-rice-1.jpg",
+    "/app/assets/img/meal/coffee-2.jpg",
+    "/app/assets/img/meal/jollof-rice-4.jpg",
+    "/app/assets/img/meal/swallow-1.jpg"
+  ]) {
+    const res = await fetch(BASE + p);
+    check("served: " + p, res.status === 200, res.status);
+  }
+  const foodSw = (await get("/app/sw.js")).text;
+  check("the service worker takes the whole food guide offline",
+    /meal\/white-rice-1\.jpg/.test(foodSw) && !/meal\/thumb\//.test(foodSw));
+  const foodScan = (await get("/app/assets/js/scanner.js")).text;
+  check("the scanner matches the plate against the real photographs",
+    foodScan.includes('"/app/assets/img/" + p') && !/meal\/thumb\//.test(foodScan));
+
   section("TRAINERS, MODERATION AND EQUIPMENT");
   r = await api("/api/trainers", undefined, "GET");
   check("trainers -> 200", r.status === 200 && r.j.ok, r.j);
@@ -207,21 +242,42 @@ function analyseLogo(buf) {
   check("translate returns a mapping", r.j && r.j.translations && Object.keys(r.j.translations).length >= 1, r.j);
 
   section("THE OFFICIAL LOGO");
-  for (const [url, label] of [["/assets/img/mark.png?v=23", "mark"], ["/assets/img/logo.png?v=23", "logo"]]) {
-    const res = await fetch(BASE + url);
-    check(label + " loads", res.status === 200);
-    if (res.status !== 200) continue;
-    const a = analyseLogo(Buffer.from(await res.arrayBuffer()));
-    check(label + " has no white plate (" + a.white + " px)", a.white === 0);
-    check(label + " is transparent or on a dark tile", a.transparent > 0 || a.coral + a.cream + a.tawny > 0);
-    check(label + " carries the brand accent (" + a.coral + " px)", a.coral > 500);
-    check(label + " carries the honeybadger tawny (" + a.tawny + " px)", a.tawny > 500);
-    check(label + " carries the honeybadger cream (" + a.cream + " px)", a.cream > 200);
+  // logo.png — the cream mark on transparent. Every box that shows it is
+  // square (34px header, 54px Badge ID, auto splash), so the canvas must be
+  // square or the artwork stretches inside them.
+  const logoRes = await fetch(BASE + "/assets/img/logo.png?v=24");
+  check("the logo loads", logoRes.status === 200);
+  if (logoRes.status === 200) {
+    const a = analyseLogo(Buffer.from(await logoRes.arrayBuffer()));
+    check("the logo stays square (" + a.w + "x" + a.h + ")", a.w === a.h);
+    check("the logo has no white plate (" + a.white + " px)", a.white === 0);
+    check("the logo is transparent behind the mark (" + a.transparent + " px)", a.transparent > 0);
+    check("the logo carries the cream mark (" + a.cream + " px)", a.cream > 500);
   }
-  const logoSvg = await get("/assets/img/logo.svg?v=23");
+  // mark.png — the 1200x736 press lockup on the app-black tile
+  const bannerRes = await fetch(BASE + "/assets/img/mark.png?v=24");
+  check("the press banner loads", bannerRes.status === 200);
+  if (bannerRes.status === 200) {
+    const a = analyseLogo(Buffer.from(await bannerRes.arrayBuffer()));
+    check("the banner keeps its 1200x736 canvas (" + a.w + "x" + a.h + ")", a.w === 1200 && a.h === 736);
+    check("the banner has no white plate (" + a.white + " px)", a.white === 0);
+    check("the banner carries the cream mark (" + a.cream + " px)", a.cream > 500);
+    check("the banner carries the coral accent (" + a.coral + " px)", a.coral > 500);
+  }
+  const logoSvg = await get("/assets/img/logo.svg?v=24");
   check("the vector logo loads", logoSvg.status === 200);
   check("the vector logo is the badge", /aria-label="Gym Badge"/.test(logoSvg.text));
-  const markSvg = await get("/assets/img/mark.svg?v=23");
+  check("the vector logo does not swing with the theme", !/var\(--accent\)/.test(logoSvg.text));
+  // the tab favicon needs the solid app-colour tile: a transparent mark
+  // disappears against light browser chrome
+  const faviconSvg = await get("/assets/img/favicon.svg?v=24");
+  check("the tab favicon loads", faviconSvg.status === 200);
+  check("the tab favicon sits on a visible tile",
+    faviconSvg.status === 200 && /#0b0b0b/.test(faviconSvg.text) && /aria-label="Gym Badge"/.test(faviconSvg.text));
+  const home = await get("/");
+  check("pages point the tab at the tiled favicon",
+    home.status === 200 && /rel="icon" href="\/assets\/img\/favicon\.svg/.test(home.text));
+  const markSvg = await get("/assets/img/mark.svg?v=24");
   check("the bare mark loads", markSvg.status === 200);
   const siteCss = (await get("/web/assets/css/site.css")).text;
   check("secure note icons stay icon sized", /\.secure-note svg\{width:20px/.test(siteCss));

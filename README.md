@@ -194,10 +194,13 @@ My Plate Truth opens with a scanner again.
 - **The camera** opens straight away and takes the photo for you.
 - **A photo from your device** works anywhere the camera cannot, and on a
   phone it opens the camera roll with the rear camera ready.
-- The photo is reduced to a colour signature and compared against the
-  reference photographs of every food in the guide, which produces a ranked
-  shortlist. The guide is then opened for the food **the member picks**, so
-  it is never a guess they did not accept.
+- The photo is reduced to a colour signature and compared against **every**
+  reference photograph of every food in the guide — all 46 foods, two or more
+  real photographs each — matching directly against the full size
+  photographs, with no thumbnail or reduced copies anywhere in the app. Each
+  food scores on its **best** photograph, which produces a ranked shortlist.
+  The guide is then opened for the food **the member picks**, so it is never
+  a guess they did not accept.
 - If the server has a vision model configured it is asked for a better first
   guess. Without one the scanner still works completely offline.
 - It never pretends to know. If nothing matches, it says so and lists the
@@ -215,29 +218,32 @@ message toast. Every screen file uses them, so a toast can never fail
 because one file forgot to bring its own copy.
 
 ### 🎨 The official logo
-The mark is **Ascend**: three ascending bars (coral → orange → tawny) with the
-detailed cream Gym Badge runner driving up them. It is the adidas-style
-"performance" idea told in our own body — the runner is the restored
-muscle-line silhouette from the original identity, angled into the climb so it
-reads as forward motion, not a pose. Simple, flat, one gesture.
+The mark is **the ascender**: the Gym Badge runner driving up three ascending
+bars — one flat, confident gesture, adidas-style performance energy told in our
+own body. It is shipped as **traced vectors**, not a redraw, so the artwork is
+pixel-faithful to the approved reference from a 16px favicon to the press
+banner.
 
-- **Transparent background**, so it blends into whatever it sits on — the
-  app's `#0b0b0b`, or the site's ember, midnight and dark themes. No plate, no
+- **One artwork, two fills**: cream `#F4EFE6` on every dark surface (the app's
+  `#0b0b0b` and all three site themes — ember, midnight, dark), black on light
+  chips. Only the colour flips; the geometry never changes between surfaces.
+- **Transparent background** on the in-page assets (`logo.svg`, `mark.svg`,
+  `logo.png`), so the mark blends into whatever theme is active — no plate, no
   tile, no white box.
-- The bars ramp coral → orange → tawny (the honeybadger palette), the runner
-  is cream. In the site SVGs the bar fills reference `var(--accent)`, so the
-  mark can track the active theme; the PNGs are fixed to the ember coral
-  default.
-- The SVG sources (`assets/img/logo.svg` and `assets/img/mark.svg`) keep the
-  mark crisp from a 16px favicon to a press banner. `assets/img/mark.png` is
-  the dark horizontal lockup (mark + GYM BADGE wordmark + tagline) used for
-  press and social.
-- Shipped at 512, 192 and 180 for the icons, plus a full-bleed maskable
-  variant on the app-color square that keeps the runner and bars inside the
-  safe zone.
+- The **tab favicon** (`favicon.svg`, `favicon-32.png`, `favicon-48.png`) puts
+  the cream mark on the solid app-colour tile instead: a transparent mark
+  vanishes against light browser chrome, and PWA icons always need a solid
+  background anyway. Pages link the tiled SVG so no browser can pick a
+  transparent one.
+- `assets/img/mark.png` is the dark horizontal lockup (mark + GYM BADGE
+  wordmark + gold rule + `TRAIN · TRACK · TRIUMPH`) used for press and social.
+- Shipped at 180, 192 and 512 for the icons, plus a full-bleed maskable
+  variant on the app-colour square that keeps the mark inside the safe zone.
 - The site header, download page, app splash, welcome screen, Badge ID, OAuth
   page, favicons and PWA icons all use the same files, so the brand cannot
-  drift between surfaces.
+  drift between surfaces. Asset URLs are version-stamped (`?v=24`) and the
+  service worker caches `gymbadge-v24`, so an updated mark reaches installed
+  users instead of sitting in an old immutable cache.
 
 ### 🌍 Language changes (35 languages, flags first)
 `assets/i18n.js` is one dictionary shared by the app and the site.

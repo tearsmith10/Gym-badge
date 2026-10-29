@@ -6,10 +6,12 @@
 
    How the recognition works
    -------------------------
-   The photo is reduced to a small colour signature and compared against the
-   reference photographs of every food in the guide. That gives a ranked
-   shortlist, and the member confirms which one it is. The guide is always
-   shown for the food the member picks, never a guess they did not accept.
+   The photo is reduced to a colour signature and compared against the
+   full size reference photographs of every food in the guide (the
+   signatures are computed in memory, so no reduced copies are stored).
+   That gives a ranked shortlist, and the member confirms which one it is.
+   The guide is always shown for the food the member picks, never a guess
+   they did not accept.
 
    When the server has a vision model configured the photo is also sent to
    it for a better first guess. Without one the local matcher still works
@@ -54,22 +56,36 @@
     return Math.sqrt(total / (n * 3));
   }
 
-  /* Cache the reference signatures so repeated scans stay instant. */
+  /* Cache the reference signatures so repeated scans stay instant.
+     Every photograph of every food takes part — matched through a
+     small signature copy created in memory from the photo, so the
+     whole guide loads in a few hundred kilobytes instead of tens
+     of megabytes. */
   var REF = null;
+  function loadRef(path) {
+    return new Promise(function (resolve) {
+      var img = new Image();
+      img.onload = function () {
+        try { resolve(signature(img)); }
+        catch (e) { resolve(null); }
+      };
+      img.onerror = function () { resolve(null); };
+      img.src = path;
+    });
+  }
   function referenceSignatures() {
     if (REF) return Promise.resolve(REF);
-    var names = Object.keys(D.foods);
-    var jobs = names.map(function (name) {
+    var jobs = [];
+    Object.keys(D.foods).forEach(function (name) {
       var f = D.foods[name];
-      if (!f.photo) return Promise.resolve(null);
-      return new Promise(function (resolve) {
-        var img = new Image();
-        img.onload = function () {
-          try { resolve({ name: name, sig: signature(img) }); }
-          catch (e) { resolve(null); }
-        };
-        img.onerror = function () { resolve(null); };
-        img.src = "/app/assets/img/" + f.photo;
+      var photos = f.photos && f.photos.length ? f.photos
+        : (f.photo ? [f.photo] : []);
+      photos.forEach(function (p) {
+        jobs.push(
+          loadRef("/app/assets/img/" + p).then(function (sig) {
+            return sig ? { name: name, sig: sig } : null;
+          })
+        );
       });
     });
     return Promise.all(jobs).then(function (rows) {
@@ -78,10 +94,17 @@
     });
   }
 
+  /* Rank the shortlist, keeping each food's best photograph: a food with
+     several reference shots only has to match one of them well. */
   function rank(sig) {
     return referenceSignatures().then(function (refs) {
-      return refs.map(function (r) {
-        return { name: r.name, score: distance(sig, r.sig) };
+      var best = {};
+      refs.forEach(function (r) {
+        var d = distance(sig, r.sig);
+        if (!(r.name in best) || d < best[r.name]) best[r.name] = d;
+      });
+      return Object.keys(best).map(function (name) {
+        return { name: name, score: best[name] };
       }).sort(function (a, b) { return a.score - b.score; });
     });
   }
@@ -227,7 +250,7 @@
       stage.innerHTML = "";
       var shotBox = h('<div class="scan-shot"><img alt="Your meal" src="' + dataUrl + '"></div>');
       stage.appendChild(shotBox);
-      stage.appendChild(h('<p class="scan-status">This looks closest to. Pick the one that is right and we will explain it.</p>'));
+      stage.appendChild(h('<p class="scan-status">We matched your photo against the whole food guide. Pick the dish that is right and we will explain it.</p>'));
       var grid = h('<div class="scan-picks"></div>');
       names.forEach(function (name) {
         var f = D.foods[name];

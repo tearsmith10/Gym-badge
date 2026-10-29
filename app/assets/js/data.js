@@ -1195,6 +1195,8 @@
     },
     "white rice": {
       kcal: 205, carbs: 45, protein: 4, fat: 0.4, fiber: 0.6, verdict: "watch", emoji: "🍚",
+      photos: ["meal/white-rice-1.jpg", "meal/white-rice-2.jpg"],
+      photo: "meal/white-rice-1.jpg",
       aliases: ["Rice", "Steamed rice", "Boiled rice", "White rice grains"],
       portion: "One cup cooked (about 158g)",
       ingredients: ["White rice", "Water", "Salt"],
@@ -1215,6 +1217,8 @@
     },
     "fried rice": {
       kcal: 340, carbs: 42, protein: 10, fat: 14, fiber: 2, verdict: "watch", emoji: "🍛",
+      photos: ["meal/fried-rice-1.jpg", "meal/fried-rice-2.jpg"],
+      photo: "meal/fried-rice-1.jpg",
       aliases: ["Stir fried rice", "Chinese fried rice", "Party fried rice"],
       portion: "One plate (about 250g)",
       ingredients: ["Rice", "Oil", "Egg", "Vegetables", "Soy sauce", "Sometimes meat"],
@@ -1235,6 +1239,8 @@
     },
     "bread": {
       kcal: 265, carbs: 49, protein: 9, fat: 3.2, fiber: 2.7, verdict: "watch", emoji: "🍞",
+      photos: ["meal/bread-1.jpg", "meal/bread-2.jpg"],
+      photo: "meal/bread-1.jpg",
       aliases: ["Loaf", "Sliced bread", "White bread", "Wholewheat bread", "Wheat bread"],
       portion: "Two slices",
       ingredients: ["Flour", "Water", "Yeast", "Salt", "Sometimes sugar and oil"],
@@ -1255,6 +1261,8 @@
     },
     "indomie": {
       kcal: 380, carbs: 52, protein: 8, fat: 14, fiber: 2, verdict: "off", emoji: "🍜",
+      photos: ["meal/indomie-1.jpg", "meal/indomie-2.jpg"],
+      photo: "meal/indomie-1.jpg",
       aliases: ["Instant noodles", "Noodles", "Indomie noodles", "Cup noodles", "Ramen"],
       portion: "One packet",
       ingredients: ["Wheat noodles", "Palm oil", "Salt", "Seasoning", "Sometimes chilli"],
@@ -1275,6 +1283,8 @@
     },
     "spaghetti": {
       kcal: 220, carbs: 43, protein: 8, fat: 1.3, fiber: 2.5, verdict: "watch", emoji: "🍝",
+      photos: ["meal/spaghetti-1.jpg", "meal/spaghetti-2.jpg"],
+      photo: "meal/spaghetti-1.jpg",
       aliases: ["Pasta", "Noodles", "Macaroni", "Spaghetti bolognese", "Pasta noodles"],
       portion: "One cup cooked (about 140g)",
       ingredients: ["Durum wheat pasta", "Water", "Salt"],
@@ -1295,6 +1305,8 @@
     },
     "plantain": {
       kcal: 122, carbs: 31, protein: 1.3, fat: 0.3, fiber: 2.3, verdict: "good", emoji: "🍌",
+      photos: ["meal/plantain-1.jpg", "meal/plantain-2.jpg"],
+      photo: "meal/plantain-1.jpg",
       aliases: ["Fried plantain", "Boiled plantain", "Dodo", "Cooking banana", "Alocado"],
       portion: "One medium piece",
       ingredients: ["Plantain", "Sometimes oil for frying"],
@@ -1315,6 +1327,8 @@
     },
     "yam": {
       kcal: 118, carbs: 28, protein: 1.5, fat: 0.1, fiber: 3.9, verdict: "good", emoji: "🍠",
+      photos: ["meal/yam-1.jpg", "meal/yam-2.jpg"],
+      photo: "meal/yam-1.jpg",
       aliases: ["Boiled yam", "Fried yam", "Pounded yam", "Yam porridge", "Dioscorea"],
       portion: "One cup cubed",
       ingredients: ["Yam", "Water", "Sometimes oil"],
@@ -1335,6 +1349,8 @@
     },
     "potato": {
       kcal: 161, carbs: 37, protein: 4.3, fat: 0.2, fiber: 3.8, verdict: "good", emoji: "🥔",
+      photos: ["meal/potato-1.jpg", "meal/potato-2.jpg"],
+      photo: "meal/potato-1.jpg",
       aliases: ["Boiled potato", "Baked potato", "Jacket potato", "Sweet potato", "Mashed potato"],
       portion: "One medium potato",
       ingredients: ["Potato", "Sometimes butter or oil"],
@@ -1355,6 +1371,8 @@
     },
     "salmon": {
       kcal: 208, carbs: 0, protein: 20, fat: 13, fiber: 0, verdict: "good", emoji: "🐟",
+      photos: ["meal/salmon-1.jpg", "meal/salmon-2.jpg"],
+      photo: "meal/salmon-1.jpg",
       aliases: ["Grilled salmon", "Smoked salmon", "Baked salmon", "Fish fillet"],
       portion: "One fillet (about 120g)",
       ingredients: ["Salmon", "Lemon", "Herbs", "A little oil"],
@@ -1375,6 +1393,8 @@
     },
     "tuna": {
       kcal: 130, carbs: 0, protein: 28, fat: 1, fiber: 0, verdict: "good", emoji: "🐟",
+      photos: ["meal/tuna-1.jpg", "meal/tuna-2.jpg"],
+      photo: "meal/tuna-1.jpg",
       aliases: ["Canned tuna", "Tinned tuna", "Tuna fish", "Raw tuna", "Tataki"],
       portion: "One can drained (about 120g)",
       ingredients: ["Tuna", "Sometimes water or oil", "Salt"],
@@ -1395,6 +1415,8 @@
     },
     "goat meat": {
       kcal: 143, carbs: 0, protein: 27, fat: 3, fiber: 0, verdict: "good", emoji: "🍖",
+      photos: ["meal/goat-meat-1.jpg", "meal/goat-meat-2.jpg"],
+      photo: "meal/goat-meat-1.jpg",
       aliases: ["Goat", "Mutton", "Bush meat", "Asun", "Roasted goat"],
       portion: "One serving (about 120g)",
       ingredients: ["Goat meat", "Spices", "Sometimes onions"],
@@ -1415,6 +1437,8 @@
     },
     "turkey": {
       kcal: 135, carbs: 0, protein: 30, fat: 1, fiber: 0, verdict: "good", emoji: "🦃",
+      photos: ["meal/turkey-1.jpg", "meal/turkey-2.jpg"],
+      photo: "meal/turkey-1.jpg",
       aliases: ["Turkey breast", "Ground turkey", "Minced turkey", "Roast turkey"],
       portion: "One serving (about 120g)",
       ingredients: ["Turkey", "Herbs", "A little oil"],
@@ -1435,6 +1459,8 @@
     },
     "milk": {
       kcal: 122, carbs: 12, protein: 8, fat: 4.8, fiber: 0, verdict: "good", emoji: "🥛",
+      photos: ["meal/milk-1.jpg", "meal/milk-2.jpg"],
+      photo: "meal/milk-1.jpg",
       aliases: ["Cow milk", "Whole milk", "Semi skimmed milk", "Fresh milk", " dairy milk"],
       portion: "One glass (about 240ml)",
       ingredients: ["Milk"],
@@ -1455,6 +1481,8 @@
     },
     "yoghurt": {
       kcal: 100, carbs: 7, protein: 17, fat: 0.7, fiber: 0, verdict: "good", emoji: "🥣",
+      photos: ["meal/yoghurt-1.jpg", "meal/yoghurt-2.jpg"],
+      photo: "meal/yoghurt-1.jpg",
       aliases: ["Yogurt", "Greek yoghurt", "Plain yoghurt", "Curd", "Dahi"],
       portion: "One pot (about 170g)",
       ingredients: ["Milk", "Live cultures"],
@@ -1475,6 +1503,8 @@
     },
     "cheese": {
       kcal: 113, carbs: 0.9, protein: 7, fat: 9, fiber: 0, verdict: "watch", emoji: "🧀",
+      photos: ["meal/cheese-1.jpg", "meal/cheese-2.jpg"],
+      photo: "meal/cheese-1.jpg",
       aliases: ["Cheddar", "Mozzarella", "Gouda", "Processed cheese", "Cheese slice"],
       portion: "One slice or about 30g",
       ingredients: ["Milk", "Cultures", "Salt", "Rennet"],
@@ -1495,6 +1525,8 @@
     },
     "orange": {
       kcal: 62, carbs: 15, protein: 1.2, fat: 0.2, fiber: 3.1, verdict: "good", emoji: "🍊",
+      photos: ["meal/orange-1.jpg", "meal/orange-2.jpg"],
+      photo: "meal/orange-1.jpg",
       aliases: ["Sweet orange", "Navel orange", "Tangerine", "Mandarin", "Clementine"],
       portion: "One medium orange",
       ingredients: ["Orange"],
@@ -1515,6 +1547,8 @@
     },
     "apple": {
       kcal: 95, carbs: 25, protein: 0.5, fat: 0.3, fiber: 4.4, verdict: "good", emoji: "🍎",
+      photos: ["meal/apple-1.jpg", "meal/apple-2.jpg"],
+      photo: "meal/apple-1.jpg",
       aliases: ["Green apple", "Red apple", "Fruit apple", "Eating apple"],
       portion: "One medium apple",
       ingredients: ["Apple"],
@@ -1535,6 +1569,8 @@
     },
     "mango": {
       kcal: 99, carbs: 25, protein: 1.4, fat: 0.6, fiber: 2.6, verdict: "good", emoji: "🥭",
+      photos: ["meal/mango-1.jpg", "meal/mango-2.jpg"],
+      photo: "meal/mango-1.jpg",
       aliases: ["Sweet mango", "Chunsa mango", "Alphonso", "Mangifera", "Mango fruit"],
       portion: "One cup sliced",
       ingredients: ["Mango"],
@@ -1555,6 +1591,8 @@
     },
     "watermelon": {
       kcal: 30, carbs: 7.6, protein: 0.6, fat: 0.2, fiber: 0.4, verdict: "good", emoji: "🍉",
+      photos: ["meal/watermelon-1.jpg", "meal/watermelon-2.jpg"],
+      photo: "meal/watermelon-1.jpg",
       aliases: ["Water melon", "Melon", "Seedless watermelon", "Tangra melon"],
       portion: "One cup cubed",
       ingredients: ["Watermelon"],
@@ -1575,6 +1613,8 @@
     },
     "pineapple": {
       kcal: 82, carbs: 22, protein: 0.9, fat: 0.2, fiber: 2.3, verdict: "good", emoji: "🍍",
+      photos: ["meal/pineapple-1.jpg", "meal/pineapple-2.jpg"],
+      photo: "meal/pineapple-1.jpg",
       aliases: ["Pine apple", "Ananas", "Sweet pineapple", "Tropical pineapple"],
       portion: "One cup chunks",
       ingredients: ["Pineapple"],
@@ -1595,6 +1635,8 @@
     },
     "grapes": {
       kcal: 62, carbs: 16, protein: 0.6, fat: 0.2, fiber: 0.9, verdict: "good", emoji: "🍇",
+      photos: ["meal/grapes-1.jpg", "meal/grapes-2.jpg"],
+      photo: "meal/grapes-1.jpg",
       aliases: ["Table grapes", "Red grapes", "Black grapes", "Green grapes", "Sultanas", "Raisins"],
       portion: "One cup",
       ingredients: ["Grapes"],
@@ -1615,6 +1657,8 @@
     },
     "broccoli": {
       kcal: 55, carbs: 11, protein: 3.7, fat: 0.6, fiber: 5.1, verdict: "good", emoji: "🥦",
+      photos: ["meal/broccoli-1.jpg", "meal/broccoli-2.jpg"],
+      photo: "meal/broccoli-1.jpg",
       aliases: ["Broccoli florets", "Green broccoli", "Calabrese", "Cruciferous vegetable"],
       portion: "One cup chopped",
       ingredients: ["Broccoli", "Sometimes oil and garlic"],
@@ -1635,6 +1679,8 @@
     },
     "spinach": {
       kcal: 23, carbs: 3.6, protein: 2.9, fat: 0.4, fiber: 2.2, verdict: "good", emoji: "🥬",
+      photos: ["meal/spinach-1.jpg", "meal/spinach-2.jpg"],
+      photo: "meal/spinach-1.jpg",
       aliases: ["Green spinach", "Leafy greens", "Palak", "Efo riro"],
       portion: "One cup raw",
       ingredients: ["Spinach"],
@@ -1655,6 +1701,8 @@
     },
     "carrot": {
       kcal: 41, carbs: 10, protein: 0.9, fat: 0.2, fiber: 2.8, verdict: "good", emoji: "🥕",
+      photos: ["meal/carrot-1.jpg", "meal/carrot-2.jpg"],
+      photo: "meal/carrot-1.jpg",
       aliases: ["Carrots", "Sweet carrot", "Boiled carrot", "Carrot stick"],
       portion: "One cup chopped",
       ingredients: ["Carrot"],
@@ -1675,6 +1723,8 @@
     },
     "soft drink": {
       kcal: 150, carbs: 39, protein: 0, fat: 0, fiber: 0, verdict: "off", emoji: "🥤",
+      photos: ["meal/soft-drink-1.jpg", "meal/soft-drink-2.jpg"],
+      photo: "meal/soft-drink-1.jpg",
       aliases: ["Soda", "Coke", "Fizzy drink", "Pop", "Carbonated drink", "Energy drink"],
       portion: "One can (330ml)",
       ingredients: ["Carbonated water", "Sugar", "Colour", "Flavour", "Caffeine in some"],
@@ -1695,6 +1745,8 @@
     },
     "fruit juice": {
       kcal: 112, carbs: 28, protein: 0.5, fat: 0.3, fiber: 0.2, verdict: "watch", emoji: "🧃",
+      photos: ["meal/fruit-juice-1.jpg", "meal/fruit-juice-2.jpg"],
+      photo: "meal/fruit-juice-1.jpg",
       aliases: ["Juice", "Orange juice", "Zobo", "Chapman", "Smoothie juice", "Fresh juice"],
       portion: "One glass (250ml)",
       ingredients: ["Fruit", "Sometimes added sugar", "Water"],
@@ -1715,6 +1767,8 @@
     },
     "chocolate": {
       kcal: 235, carbs: 26, protein: 3, fat: 14, fiber: 2, verdict: "off", emoji: "🍫",
+      photos: ["meal/chocolate-1.jpg", "meal/chocolate-2.jpg"],
+      photo: "meal/chocolate-1.jpg",
       aliases: ["Milk chocolate", "Dark chocolate", "Chocolate bar", "Candy bar", "Sweet"],
       portion: "One small bar (about 45g)",
       ingredients: ["Cocoa", "Sugar", "Milk solids", "Cocoa butter", "Vanilla"],
@@ -1735,6 +1789,8 @@
     },
     "ice cream": {
       kcal: 207, carbs: 24, protein: 3.5, fat: 11, fiber: 0.7, verdict: "off", emoji: "🍨",
+      photos: ["meal/ice-cream-1.jpg", "meal/ice-cream-2.jpg"],
+      photo: "meal/ice-cream-1.jpg",
       aliases: ["Cream ice", "Gelato", "Frozen dessert", "Sherbet", "Ice cream cone"],
       portion: "One scoop (about 66g)",
       ingredients: ["Milk", "Cream", "Sugar", "Flavour"],
@@ -1755,6 +1811,8 @@
     },
     "chips": {
       kcal: 312, carbs: 41, protein: 3.4, fat: 15, fiber: 3.8, verdict: "off", emoji: "🍟",
+      photos: ["meal/chips-1.jpg", "meal/chips-2.jpg"],
+      photo: "meal/chips-1.jpg",
       aliases: ["French fries", "Fried chips", "Potato chips", "Crisps", "Roasted plantain chips"],
       portion: "One medium serving",
       ingredients: ["Potato", "Oil", "Salt"],
@@ -1775,6 +1833,8 @@
     },
     "meat pie": {
       kcal: 320, carbs: 32, protein: 9, fat: 17, fiber: 1.5, verdict: "off", emoji: "🥟",
+      photos: ["meal/meat-pie-1.jpg", "meal/meat-pie-2.jpg"],
+      photo: "meal/meat-pie-1.jpg",
       aliases: ["Pie", "Chicken pie", "Beef pie", "Sausage roll", "Patty"],
       portion: "One pie",
       ingredients: ["Flour pastry", "Meat", "Potato", "Oil", "Seasoning"],
@@ -1795,6 +1855,8 @@
     },
     "shawarma": {
       kcal: 450, carbs: 45, protein: 25, fat: 19, fiber: 3, verdict: "watch", emoji: "🥙",
+      photos: ["meal/shawarma-1.jpg", "meal/shawarma-2.jpg"],
+      photo: "meal/shawarma-1.jpg",
       aliases: ["Shawarma", "Kebab", "Doner", "Gyro", "Chicken shawarma", "Beef shawarma"],
       portion: "One wrap",
       ingredients: ["Flatbread", "Grilled meat", "Vegetables", "Garlic sauce", "Sometimes fries"],
@@ -1815,6 +1877,8 @@
     },
     "fried chicken": {
       kcal: 490, carbs: 18, protein: 31, fat: 31, fiber: 1, verdict: "off", emoji: "🍗",
+      photos: ["meal/fried-chicken-1.jpg", "meal/fried-chicken-2.jpg"],
+      photo: "meal/fried-chicken-1.jpg",
       aliases: ["Chicken", "Crispy chicken", "Jerk chicken", "Fried poultry", "Chicken drumstick"],
       portion: "Two pieces",
       ingredients: ["Chicken", "Flour coating", "Oil", "Spices"],
@@ -1835,6 +1899,8 @@
     },
     "groundnut": {
       kcal: 161, carbs: 4.6, protein: 7.3, fat: 14, fiber: 2.4, verdict: "watch", emoji: "🥜",
+      photos: ["meal/groundnut-1.jpg", "meal/groundnut-2.jpg"],
+      photo: "meal/groundnut-1.jpg",
       aliases: ["Peanuts", "Ground nuts", "Kuli kuli", "Peanut butter", "Roasted groundnut"],
       portion: "One handful (about 28g)",
       ingredients: ["Groundnuts", "Sometimes salt or oil"],
@@ -1855,6 +1921,8 @@
     },
     "tea": {
       kcal: 2, carbs: 0.3, protein: 0, fat: 0, fiber: 0, verdict: "good", emoji: "🍵",
+      photos: ["meal/tea-1.jpg", "meal/tea-2.jpg"],
+      photo: "meal/tea-1.jpg",
       aliases: ["Green tea", "Black tea", "Herbal tea", "Chai", "Zobo tea", "Mint tea"],
       portion: "One cup",
       ingredients: ["Tea leaves", "Hot water", "Optional milk or sugar"],
@@ -1875,6 +1943,8 @@
     },
     "coffee": {
       kcal: 5, carbs: 0, protein: 0.3, fat: 0, fiber: 0, verdict: "good", emoji: "☕",
+      photos: ["meal/coffee-1.jpg", "meal/coffee-2.jpg"],
+      photo: "meal/coffee-1.jpg",
       aliases: ["Black coffee", "Espresso", "Cappuccino", "Latte", "Café", "Instant coffee"],
       portion: "One cup",
       ingredients: ["Coffee beans", "Hot water", "Optional milk and sugar"],

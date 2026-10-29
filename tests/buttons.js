@@ -393,24 +393,44 @@ for (const f of FILES) {
 /* --- 19. every food has its own real photograph --------------------------- */
 {
   const data = fs.readFileSync(path.join(APP, "data.js"), "utf8");
-  const foods = [...data.matchAll(/"([a-z ]+)": \{\s*\n\s*kcal:[\s\S]{0,900}?photo: "([^"]+)"/g)]
-    .map((m) => ({ name: m[1], photo: m[2] }));
-  check("the food database is intact", foods.length >= 11, String(foods.length));
+  const start = data.indexOf("var FOODS = {");
+  const block = data.slice(start, data.indexOf("\n  };", start));
+  const chunks = block.split(/\n    "([a-z ]+)": \{/);   // name, body, name, body...
+  const foods = [];
+  for (let i = 1; i + 1 < chunks.length; i += 2) {
+    const body = chunks[i + 1];
+    const photo = (body.match(/photo: "(meal\/[^"]+)"/) || [])[1] || null;
+    const arr = body.match(/photos: \[([^\]]*)\]/);
+    const photos = arr
+      ? [...arr[1].matchAll(/"(meal\/[^"]+\.jpg)"/g)].map((m) => m[1])
+      : (photo ? [photo] : []);
+    foods.push({ name: chunks[i], photo, photos });
+  }
+  check("the food database is intact", foods.length >= 46, String(foods.length));
+
+  const noPhoto = foods.filter((f) => !f.photo);
+  check("every food in the guide has a photograph", noPhoto.length === 0,
+    noPhoto.map((f) => f.name).join(", "));
 
   const photoDir = path.join(ROOT, "app/assets/img/");
-  const missing = foods.filter((f) => !fs.existsSync(path.join(photoDir, f.photo)));
+  const missing = foods.filter((f) => f.photo && !fs.existsSync(path.join(photoDir, f.photo)));
   check("every food photograph exists", missing.length === 0, missing.map((f) => f.name).join(", "));
 
   const used = new Map();
   const shared = [];
-  foods.forEach((f) => {
-    if (used.has(f.photo)) shared.push(f.name + " / " + used.get(f.photo));
-    used.set(f.photo, f.name);
-  });
+  foods.forEach((f) => f.photos.forEach((p) => {
+    if (used.has(p)) shared.push(f.name + " / " + used.get(p));
+    used.set(p, f.name);
+  }));
   check("no two foods share a photograph", shared.length === 0, shared.join(", "));
 
-  const stale = foods.filter((f) => /meal\/meal-\d\.jpg/.test(f.photo));
+  const stale = foods.filter((f) => f.photo && /meal\/meal-\d\.jpg/.test(f.photo));
   check("no food falls back to a borrowed picture", stale.length === 0, stale.map((f) => f.name).join(", "));
+
+  const scan = fs.readFileSync(path.join(APP, "scanner.js"), "utf8");
+  check("the scanner matches the plate against the real photographs",
+    scan.includes('"/app/assets/img/" + p') && !/meal\/thumb\//.test(scan));
+  check("the scanner scores each food on its best photograph", /best\[r\.name\]/.test(scan));
 }
 
 /* --- 20. every gym has a real photograph --------------------------------- */
