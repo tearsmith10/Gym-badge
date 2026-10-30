@@ -1,5 +1,5 @@
 /* GYM BADGE — service worker (offline first, self-updating) */
-var CACHE = "gymbadge-v24";
+var CACHE = "gymbadge-v25";
 var IMGS = [
   "/app/assets/img/avatar.jpg",
   "/app/assets/img/coach/model-male.jpg",
@@ -72,26 +72,46 @@ var IMGS = [
   "/app/assets/img/meal/burger-1.jpg",
   "/app/assets/img/meal/salad-1.jpg",
   "/app/assets/img/meal/suya-1.jpg",
-  "/app/assets/img/meal/swallow-1.jpg",
-  "/app/assets/img/meal/jollof-rice-2.jpg",
-  "/app/assets/img/meal/jollof-rice-3.jpg",
-  "/app/assets/img/meal/jollof-rice-4.jpg",
-  "/app/assets/img/meal/grilled-chicken-2.jpg",
-  "/app/assets/img/meal/beans-2.jpg",
-  "/app/assets/img/meal/banana-2.jpg",
-  "/app/assets/img/meal/banana-3.jpg",
-  "/app/assets/img/meal/pizza-2.jpg",
-  "/app/assets/img/meal/pizza-3.jpg",
-  "/app/assets/img/meal/burger-2.jpg",
-  "/app/assets/img/meal/burger-3.jpg",
-  "/app/assets/img/meal/salad-2.jpg",
-  "/app/assets/img/meal/salad-3.jpg",
-  "/app/assets/img/meal/suya-2.jpg",
-  "/app/assets/img/meal/suya-3.jpg",
-  "/app/assets/img/meal/swallow-2.jpg",
-  "/app/assets/img/meal/egg-2.jpg",
-  "/app/assets/img/meal/egg-3.jpg",
-  "/app/assets/img/meal/oatmeal-2.jpg",
+  "/app/assets/img/meal/swallow-1.jpg",
+
+  "/app/assets/img/meal/jollof-rice-2.jpg",
+
+  "/app/assets/img/meal/jollof-rice-3.jpg",
+
+  "/app/assets/img/meal/jollof-rice-4.jpg",
+
+  "/app/assets/img/meal/grilled-chicken-2.jpg",
+
+  "/app/assets/img/meal/beans-2.jpg",
+
+  "/app/assets/img/meal/banana-2.jpg",
+
+  "/app/assets/img/meal/banana-3.jpg",
+
+  "/app/assets/img/meal/pizza-2.jpg",
+
+  "/app/assets/img/meal/pizza-3.jpg",
+
+  "/app/assets/img/meal/burger-2.jpg",
+
+  "/app/assets/img/meal/burger-3.jpg",
+
+  "/app/assets/img/meal/salad-2.jpg",
+
+  "/app/assets/img/meal/salad-3.jpg",
+
+  "/app/assets/img/meal/suya-2.jpg",
+
+  "/app/assets/img/meal/suya-3.jpg",
+
+  "/app/assets/img/meal/swallow-2.jpg",
+
+  "/app/assets/img/meal/egg-2.jpg",
+
+  "/app/assets/img/meal/egg-3.jpg",
+
+  "/app/assets/img/meal/oatmeal-2.jpg",
+
   "/app/assets/img/meal/oatmeal-3.jpg",
   "/app/assets/img/meal/egg-1.jpg",
   "/app/assets/img/meal/oatmeal-1.jpg",
@@ -209,12 +229,12 @@ var ASSETS = [
   "/app/assets/js/trainers.js",
   "/app/assets/js/chat.js",
   "/app/assets/js/app.js",
-  "/app/assets/img/logo.png?v=24",
-  "/app/assets/img/icon-192.png?v=24",
-  "/app/assets/img/icon-maskable-512.png?v=24",
-  "/assets/img/logo.png?v=24",
-  "/assets/img/favicon.svg?v=24",
-  "/assets/img/favicon-32.png?v=24",
+  "/app/assets/img/logo.png?v=25",
+  "/app/assets/img/icon-192.png?v=25",
+  "/app/assets/img/icon-maskable-512.png?v=25",
+  "/assets/img/logo.png?v=25",
+  "/assets/img/favicon.svg?v=25",
+  "/assets/img/favicon-32.png?v=25",
   "/assets/img/bg/aurora-1.jpg",
   "/assets/img/bg/aurora-2.jpg",
   "/assets/img/bg/aurora-3.jpg"

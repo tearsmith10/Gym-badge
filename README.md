@@ -218,31 +218,29 @@ message toast. Every screen file uses them, so a toast can never fail
 because one file forgot to bring its own copy.
 
 ### 🎨 The official logo
-The mark is **the ascender**: the Gym Badge runner driving up three ascending
-bars — one flat, confident gesture, adidas-style performance energy told in our
-own body. It is shipped as **traced vectors**, not a redraw, so the artwork is
-pixel-faithful to the approved reference from a 16px favicon to the press
-banner.
+The mark is the approved **sprinter**: a runner exploding out of the blocks
+with two gold stripes streaming behind him, on the brand's own dark tile. It
+is the image exactly as designed — every surface uses the **complete
+artwork, unaltered**: nothing traced, simplified, cropped or recoloured.
 
-- **One artwork, two fills**: cream `#F4EFE6` on every dark surface (the app's
-  `#0b0b0b` and all three site themes — ember, midnight, dark), black on light
-  chips. Only the colour flips; the geometry never changes between surfaces.
-- **Transparent background** on the in-page assets (`logo.svg`, `mark.svg`,
-  `logo.png`), so the mark blends into whatever theme is active — no plate, no
-  tile, no white box.
-- The **tab favicon** (`favicon.svg`, `favicon-32.png`, `favicon-48.png`) puts
-  the cream mark on the solid app-colour tile instead: a transparent mark
-  vanishes against light browser chrome, and PWA icons always need a solid
-  background anyway. Pages link the tiled SVG so no browser can pick a
-  transparent one.
-- `assets/img/mark.png` is the dark horizontal lockup (mark + GYM BADGE
-  wordmark + gold rule + `TRAIN · TRACK · TRIUMPH`) used for press and social.
-- Shipped at 180, 192 and 512 for the icons, plus a full-bleed maskable
-  variant on the app-colour square that keeps the mark inside the safe zone.
+- **One artwork everywhere.** `logo.png`, `logo.svg`, `mark.svg`, the
+  favicons and all PWA icons carry the same 512×512 picture, scaled as
+  needed — the runner, both stripes, the tile and its rounded launcher
+  corners are always present.
+- **SVG surfaces are wrappers, not redraws**: `logo.svg`, `mark.svg` and
+  `favicon.svg` embed the artwork itself, so a vector file can never drift
+  from the picture the brand was approved as.
+- The **tab favicon** sits the artwork on the solid `#0b0b0b` tile so it is
+  visible against light browser chrome; the PWA set ships the full artwork
+  at 180, 192 and 512, plus a full-bleed maskable variant on the brand's own
+  tile colour that stays inside the launcher safe zone.
+- `assets/img/mark.png` is the 1200×736 press lockup: the complete artwork on
+  the brand tile with the GYM (cream) BADGE (coral) wordmark, a gold rule and
+  "Train smarter. Earn your badge."
 - The site header, download page, app splash, welcome screen, Badge ID, OAuth
   page, favicons and PWA icons all use the same files, so the brand cannot
-  drift between surfaces. Asset URLs are version-stamped (`?v=24`) and the
-  service worker caches `gymbadge-v24`, so an updated mark reaches installed
+  drift between surfaces. Asset URLs are version-stamped (`?v=25`) and the
+  service worker caches `gymbadge-v25`, so an updated mark reaches installed
   users instead of sitting in an old immutable cache.
 
 ### 🌍 Language changes (35 languages, flags first)
