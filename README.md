@@ -18,7 +18,8 @@ brand title, the training pitch, My Plate Truth, the food library with 101
 real photographs, the exercise guides, trainers, equipment, the four-tap
 onboarding story, programs, and the download card. Every surface in it uses
 the approved artwork and real product photography; `demo/poster.jpg` is its
-poster frame.
+poster frame. It is H.264 with faststart, so it plays in **any** browser,
+phone player or desktop video app.
 
 ---
 
