@@ -11,6 +11,17 @@ order basket and no billing screen anywhere in the codebase.
 
 ---
 
+## 🎬 Demo video
+
+`demo/gymbadge-demo.mp4` (52 seconds, 1280×720, 30 fps) is the product demo:
+brand title, the training pitch, My Plate Truth, the food library with 101
+real photographs, the exercise guides, trainers, equipment, the four-tap
+onboarding story, programs, and the download card. Every surface in it uses
+the approved artwork and real product photography; `demo/poster.jpg` is its
+poster frame.
+
+---
+
 ## What is in here
 
 ```
