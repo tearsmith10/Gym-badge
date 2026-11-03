@@ -21,6 +21,12 @@ the approved artwork and real product photography; `demo/poster.jpg` is its
 poster frame. It is H.264 with faststart, so it plays in **any** browser,
 phone player or desktop video app.
 
+`demo/gymbadge-mvp-ad.mp4` (2:12) is the narrated investor cut: every MVP
+of the product walked through with a soft voiceover and a light music
+bed — scanner, food library, guides, trainers, equipment, projection,
+gyms, programs, install-anywhere, and human support. Its poster frame is
+`demo/mvp-ad-poster.jpg`.
+
 ---
 
 ## What is in here
