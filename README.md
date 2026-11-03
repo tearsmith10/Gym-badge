@@ -21,14 +21,16 @@ the approved artwork and real product photography; `demo/poster.jpg` is its
 poster frame. It is H.264 with faststart, so it plays in **any** browser,
 phone player or desktop video app.
 
-`demo/gymbadge-mvp-ad.mp4` (1:50) is the narrated investor cut: every MVP
+`demo/gymbadge-mvp-ad.mp4` (1:47) is the narrated investor cut: every MVP
 of the product walked through — scanner, food library, guides, trainers,
 equipment, projection, gyms, programs, install-anywhere and human
-support — with a deep commercial voiceover over a modern hip-hop track:
-85 BPM, booming 808s, rolling hi-hats, and a drop that lands on the end
-card. Every scene cut is timed to the narration, so each visual changes
-a breath before he starts speaking about it, and the beat leans back
-under the voice on its own. Its poster frame is
+support — with a deep commercial voiceover over a hip-hop track built
+for it: 90 BPM boom-bap swing, punchy sampled-feel drums, and drill
+808s that slide into every note. Scene cuts are snapped to the
+narration — each visual changes a quarter-second before he starts
+speaking about it — the one music-only beat showcases the kit, and the
+drop lands exactly on the end card. The beat leans back under the voice
+on its own. Its poster frame is
 `demo/mvp-ad-poster.jpg`.
 
 ---
