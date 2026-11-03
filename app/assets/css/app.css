@@ -722,6 +722,22 @@ button.row-main:focus-visible { outline: 2px solid var(--accent); outline-offset
 .jn small{display:block;font-size:.64rem;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.06em}
 
 /* ---------- AI support assistant ---------- */
+/* ---- Ask about this food (My Plate Truth) ----
+   The button opens a question box inside the food itself: starters,
+   an input, and the assistant's answer about this plate. */
+.food-ask{margin-top:14px;border:1px solid var(--line);border-radius:16px;
+  padding:14px;background:var(--surface)}
+.food-ask .chips{margin:8px 0 4px}
+.food-ask .field{margin:10px 0 0}
+.food-ask input{width:100%;min-height:44px;border-radius:999px;
+  border:1.5px solid var(--line);background:var(--bg);color:var(--text);
+  padding:0 16px;font-size:.95rem}
+.food-ask input:focus{outline:none;border-color:var(--accent)}
+.food-ask-ans{margin-top:12px;padding:12px 14px;border-radius:14px;
+  border:1px solid var(--line);background:rgba(255,255,255,.04);
+  font-size:.93rem;line-height:1.55}
+.food-ask-ans .gb-ask{display:block;margin-top:8px;font-size:.8rem;
+  color:var(--muted);font-style:italic}
 .gb-chat-fab{
   position:fixed;right:16px;bottom:calc(var(--nav-h) + 16px);z-index:130;
   display:inline-flex;align-items:center;gap:7px;

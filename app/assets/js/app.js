@@ -259,7 +259,7 @@
   route("welcome", function () {
     var s = h('<div class="screen"><div class="welcome"></div></div>');
     var w = s.firstChild;
-    w.appendChild(h('<img class="logo" src="/assets/img/logo.png?v=25" alt="Gym Badge">'));
+    w.appendChild(h('<img class="logo" src="/assets/img/logo.png?v=26" alt="Gym Badge">'));
     w.appendChild(h('<div class="brandbig">Gymbadge</div><p class="tagline">Train · Track · Triumph</p>'));
     w.appendChild(h('<div class="hero-photos" style="margin-top:26px">' +
       '<div class="ph">' + img(modelImage("welcome"), modelAlt()) + "</div>" +
@@ -643,7 +643,7 @@
     tools.appendChild(tool("/assets/img/people/member-lift.jpg", "Body Goals", "Meet the body you're building", "future"));
     tools.appendChild(tool("/assets/img/people/gym-floor.jpg", "Find a Gym", "Find a gym and book a slot", "find"));
     tools.appendChild(tool("coach/coach-ada-okafor.jpg", "My Trainer", "Coaches you can trust", "trainers"));
-    tools.appendChild(tool("/app/assets/img/logo.png?v=25", "Your Badge ID", "Profile, streak and settings", "profile"));
+    tools.appendChild(tool("/app/assets/img/logo.png?v=26", "Your Badge ID", "Profile, streak and settings", "profile"));
     node.appendChild(tools);
 
     shell("library", "Workout Programs", node);
@@ -911,6 +911,131 @@
         toast(on ? "Saved to your favourites" : "Removed from your favourites");
       };
       panel.appendChild(favBtn);
+
+      /* ---- Ask about this food: a button, then the space to ask ----
+         Under My Plate Truth the member can go further than the guide:
+         tap the button, a question box opens right there in the food,
+         with a few starters, and the assistant answers about THIS food
+         (its own numbers travel with the question). */
+      var askBtn = h('<button class="btn btn-ghost mt" id="fdAskBtn">💬 Ask about this food</button>');
+      var askWrap = h('<div class="food-ask" id="fdAskWrap" hidden></div>');
+      askWrap.innerHTML =
+        '<div class="eyebrow" style="margin:0 0 8px">Ask about ' + esc(name) + "</div>" +
+        '<div class="chips" id="fdAskChips">' +
+          '<button type="button" class="chip">How often can I eat this?</button>' +
+          '<button type="button" class="chip">What can I swap it for?</button>' +
+          '<button type="button" class="chip">Does it fit my goal?</button>' +
+        "</div>" +
+        '<div class="field"><input id="fdAskQ" type="text" autocomplete="off" ' +
+        'placeholder="e.g. Can I eat this after a workout?"></div>' +
+        '<button class="btn btn-primary" id="fdAskSend" type="button">Ask</button>' +
+        '<div class="food-ask-ans" id="fdAskAns" hidden></div>';
+      panel.appendChild(askBtn);
+      panel.appendChild(askWrap);
+
+      askBtn.onclick = function () {
+        var opening = askWrap.hidden;
+        askWrap.hidden = !opening;
+        askBtn.textContent = opening ? "Hide the questions" : "💬 Ask about this food";
+        if (opening) {
+          var qi0 = $("#fdAskQ", askWrap);
+          if (qi0) qi0.focus();
+        }
+      };
+
+      var askSending = false;
+      function showAns(html) {
+        var ans = $("#fdAskAns", askWrap);
+        if (!ans) return;
+        ans.hidden = false;
+        ans.innerHTML = html;
+      }
+      /* The guide under the member's finger already knows this food.
+         When the question is one it can answer, answer it right here,
+         instantly and about THIS plate; everything else goes to the
+         assistant. */
+      function answerFromGuide(q, food) {
+        var s = (q || "").toLowerCase();
+        function has(list) { return list && list.length ? list.join("; ") : ""; }
+        function say(what) { return what ? '<b>From the guide:</b> ' + esc(what) : null; }
+        if (/swap|instead|replace/.test(s)) return say(has(food.swaps));
+        if (/how often|how much|portion|serving|how many|times a/.test(s))
+          return say(has(food.servings) || food.portion || "");
+        if (/goal|fat loss|lose weight|muscle|bulk|cut|endurance|lean/.test(s))
+          return say(food.goals || "");
+        if (/allergen|allergic|nuts?|gluten|intoleran/.test(s)) return say(has(food.allergens));
+        if (/benefit|good for|help|healthy|why should/.test(s)) return say(food.benefits || "");
+        if (/combin|pair|eat with|have with|drink with/.test(s)) return say(has(food.combinations));
+        if (/ingredient|made of|contains?|cook|recipe/.test(s)) return say(has(food.ingredients));
+        if (/protein|carb|calorie|kcal|fat|fibre|fiber|macro|nutrient|energy/.test(s)) {
+          var line = food.kcal + " kcal · " + food.carbs + "g carbs · " + food.protein +
+            "g protein · " + food.fat + "g fat · " + food.fiber + "g fibre per " +
+            (food.portion || "serving") + ".";
+          return say(line + (has(food.contributions) ? " " + has(food.contributions) : ""));
+        }
+        if (/culture|country|region|variation|traditional/.test(s)) return say(food.culture || "");
+        if (/what is|what's|what does|explain|describe|tell me about/.test(s))
+          return say(food.simple || food.what || "");
+        return null;
+      }
+      function sendAsk(q) {
+        if (askSending) return;
+        q = (q || "").trim();
+        if (!q) return toast("Type a question about " + name);
+        var local = answerFromGuide(q, f);
+        if (local) { showAns(local); return; }
+        askSending = true;
+        var send = $("#fdAskSend", askWrap);
+        if (send) { send.disabled = true; send.textContent = "Thinking\u2026"; }
+        showAns('<span class="gb-typing"><i></i><i></i><i></i></span>');
+        var lang = (window.GBI18n && window.GBI18n.current && window.GBI18n.current().code) || "en";
+        /* The food's own numbers travel with the question, so the answer
+           is about this plate, not food in general. */
+        var ctx = 'About the food "' + name + '" (' + f.kcal + " kcal, " + f.carbs +
+          "g carbs, " + f.protein + "g protein, " + f.fat + "g fat, " + f.fiber +
+          "g fibre per " + (f.portion || "serving") + "): " + q;
+        fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: ctx, lang: lang,
+                                 history: [{ role: "user", text: q }] })
+        }).then(function (r) {
+          return r.json().then(function (j) { return { status: r.status, j: j }; });
+        }).then(function (res) {
+          askSending = false;
+          if (send) { send.disabled = false; send.textContent = "Ask"; }
+          var j = res.j || {};
+          if (res.status === 429) {
+            showAns("You have asked a few questions very quickly. Give it a moment, then try again.");
+            return;
+          }
+          if (!j.ok) {
+            showAns("I could not reach the assistant just then. Try again in a moment, or email " +
+              "gymbadgesupport@gmail.com and a human will reply within one business day.");
+            return;
+          }
+          var html = esc(j.answer || "I do not have a confident answer for that one.");
+          if (j.followUp) {
+            html += '<span class="gb-ask">To narrow this down: ' + esc(j.followUp) + "</span>";
+          }
+          showAns(html);
+        }).catch(function () {
+          askSending = false;
+          if (send) { send.disabled = false; send.textContent = "Ask"; }
+          showAns("Something went wrong reaching the assistant. Please try again in a moment.");
+        });
+      }
+      askWrap.querySelectorAll("#fdAskChips .chip").forEach(function (c) {
+        c.onclick = function () { sendAsk(c.textContent); };
+      });
+      var qi = $("#fdAskQ", askWrap);
+      if (qi) {
+        qi.onkeydown = function (e) {
+          if (e.key === "Enter") { e.preventDefault(); sendAsk(qi.value); }
+        };
+      }
+      var sendBtn = $("#fdAskSend", askWrap);
+      if (sendBtn) sendBtn.onclick = function () { sendAsk(qi && qi.value); };
 
       $("#fdX", panel).onclick = function () { sheet.remove(); };
       sheet.onclick = function (e) { if (e.target === sheet) sheet.remove(); };
@@ -1232,7 +1357,7 @@
 
     // Digital Badge ID
     var code = badgeCode(u.username || u.name || "athlete");
-    node.appendChild(h('<div class="card center mt"><div class="badge-mark"><img src="/assets/img/logo.png?v=25" alt="Gym Badge"></div><h3 style="font-size:1.1rem">Your Badge ID</h3><div class="sub">Scan at any GymBadge partner gym</div><div class="qr">' + qrSvg(code) + '</div><div style="margin-top:10px"><span class="mono-code">' + esc(code) + '</span></div><button class="btn btn-ghost btn-sm" id="copyBadge" style="margin-top:12px">Copy code</button></div>'));
+    node.appendChild(h('<div class="card center mt"><div class="badge-mark"><img src="/assets/img/logo.png?v=26" alt="Gym Badge"></div><h3 style="font-size:1.1rem">Your Badge ID</h3><div class="sub">Scan at any GymBadge partner gym</div><div class="qr">' + qrSvg(code) + '</div><div style="margin-top:10px"><span class="mono-code">' + esc(code) + '</span></div><button class="btn btn-ghost btn-sm" id="copyBadge" style="margin-top:12px">Copy code</button></div>'));
 
     node.appendChild(h('<div class="list mt">' +
       '<div class="row"><div class="ri">🎯</div><div class="rm"><b>Goal</b><small>' + esc(u.goal || "Not set") + '</small></div></div>' +

@@ -21,10 +21,11 @@ the approved artwork and real product photography; `demo/poster.jpg` is its
 poster frame. It is H.264 with faststart, so it plays in **any** browser,
 phone player or desktop video app.
 
-`demo/gymbadge-mvp-ad.mp4` (2:12) is the narrated investor cut: every MVP
-of the product walked through with a soft voiceover and a light music
-bed — scanner, food library, guides, trainers, equipment, projection,
-gyms, programs, install-anywhere, and human support. Its poster frame is
+`demo/gymbadge-mvp-ad.mp4` (2:03) is the narrated investor cut: every MVP
+of the product walked through with a deep commercial voiceover over a
+high-energy gym track — scanner, food library, guides, trainers,
+equipment, projection, gyms, programs, install-anywhere, and human
+support. The music ducks under the voice on its own. Its poster frame is
 `demo/mvp-ad-poster.jpg`.
 
 ---
@@ -206,6 +207,17 @@ tab bar is always there.
 - **My Trainer** — bookable slots, saved trainers, and a review you can
   leave after a session.
 
+### 💬 Ask about this food
+Under My Plate Truth, every food now has a **Ask about this food** button.
+Tap it and a question space opens right inside the food: three starter
+questions, a box for your own, and the answer where you are reading.
+
+- Questions the food's own guide already covers — swaps, portions, goals,
+  allergens, benefits, pairings, macros, culture — are answered **instantly
+  from that guide**, with the food's real numbers.
+- Everything else goes to the assistant with the food's numbers travelling
+  with the question, so the reply is about this plate, not food in general.
+
 ### 📷 The food scanner is back
 My Plate Truth opens with a scanner again.
 
@@ -257,8 +269,8 @@ artwork, unaltered**: nothing traced, simplified, cropped or recoloured.
   "Train smarter. Earn your badge."
 - The site header, download page, app splash, welcome screen, Badge ID, OAuth
   page, favicons and PWA icons all use the same files, so the brand cannot
-  drift between surfaces. Asset URLs are version-stamped (`?v=25`) and the
-  service worker caches `gymbadge-v25`, so an updated mark reaches installed
+  drift between surfaces. Asset URLs are version-stamped (`?v=26`) and the
+  service worker caches `gymbadge-v26`, so an updated mark reaches installed
   users instead of sitting in an old immutable cache.
 
 ### 🌍 Language changes (35 languages, flags first)

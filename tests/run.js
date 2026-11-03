@@ -246,7 +246,7 @@ function analyseLogo(buf) {
   // the runner and both gold stripes, nothing traced or simplified. Every
   // box that shows it is square (34px header, 54px Badge ID, auto splash),
   // so the canvas must be square or the artwork stretches inside them.
-  const logoRes = await fetch(BASE + "/assets/img/logo.png?v=25");
+  const logoRes = await fetch(BASE + "/assets/img/logo.png?v=26");
   check("the logo loads", logoRes.status === 200);
   if (logoRes.status === 200) {
     const a = analyseLogo(Buffer.from(await logoRes.arrayBuffer()));
@@ -258,7 +258,7 @@ function analyseLogo(buf) {
   }
   // mark.png — the 1200x736 press lockup: the complete artwork on the
   // brand's own dark tile, with the Gym Badge wordmark
-  const bannerRes = await fetch(BASE + "/assets/img/mark.png?v=25");
+  const bannerRes = await fetch(BASE + "/assets/img/mark.png?v=26");
   check("the press banner loads", bannerRes.status === 200);
   if (bannerRes.status === 200) {
     const a = analyseLogo(Buffer.from(await bannerRes.arrayBuffer()));
@@ -267,14 +267,14 @@ function analyseLogo(buf) {
     check("the banner carries the cream mark (" + a.cream + " px)", a.cream > 500);
     check("the banner carries the coral accent (" + a.coral + " px)", a.coral > 500);
   }
-  const logoSvg = await get("/assets/img/logo.svg?v=25");
+  const logoSvg = await get("/assets/img/logo.svg?v=26");
   check("the vector logo loads", logoSvg.status === 200);
   check("the vector logo is the badge", /aria-label="Gym Badge"/.test(logoSvg.text));
   check("the vector logo carries the artwork", /data:image\/png;base64/.test(logoSvg.text));
   check("the vector logo does not swing with the theme", !/var\(--accent\)/.test(logoSvg.text));
   // the tab favicon needs the solid app-colour tile: a transparent mark
   // disappears against light browser chrome
-  const faviconSvg = await get("/assets/img/favicon.svg?v=25");
+  const faviconSvg = await get("/assets/img/favicon.svg?v=26");
   check("the tab favicon loads", faviconSvg.status === 200);
   check("the tab favicon sits on a visible tile",
     faviconSvg.status === 200 && /#0b0b0b/.test(faviconSvg.text) && /aria-label="Gym Badge"/.test(faviconSvg.text));
@@ -282,7 +282,7 @@ function analyseLogo(buf) {
   const home = await get("/");
   check("pages point the tab at the tiled favicon",
     home.status === 200 && /rel="icon" href="\/assets\/img\/favicon\.svg/.test(home.text));
-  const markSvg = await get("/assets/img/mark.svg?v=25");
+  const markSvg = await get("/assets/img/mark.svg?v=26");
   check("the bare mark loads", markSvg.status === 200);
   const siteCss = (await get("/web/assets/css/site.css")).text;
   check("secure note icons stay icon sized", /\.secure-note svg\{width:20px/.test(siteCss));
@@ -302,6 +302,13 @@ function analyseLogo(buf) {
   const appJs = (await get("/app/assets/js/app.js")).text;
   check("My Plate Truth has a scan button", /Scan my meal/.test(appJs));
   check("My Plate Truth has a photo button", /Use a photo from my device/.test(appJs));
+  // Under My Plate Truth: a button and a space to ask further questions
+  // about the food itself, answered by the assistant with the food's
+  // own numbers travelling with the question.
+  check("My Plate Truth offers questions about a food", /Ask about this food/.test(appJs));
+  check("the food question sends the food to the assistant",
+    /About the food "/.test(appJs) && /\/api\/chat/.test(appJs));
+  check("the food question has starter questions", /How often can I eat this\?/.test(appJs));
 
   section("NO MISSING HELPERS");
   // Every screen file must not call a helper it never defined.

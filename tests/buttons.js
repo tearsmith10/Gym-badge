@@ -118,6 +118,8 @@ for (const f of FILES) {
   const app = fs.readFileSync(path.join(APP, "app.js"), "utf8");
   check("My Plate Truth offers to scan", /Scan my meal/.test(app));
   check("My Plate Truth offers a photo", /Use a photo from my device/.test(app));
+  check("My Plate Truth lets the member ask about a food",
+    /Ask about this food/.test(app) && /fdAskSend/.test(app) && /fdAskAns/.test(app));
   const scan = fs.readFileSync(path.join(APP, "scanner.js"), "utf8");
   check("the scanner opens the camera", /getUserMedia/.test(scan));
   check("the scanner accepts a photo from the device", /capture="environment"/.test(scan));
