@@ -75,10 +75,11 @@ ROUTES = {
     "/account": "web/account.html",
     "/privacy": "web/privacy.html",
     "/terms": "web/terms.html",
+    "/demo": "demo/index.html",
 }
 
 # Directories served straight from disk.
-STATIC_ROOTS = ("/app/", "/assets/", "/web/")
+STATIC_ROOTS = ("/app/", "/assets/", "/web/", "/demo/")
 
 # Files that must never be served.
 HIDDEN = ("users.json", ".env", "server.py", "gymbadge_core.py", "data/")

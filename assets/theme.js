@@ -51,3 +51,21 @@
 
   window.GBTheme = { get: function () { return current; }, set: set, next: next, label: label, modes: modes };
 })();
+
+/* ==========================================================================
+   GYM BADGE - visit analytics
+   Loads Vercel Web Analytics once, from the one script every surface
+   includes (landing, marketing pages, the PWA). Nothing is collected
+   until Web Analytics is enabled for the project in the Vercel
+   dashboard (Settings -> Web Analytics); before that the script 404s
+   and this is a silent no-op.
+   ========================================================================== */
+(function () {
+  "use strict";
+  if (window.__gbInsights) return;
+  window.__gbInsights = true;
+  var s = document.createElement("script");
+  s.defer = true;
+  s.src = "/_vercel/insights/script.js";
+  document.head.appendChild(s);
+})();

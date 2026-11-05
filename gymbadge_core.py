@@ -136,7 +136,7 @@ _DB: dict = {"users": {}, "sessions": {}, "verify": {}, "reset": {}, "revoked": 
 # The account tables are dictionaries; the review queues and the trainer
 # directory are lists. Both have to survive a restart.
 _DICT_KEYS = ("users", "sessions", "verify", "reset", "revoked")
-_LIST_KEYS = ("trainers", "trainerApplications", "exerciseSubmissions")
+_LIST_KEYS = ("trainers", "trainerApplications", "exerciseSubmissions", "waitlist")
 
 
 def _token_digest(token: str) -> str:
@@ -850,6 +850,28 @@ def api_verify_id(body: dict, headers) -> tuple[int, dict]:
                   "message": "Identity verified. Only the last 4 digits are stored."})
 
 
+def api_waitlist(body: dict, headers) -> tuple[int, dict]:
+    """Public waitlist capture: validated, deduped, persisted.
+
+    The footer subscribe box used to fake success without storing
+    anything. This endpoint makes the count real - it lives in the same
+    store as accounts, so it is durable wherever that store is durable
+    (Upstash when configured, the data dir otherwise).
+    """
+    email = str(body.get("email") or "").strip().lower()
+    if len(email) > 254 or not EMAIL_RE.match(email):
+        return (400, {"ok": False, "error": "Enter a valid email address."})
+    with _LOCK:
+        entries = _DB.setdefault("waitlist", [])
+        if any(str(e.get("email") or "").lower() == email for e in entries):
+            return (200, {"ok": True, "already": True, "count": len(entries)})
+        entries.append({"email": email, "ts": now_ts()})
+        count = len(entries)
+    db_save()
+    print(f"[waitlist] {count} total - {email}", flush=True)
+    return (200, {"ok": True, "count": count})
+
+
 ROUTE_TABLE = {
     "POST /api/auth/signup": api_signup,
     "POST /api/auth/login": api_login,
@@ -861,6 +883,7 @@ ROUTE_TABLE = {
     "POST /api/auth/logout": api_logout,
     "POST /api/auth/change-password": api_change_password,
     "POST /api/verify/id": api_verify_id,
+    "POST /api/waitlist": api_waitlist,
 }
 
 

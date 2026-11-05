@@ -273,6 +273,7 @@ for (const f of FILES) {
   check("the download page uses the real encoder", /GBQR\.svg/.test(dl));
   const chrome = fs.readFileSync(path.join(ROOT, "web/assets/js/chrome.js"), "utf8");
   check("the footer links to the download page", chrome.includes('"/download"'));
+  check("the footer subscribe box really stores the address", chrome.includes("/api/waitlist"));
   const routes = fs.readFileSync(path.join(ROOT, "server.py"), "utf8");
   check("the download page has a route", /"\/download"/.test(routes));
 }

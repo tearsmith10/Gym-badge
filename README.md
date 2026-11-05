@@ -62,7 +62,8 @@ one script (`SLIDES`), and the product plates ship in `pitch/plates/`.
 ```
 app/            The installable PWA (Workout · Exercise · Library · Progress · You)
 web/            The marketing site (19 pages)
-assets/         Shared runtime: auth, i18n, music OAuth, password helper, theme, people
+demo/           The /demo landing page: plays the narrated ad and captures waitlist signups
+assets/         Shared runtime: auth, i18n, music OAuth, password helper, theme, people, analytics
 gymbadge_core.py  Accounts, tokens, Mailgun email and the JSON API (shared)
 server.py       Standalone HTTP server: serves the site + the API in one process
 api/index.py    The same API as a Vercel serverless function
@@ -71,7 +72,9 @@ vercel.json     Deployment config: clean URLs, function route, cache headers
 
 The API lives in `gymbadge_core.py` and is used by **both** `server.py` (local
 and self-hosted) and `api/index.py` (Vercel), so the two can never drift
-apart.
+apart. `POST /api/waitlist` stores footer and `/demo` signups in the same
+store as accounts; Vercel Web Analytics is injected from `assets/theme.js`
+and starts collecting once it is enabled in the project dashboard.
 
 ### The features
 

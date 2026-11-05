@@ -270,9 +270,26 @@
       var v = document.getElementById("newsEmail").value.trim();
       var note = document.getElementById("newsNote");
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { note.textContent = "Please enter a valid email address."; note.className = "fn-note err"; return; }
-      nf.remove();
-      note.textContent = "You're in — check your inbox to confirm. " + v;
-      note.className = "fn-note ok";
+      note.textContent = "Saving…"; note.className = "fn-note";
+      // Real capture: the signup is stored server-side and deduped; the
+      // success note only appears once the server confirms.
+      fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: v })
+      }).then(function (r) { return r.json(); }).then(function (d) {
+        if (d && d.ok) {
+          nf.remove();
+          note.textContent = "You're in — we'll be in touch at " + v + ".";
+          note.className = "fn-note ok";
+        } else {
+          note.textContent = (d && d.error) || "Could not save that — please try again.";
+          note.className = "fn-note err";
+        }
+      }).catch(function () {
+        note.textContent = "Network error — please try again.";
+        note.className = "fn-note err";
+      });
     });
 
     // PWA install (footer button) — captures the browser's install prompt.

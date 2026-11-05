@@ -161,6 +161,14 @@ function analyseLogo(buf) {
   r = await api("/api/profile", undefined, "GET", session);
   check("the session is dead after logout", r.status === 401, r.j);
 
+  section("WAITLIST");
+  r = await api("/api/waitlist", { email: "not-an-email" });
+  check("the waitlist rejects a bad email", r.status === 400, r.j);
+  r = await api("/api/waitlist", { email: "deck.qa@nowhere.test" });
+  check("the waitlist accepts a valid email", r.status === 200 && r.j.ok, r.j);
+  r = await api("/api/waitlist", { email: "deck.qa@nowhere.test" });
+  check("the waitlist dedupes a repeat signup", r.status === 200 && r.j.already, r.j);
+
   section("AI ASSISTANT");
   r = await api("/api/chat", { message: "How do I reset my password?", lang: "en" });
   check("answers a password question", r.status === 200 && r.j.answer.length > 40, r.j);

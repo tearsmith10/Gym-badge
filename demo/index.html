@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121211">
+<title>Gym Badge — the 1:47 tour</title>
+<meta name="description" content="Watch the narrated Gym Badge product tour: My Plate Truth, 148 exercise guides, NFC equipment taps, real trainers and badges — the whole product in 1 minute 47 seconds.">
+<link rel="icon" href="/assets/img/favicon.svg?v=26" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/shared.css">
+<style>
+  :root { --bg:#121211; --surface:#1A1A18; --line:#2B2B28; --text:#F2F0EB;
+          --muted:#A5A29B; --coral:#FF6A45; --gold:#C9A227; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    background:var(--bg); color:var(--text); font-family:"Segoe UI",system-ui,sans-serif;
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding:32px 20px;
+  }
+  main { width:100%; max-width:860px; text-align:center; }
+  .mark { width:74px; height:74px; border-radius:18px; display:inline-block; }
+  .brand { font-size:1.6rem; font-weight:800; letter-spacing:.4px; margin-top:14px; }
+  .brand em { color:var(--coral); font-style:normal; }
+  .rule { width:44px; height:3px; background:var(--gold); margin:22px auto; border-radius:2px; }
+  h1 { font-size:clamp(1.7rem,4.5vw,2.6rem); font-weight:800; line-height:1.15; }
+  h1 em { color:var(--coral); font-style:normal; }
+  .sub { color:var(--muted); margin-top:12px; font-size:1.02rem; }
+  .player {
+    margin:30px auto 0; border-radius:16px; overflow:hidden;
+    border:1px solid var(--line); background:#000;
+    box-shadow:0 24px 60px rgba(0,0,0,.55);
+  }
+  video { display:block; width:100%; height:auto; max-height:64vh; }
+  .cta { margin-top:26px; }
+  .cta-label { font-size:.8rem; letter-spacing:2.4px; text-transform:uppercase; color:var(--coral); font-weight:700; }
+  form { display:flex; gap:10px; justify-content:center; margin-top:14px; flex-wrap:wrap; }
+  input[type=email] {
+    background:var(--surface); border:1px solid var(--line); color:var(--text);
+    border-radius:10px; padding:13px 16px; font-size:1rem; width:min(340px,100%);
+    outline:none; transition:border-color .15s;
+  }
+  input[type=email]:focus { border-color:var(--coral); }
+  button {
+    background:var(--coral); color:#121211; border:0; border-radius:10px;
+    padding:13px 22px; font-size:1rem; font-weight:700; cursor:pointer;
+  }
+  button:hover { filter:brightness(1.08); }
+  .note { margin-top:12px; font-size:.88rem; color:var(--muted); min-height:1.2em; }
+  .note.ok { color:#7BD88F; } .note.err { color:#FF8A70; }
+  .links { margin-top:26px; display:flex; gap:18px; justify-content:center; flex-wrap:wrap; }
+  .links a { color:var(--muted); text-decoration:none; font-size:.95rem; }
+  .links a:hover { color:var(--coral); }
+  .links a.b { color:var(--text); font-weight:600; }
+</style>
+</head>
+<body>
+<main>
+  <img class="mark" src="/assets/img/logo.png?v=26" alt="Gym Badge">
+  <div class="brand">GYM <em>BADGE</em></div>
+  <div class="rule"></div>
+  <h1>The whole product in <em>1:47.</em></h1>
+  <p class="sub">Deep-voice narration, hip-hop score. Scan, train, tap, badge.</p>
+
+  <div class="player">
+    <video controls playsinline preload="metadata"
+           poster="/demo/mvp-ad-poster.jpg">
+      <source src="/demo/gymbadge-mvp-ad.mp4" type="video/mp4">
+      Your browser cannot play this video —
+      <a href="/demo/gymbadge-mvp-ad.mp4">open it directly</a>.
+    </video>
+  </div>
+
+  <div class="cta">
+    <div class="cta-label">Watched it? Get early access</div>
+    <form id="demoWait" novalidate>
+      <input type="email" id="demoEmail" placeholder="you@email.com"
+             aria-label="Email address" required>
+      <button type="submit">Join the waitlist</button>
+    </form>
+    <div class="note" id="demoNote">One or two emails a month. Unsubscribe anytime — no data is sold, ever.</div>
+  </div>
+
+  <nav class="links">
+    <a class="b" href="/app/">Open the app</a>
+    <a href="/pricing">Pricing</a>
+    <a href="/download">Install on your phone</a>
+    <a href="/gyms">For gyms</a>
+  </nav>
+</main>
+
+<script src="/assets/theme.js"></script>
+<script>
+  // Same capture as the site footer: POST to the waitlist endpoint and
+  // only claim success once the server confirms the store took it.
+  document.getElementById("demoWait").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var v = document.getElementById("demoEmail").value.trim();
+    var note = document.getElementById("demoNote");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
+      note.textContent = "Please enter a valid email address.";
+      note.className = "note err"; return;
+    }
+    note.textContent = "Saving…"; note.className = "note";
+    fetch("/api/waitlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: v })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (d && d.ok) {
+        document.getElementById("demoWait").remove();
+        note.textContent = "You're in — we'll be in touch at " + v + ".";
+        note.className = "note ok";
+      } else {
+        note.textContent = (d && d.error) || "Could not save that — please try again.";
+        note.className = "note err";
+      }
+    }).catch(function () {
+      note.textContent = "Network error — please try again.";
+      note.className = "note err";
+    });
+  });
+</script>
+</body>
+</html>

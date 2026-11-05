@@ -23,6 +23,7 @@ Routes
     POST /api/auth/oauth          link a Google / Yahoo account
     POST /api/auth/logout         revoke the session
     POST /api/verify/id           optional masked identity verification
+    POST /api/waitlist            public waitlist capture (footer + /demo)
 
 Environment variables
 ---------------------

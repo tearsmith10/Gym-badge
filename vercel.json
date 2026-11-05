@@ -74,6 +74,7 @@
     { "src": "/server.py", "dest": "/api/index.py" },
     { "src": "/api/index.py", "status": 404 },
     { "src": "/data/(.*)", "dest": "/api/index.py" },
+    { "src": "/demo", "dest": "/demo/index.html" },
     { "handle": "filesystem" },
     { "src": "/api/(.*)", "dest": "/api/index.py" },
     { "src": "/login", "dest": "/web/login.html" },
