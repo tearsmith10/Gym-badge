@@ -168,6 +168,9 @@ function analyseLogo(buf) {
   check("the waitlist accepts a valid email", r.status === 200 && r.j.ok, r.j);
   r = await api("/api/waitlist", { email: "deck.qa@nowhere.test" });
   check("the waitlist dedupes a repeat signup", r.status === 200 && r.j.already, r.j);
+  r = await api("/api/waitlist", "not-an-object");
+  check("a non-object JSON body answers 400, never 500",
+    r.status === 400 && r.j && r.j.ok === false, r.j);
 
   section("AI ASSISTANT");
   r = await api("/api/chat", { message: "How do I reset my password?", lang: "en" });

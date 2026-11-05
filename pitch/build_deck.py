@@ -183,7 +183,7 @@ SLIDES = [
      "headline": ["Shipped. **Not slideware.**"],
      "bullets": [
          "**In production.** gymbadge.vercel.app - live, branded, current; offline-first PWA installs from a link.",
-         "**Gated by tests.** 181 UI wiring checks and 165 behaviour checks gate every push; human support within one business day.",
+         "**Gated by tests.** 181 UI wiring checks and 166 behaviour checks gate every push; human support within one business day.",
          "**Traction so far.** 3,000+ on the waitlist · 100+ gym trainers in conversation · 2,000 views of the narrated ad in its first 36 hours.",
          "**First-12-month targets (targets, not results):** flagship gym house open · 10 gyms on NFC tags · weekly conversion tracking · trainer marketplace beta.",
          "**Channels are users.** Link-install means 0% store cut and instant updates; every gym in the product is a distribution point.",

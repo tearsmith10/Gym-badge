@@ -148,12 +148,19 @@ class Handler(BaseHTTPRequestHandler):
             return {}
         try:
             raw = self.rfile.read(length)
-            return json.loads(raw.decode("utf-8")) or {}
+            data = json.loads(raw.decode("utf-8")) or {}
         except Exception as exc:
             # Never fail silently — a swallowed parse error looks like a
             # mysterious "empty body" to the client.
             print(f"[api] could not parse the request body: {exc!r}", flush=True)
             return {}
+        if not isinstance(data, dict):
+            # A JSON string/array/number is not a payload — answer with an
+            # empty one so handlers return 400 instead of crashing on .get().
+            print(f"[api] non-object body ({type(data).__name__}) ignored",
+                  flush=True)
+            return {}
+        return data
 
     def do_GET(self):
         path = urlparse(self.path).path

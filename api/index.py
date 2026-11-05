@@ -95,10 +95,17 @@ def _read_body(environ) -> dict:
         return {}
 
     try:
-        return json.loads(raw.decode("utf-8")) or {}
+        data = json.loads(raw.decode("utf-8")) or {}
     except Exception as exc:
         print(f"[api] could not parse the body: {exc!r}", file=sys.stderr)
         return {}
+    if not isinstance(data, dict):
+        # A JSON string/array/number is not a request payload — treat it as
+        # an empty one so handlers answer 400 instead of crashing on .get().
+        print(f"[api] non-object body ({type(data).__name__}) ignored",
+              file=sys.stderr)
+        return {}
+    return data
 
 
 def app(environ, start_response):
@@ -118,7 +125,8 @@ def app(environ, start_response):
         print(f"[api] {method} {path} failed: {exc}", file=sys.stderr)
         status, payload = 500, {"ok": False, "error": "Something went wrong on our side."}
 
-    print(f"[api] {method} {path} -> {status} (body keys: {sorted(body.keys()) if body else 'none'})",
+    keys = sorted(body.keys()) if isinstance(body, dict) and body else "none"
+    print(f"[api] {method} {path} -> {status} (body keys: {keys})",
           file=sys.stderr)
 
     data = json.dumps(payload).encode("utf-8")
@@ -144,6 +152,8 @@ try:
             try:
                 body = json.loads(raw.decode("utf-8")) or {}
             except Exception:
+                body = {}
+            if not isinstance(body, dict):
                 body = {}
             print(f"[api-handler] {self.command} {self.path} -> body keys: "
                   f"{sorted(body.keys()) if body else 'none'}", file=sys.stderr)
