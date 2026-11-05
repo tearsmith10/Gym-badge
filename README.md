@@ -36,12 +36,14 @@ on its own. Its poster frame is
 ---
 
 ## 📊 Investor pitch deck
-`pitch/gymbadge-investor-deck.pptx` (19 slides, editable) and
-`pitch/gymbadge-investor-deck.pdf` (email-ready) are the investor deck:
-problem, solution, product plates from the live app, demo with a QR to
-the narrated cut, market, business model, roadmap, the ask, contact,
-and an appendix. Every visual is approved artwork or real product
-photography; no statistic appears without a source.
+`pitch/gymbadge-investor-deck.pptx` (21 slides, editable) and
+`pitch/gymbadge-investor-deck.pdf` (email-ready, ~3.5 MB) are the
+investor deck: problem, solution, product plates from the live app,
+demo with a QR to the narrated cut, market, competitive landscape,
+business model (USD-first), where it stands, roadmap, team, the ask
+with 12-month milestones, contact, and an appendix. Every visual is
+approved artwork or real product photography; no statistic appears
+without a source.
 
 The deck ships with every slot filled — November 2026 cover date, the
 Grand View Research market figure ($12.1B → $33.6B, 13.4% CAGR), the

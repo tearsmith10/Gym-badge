@@ -99,7 +99,15 @@ def wrap(items, size, max_w):
 
 # ---------------------------------------------------------------- content
 def img(name):
-    return str(PLATES / f"{name}.png")
+    """Return a size-optimised JPEG of a plate (keeps the deck emailable)."""
+    src = PLATES / f"{name}.png"
+    cache = Path(r"C:\Users\darli\AppData\Local\Temp\opencode\deck_jpg")
+    cache.mkdir(parents=True, exist_ok=True)
+    dst = cache / f"{name}.jpg"
+    if (not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime):
+        im = Image.open(src).convert("RGB")
+        im.save(dst, "JPEG", quality=82, optimize=True, progressive=True)
+    return str(dst)
 
 SLIDES = [
     {"kind": "cover", "image": img("title"),
@@ -149,38 +157,62 @@ SLIDES = [
          "**Channels are users.** Every gym and every trainer in the product is a distribution point, not a cost line.",
      ]},
 
+    {"kind": "table", "eyebrow": "COMPETITIVE LANDSCAPE",
+     "headline": ["Trackers count. **We change the plate.**"],
+     "col_w": [336, 172, 172, 172],
+     "rows": [
+         ["CAPABILITY", "GYM BADGE", "FITNESS TRACKERS", "AI CHATBOTS"],
+         ["Plate truth from a photo, with follow-up questions", "YES", "Database logging", "Text answers only"],
+         ["148 guided disciplines + routine builder", "YES", "Running plans only", "-"],
+         ["Live gym equipment status (NFC / QR)", "YES", "-", "-"],
+         ["Offline-first, installs from a link, no store cut", "YES", "Varies", "-"],
+         ["No ads, no data sales, human support", "YES", "Ads / paywalls", "Varies"],
+     ],
+     "footline": "**Why now:** 858M fitness-app downloads in 2023 (Business of Apps) - none of them own the floor."},
+
     {"kind": "text", "eyebrow": "BUSINESS MODEL",
      "headline": ["Grow on trust, **not traps.**"],
      "cards": [
-         ("MEMBERS", "Free core, premium depth. Premium **₦5,000/mo** (≈$3.23) in 16 currencies; Elite ₦9,500/mo."),
-         ("GYMS", "Equipment tags and floor analytics. Seat packages live: Team, Business, Enterprise from **₦3,000 per seat/mo.**"),
+         ("MEMBERS", "Free core, premium depth. Premium **~$3.23/mo** (₦5,000) across 16 currencies; Elite ~$6.13/mo."),
+         ("GYMS", "Equipment tags and floor analytics. Seats from **$1.94/seat/mo** - Team, Business, Enterprise."),
          ("TRAINERS", "Bookings and marketplace share. **15%** at launch, flexed per partner."),
      ],
-     "footline": "**No ads. No data sales. Ever.**"},
+     "footline": "List ARPU **≈$38.71/yr** · seats in blocks of 5/10/20 · **no ads, no data sales. Ever.**"},
 
     {"kind": "text", "eyebrow": "WHERE IT STANDS",
      "headline": ["Shipped. **Not slideware.**"],
      "bullets": [
-         "**In production.** gymbadge.vercel.app - live, branded, current.",
-         "**Offline-first PWA.** Installs from a link to the home screen; works where signal surrenders.",
-         "**Real support.** Human answers within one business day, verified accounts, email flows.",
-         "**Gated by tests.** Every push passes both suites: 180 UI wiring checks and 162 behaviour checks.",
-         "**Traction.** Product, pricing and support live in production today; distribution is link-based, so launch installs and waitlist are measured from day one - not estimated.",
+         "**In production.** gymbadge.vercel.app - live, branded, current; offline-first PWA installs from a link.",
+         "**Gated by tests.** 180 UI wiring checks and 162 behaviour checks gate every push; human support within one business day.",
+         "**Measured, not estimated.** Installs, scans and premium conversion are instrumented from day one.",
+         "**First-12-month targets (targets, not results):** flagship gym house open · 10 gyms on NFC tags · weekly conversion tracking · trainer marketplace beta.",
+         "**Channels are users.** Link-install means 0% store cut and instant updates; every gym in the product is a distribution point.",
      ]},
 
     {"kind": "text", "eyebrow": "ROADMAP",
      "headline": ["Three moves **from here.**"],
      "cards": [
-         ("NOW", "Gym partnerships for equipment tags. Deeper food library and guides."),
+         ("NOW", "Flagship gym house buildout. Gym partnerships for equipment tags."),
          ("NEXT", "Clubs, streaks and public badges. Trainer marketplace beta."),
          ("THEN", "Floor dashboard for gyms, B2B pilots. Months 6-12 post-close."),
      ]},
 
+    {"kind": "team", "eyebrow": "THE TEAM",
+     "headline": ["One founder. **Team-grade shipping.**"],
+     "name": "Tearsmith",
+     "role": "Founder & CEO",
+     "bio": "Self-taught engineer and lifelong fitness builder - background across engineering, hands-on training and prior startup work. Designs, builds and operates Gym Badge end to end: product, the AI food engine, 148 exercise guides, payments across 16 currencies, and a pipeline that gates every push on 342 automated checks. One person already ships what normally takes a team.",
+     "hires": "First hires on this round: two engineers, one growth & partnerships lead, one gym-ops lead for the flagship house."},
+
     {"kind": "ask", "eyebrow": "THE ASK",
      "headline": ["$1.5M pre-seed SAFE."],
-     "funds": [("Product & engineering", 40), ("Growth & partnerships", 30),
-               ("Team", 20), ("Operations & support", 10)],
-     "side": "$8M valuation cap · 20% discount · rolling close over 4-6 weeks."},
+     "funds": [("Flagship gym house - buildout & latest equipment", 30),
+               ("Product & infrastructure", 25),
+               ("Team", 25),
+               ("Growth & partnerships", 15),
+               ("Operations & support", 5)],
+     "side": "$8M valuation cap · 20% discount · rolling close over 4-6 weeks.",
+     "milestones": "**12-month milestones.** Flagship gym house open as the pilot floor · 10 gyms on NFC tags · premium conversion tracked weekly · trainer marketplace beta."},
 
     {"kind": "contact", "eyebrow": "CONTACT",
      "headline": ["Let's earn the badge **together.**"],
@@ -407,6 +439,58 @@ def build_pptx(path):
             if s.get("footline"):
                 text(slide, MARGIN, y + 46, s["footline"], 17, bold=True)
 
+        elif kind == "table":
+            cols = s["col_w"]
+            rh = 46.0
+            ty = y - 6
+            for ri, row in enumerate(s["rows"]):
+                cx = MARGIN
+                for ci, cell in enumerate(row):
+                    cw_ = cols[ci]
+                    if ri == 0:
+                        rect(slide, cx, ty, cw_, rh, SURFACE, LINE)
+                        text(slide, cx + 12, ty + rh * 0.62, cell, 12,
+                             color=CORAL, bold=True, spc=1.4, width=cw_ - 24)
+                    else:
+                        rect(slide, cx, ty, cw_, rh,
+                             SURFACE if ri % 2 else BG, LINE)
+                        hi = ci == 1
+                        lines = wrap(parse(cell), 13, cw_ - 20)
+                        by = ty + (rh - len(lines[:2]) * 17) / 2
+                        for line in lines[:2]:
+                            runs_ = [(t + (" " if k < len(line) - 1 else ""),
+                                      b, p) for k, (t, b, p) in enumerate(line)]
+                            text(slide, cx, by + 11, runs_, 13,
+                                 color=(CORAL if hi else
+                                        (TEXT if ci == 0 else MUTED)),
+                                 bold=hi, align="center", width=cw_)
+                            by += 17
+                    cx += cw_
+                ty += rh
+            text(slide, MARGIN, ty + 30, s["footline"], 15, bold=True)
+
+        elif kind == "team":
+            lx, ly, lw, lh = fit_box(str(LOGO), MARGIN, y - 4, 236, 236)
+            picture(slide, str(LOGO), lx, ly, w=lw, h=lh)
+            rx, rw = 344.0, RIGHT - 344.0
+            text(slide, rx, y + 26, s["name"], 27, bold=True)
+            text(slide, rx, y + 58, s["role"], 15, color=CORAL,
+                 bold=True, spc=1.6)
+            by = y + 96
+            for line in wrap(parse(s["bio"]), 14.5, rw):
+                runs_ = [(t + (" " if k < len(line) - 1 else ""), b, p)
+                         for k, (t, b, p) in enumerate(line)]
+                text(slide, rx, by + 12, runs_, 14.5, color=TEXT, width=rw)
+                by += 22
+            by += 18
+            rect(slide, rx, by, 40, 3, GOLD)
+            by += 22
+            for line in wrap(parse(s["hires"]), 14, rw):
+                runs_ = [(t + (" " if k < len(line) - 1 else ""), b, p)
+                         for k, (t, b, p) in enumerate(line)]
+                text(slide, rx, by + 12, runs_, 14, color=MUTED, width=rw)
+                by += 20
+
         elif kind == "demo":
             bullets(slide, MARGIN, y, s["bullets"], 400)
             px, py = 516.0, 96.0
@@ -422,14 +506,21 @@ def build_pptx(path):
         elif kind == "ask":
             fy = y
             for label, pct in s["funds"]:
-                text(slide, MARGIN, fy + 14, label, 16, bold=True)
-                text(slide, RIGHT - 90, fy + 14, f"{pct}%", 16, color=CORAL,
+                text(slide, MARGIN, fy + 13, label, 15.5, bold=True)
+                text(slide, RIGHT - 90, fy + 13, f"{pct}%", 15.5, color=CORAL,
                      bold=True, align="right", width=90)
-                rect(slide, MARGIN, fy + 26, CONTENT_W, 10, SURFACE, rounded=True)
-                rect(slide, MARGIN, fy + 26, CONTENT_W * pct / 100.0, 10,
+                rect(slide, MARGIN, fy + 25, CONTENT_W, 9, SURFACE, rounded=True)
+                rect(slide, MARGIN, fy + 25, CONTENT_W * pct / 100.0, 9,
                      CORAL, rounded=True)
-                fy += 58
+                fy += 50
             text(slide, MARGIN, fy + 24, s["side"], 14, color=MUTED)
+            my = fy + 50
+            for line in wrap(parse(s["milestones"]), 13.5, CONTENT_W):
+                runs_ = [(t + (" " if k < len(line) - 1 else ""), b, p)
+                         for k, (t, b, p) in enumerate(line)]
+                text(slide, MARGIN, my + 11, runs_, 13.5, color=TEXT,
+                     width=CONTENT_W)
+                my += 19
 
         elif kind == "contact":
             lx, ly, lw, lh = fit_box(str(LOGO), MARGIN, y + 6, 250, 250)
@@ -625,6 +716,61 @@ def build_pdf(path):
             if s.get("footline"):
                 text(MARGIN, y + 46, s["footline"], 17, bold=True)
 
+        elif kind == "table":
+            cols = s["col_w"]
+            rh = 46.0
+            ty = y - 6
+            for ri, row in enumerate(s["rows"]):
+                cx = MARGIN
+                for ci, cell in enumerate(row):
+                    cw_ = cols[ci]
+                    if ri == 0:
+                        rect(cx, ty, cw_, rh, SURFACE, LINE)
+                        text(cx + 12, ty + rh * 0.62, cell, 12, color=CORAL,
+                             bold=True, spc=1.4, width=cw_ - 24)
+                    else:
+                        rect(cx, ty, cw_, rh,
+                             SURFACE if ri % 2 else BG, LINE)
+                        hi = ci == 1
+                        lines = wrap(parse(cell), 13, cw_ - 20)
+                        by = ty + (rh - len(lines[:2]) * 17) / 2
+                        for line in lines[:2]:
+                            runs_ = [(t + (" " if k < len(line) - 1 else ""),
+                                      b, p) for k, (t, b, p) in enumerate(line)]
+                            text(cx, by + 11, runs_, 13,
+                                 color=(CORAL if hi else
+                                        (TEXT if ci == 0 else MUTED)),
+                                 bold=hi, align="center", width=cw_)
+                            by += 17
+                    cx += cw_
+                ty += rh
+            text(MARGIN, ty + 30, s["footline"], 15, bold=True)
+
+        elif kind == "team":
+            iw, ih = Image.open(str(LOGO)).size
+            box = 236.0
+            sc = min(box / iw, box / ih)
+            lwd, lht = iw * sc, ih * sc
+            picture(str(LOGO), MARGIN + (box - lwd) / 2,
+                    y - 4 + (box - lht) / 2, w=lwd, h=lht)
+            rx, rw = 344.0, RIGHT - 344.0
+            text(rx, y + 26, s["name"], 27, bold=True)
+            text(rx, y + 58, s["role"], 15, color=CORAL, bold=True, spc=1.6)
+            by = y + 96
+            for line in wrap(parse(s["bio"]), 14.5, rw):
+                runs_ = [(t + (" " if k < len(line) - 1 else ""), b, p)
+                         for k, (t, b, p) in enumerate(line)]
+                text(rx, by + 12, runs_, 14.5, color=TEXT, width=rw)
+                by += 22
+            by += 18
+            rect(rx, by, 40, 3, GOLD)
+            by += 22
+            for line in wrap(parse(s["hires"]), 14, rw):
+                runs_ = [(t + (" " if k < len(line) - 1 else ""), b, p)
+                         for k, (t, b, p) in enumerate(line)]
+                text(rx, by + 12, runs_, 14, color=MUTED, width=rw)
+                by += 20
+
         elif kind == "demo":
             bullets(MARGIN, y, s["bullets"], 400)
             px, py, pw = 516.0, 96.0, 390.0
@@ -638,13 +784,19 @@ def build_pdf(path):
         elif kind == "ask":
             fy = y
             for label, pct in s["funds"]:
-                text(MARGIN, fy + 14, label, 16, bold=True)
-                text(RIGHT - 90, fy + 14, f"{pct}%", 16, color=CORAL,
+                text(MARGIN, fy + 13, label, 15.5, bold=True)
+                text(RIGHT - 90, fy + 13, f"{pct}%", 15.5, color=CORAL,
                      bold=True, align="right", width=90)
-                rect(MARGIN, fy + 26, CONTENT_W, 10, SURFACE, rounded=True)
-                rect(MARGIN, fy + 26, CONTENT_W * pct / 100.0, 10, CORAL, rounded=True)
-                fy += 58
+                rect(MARGIN, fy + 25, CONTENT_W, 9, SURFACE, rounded=True)
+                rect(MARGIN, fy + 25, CONTENT_W * pct / 100.0, 9, CORAL, rounded=True)
+                fy += 50
             text(MARGIN, fy + 24, s["side"], 14, color=MUTED)
+            my = fy + 50
+            for line in wrap(parse(s["milestones"]), 13.5, CONTENT_W):
+                runs_ = [(t + (" " if k < len(line) - 1 else ""), b, p)
+                         for k, (t, b, p) in enumerate(line)]
+                text(MARGIN, my + 11, runs_, 13.5, color=TEXT, width=CONTENT_W)
+                my += 19
 
         elif kind == "contact":
             iw, ih = Image.open(str(LOGO)).size
