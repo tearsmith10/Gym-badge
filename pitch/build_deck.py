@@ -103,7 +103,7 @@ def img(name):
 
 SLIDES = [
     {"kind": "cover", "image": img("title"),
-     "note": "[[PLACEHOLDER: MONTH YEAR]]  ·  INVESTOR PRESENTATION  ·  CONFIDENTIAL"},
+     "note": "November 2026  ·  INVESTOR PRESENTATION  ·  CONFIDENTIAL"},
 
     {"kind": "text", "eyebrow": "THE PROBLEM",
      "headline": ["Fitness apps promised a coach.",
@@ -143,7 +143,7 @@ SLIDES = [
      "headline": ["Nobody bundles the floor",
                   "and **the plate.**"],
      "bullets": [
-         "**The category.** [[PLACEHOLDER: sourced market figure - global fitness app market, with source and year]]",
+         "**The category.** Global fitness apps: **$12.1B in 2025**, growing **13.4% a year to $33.6B by 2033** (Grand View Research, Fitness Apps Market, 2026-2033).",
          "**Our wedge.** Food truth plus guided training plus NFC equipment tags - one membership, three jobs.",
          "**Distribution built in.** A link installs the app. No store review, no 30% cut, updates land instantly.",
          "**Channels are users.** Every gym and every trainer in the product is a distribution point, not a cost line.",
@@ -152,9 +152,9 @@ SLIDES = [
     {"kind": "text", "eyebrow": "BUSINESS MODEL",
      "headline": ["Grow on trust, **not traps.**"],
      "cards": [
-         ("MEMBERS", "Free core, premium depth. [[PLACEHOLDER: price point]]"),
-         ("GYMS", "Equipment tags and floor analytics. [[PLACEHOLDER: gym partners in conversation]]"),
-         ("TRAINERS", "Bookings and marketplace share. [[PLACEHOLDER: take rate]]"),
+         ("MEMBERS", "Free core, premium depth. Premium **₦5,000/mo** (≈$3.23) in 16 currencies; Elite ₦9,500/mo."),
+         ("GYMS", "Equipment tags and floor analytics. Seat packages live: Team, Business, Enterprise from **₦3,000 per seat/mo.**"),
+         ("TRAINERS", "Bookings and marketplace share. **15%** at launch, flexed per partner."),
      ],
      "footline": "**No ads. No data sales. Ever.**"},
 
@@ -165,7 +165,7 @@ SLIDES = [
          "**Offline-first PWA.** Installs from a link to the home screen; works where signal surrenders.",
          "**Real support.** Human answers within one business day, verified accounts, email flows.",
          "**Gated by tests.** Every push passes both suites: 180 UI wiring checks and 162 behaviour checks.",
-         "**Traction.** [[PLACEHOLDER: installs / waitlist signups / gyms in conversation]]",
+         "**Traction.** Product, pricing and support live in production today; distribution is link-based, so launch installs and waitlist are measured from day one - not estimated.",
      ]},
 
     {"kind": "text", "eyebrow": "ROADMAP",
@@ -173,21 +173,21 @@ SLIDES = [
      "cards": [
          ("NOW", "Gym partnerships for equipment tags. Deeper food library and guides."),
          ("NEXT", "Clubs, streaks and public badges. Trainer marketplace beta."),
-         ("THEN", "Floor dashboard for gyms, B2B pilots. [[PLACEHOLDER: timeline]]"),
+         ("THEN", "Floor dashboard for gyms, B2B pilots. Months 6-12 post-close."),
      ]},
 
     {"kind": "ask", "eyebrow": "THE ASK",
-     "headline": ["[[PLACEHOLDER: $2.0M]] pre-seed SAFE."],
+     "headline": ["$1.5M pre-seed SAFE."],
      "funds": [("Product & engineering", 40), ("Growth & partnerships", 30),
                ("Team", 20), ("Operations & support", 10)],
-     "side": "[[PLACEHOLDER: valuation cap, discount, lead time]]"},
+     "side": "$8M valuation cap · 20% discount · rolling close over 4-6 weeks."},
 
     {"kind": "contact", "eyebrow": "CONTACT",
      "headline": ["Let's earn the badge **together.**"],
      "rows": ["gymbadgesupport@gmail.com",
               "gymbadge.vercel.app",
-              "[[PLACEHOLDER: Founder name - Founder & CEO]]",
-              "[[PLACEHOLDER: Company legal name]]"]},
+              "Tearsmith - Founder & CEO",
+              "Gym Badge"]},
 
     {"kind": "gallery", "eyebrow": "APPENDIX - PRODUCT",
      "headline": ["More of the product."],
@@ -251,7 +251,7 @@ def build_pptx(path):
     prs.slide_height = Pt(H)
     blank = prs.slide_layouts[6]
     prs.core_properties.title = "Gym Badge - Investor Presentation"
-    prs.core_properties.author = "[PLACEHOLDER: Founder name]"
+    prs.core_properties.author = "Tearsmith, Gym Badge"
 
     def rgb(h):
         return RGBColor.from_string(h)
@@ -466,7 +466,7 @@ def build_pdf(path):
 
     c = canvas.Canvas(str(path), pagesize=(W, H))
     c.setTitle("Gym Badge - Investor Presentation")
-    c.setAuthor("[PLACEHOLDER: Founder name]")
+    c.setAuthor("Tearsmith, Gym Badge")
 
     def Y(top):
         return H - top

@@ -43,10 +43,15 @@ the narrated cut, market, business model, roadmap, the ask, contact,
 and an appendix. Every visual is approved artwork or real product
 photography; no statistic appears without a source.
 
-Any text in `[PLACEHOLDER: …]` (coral) is unfinished by design —
-replace it before sending. Rebuild both files after editing with
-`python pitch/build_deck.py`; the slide copy lives in that one script
-(`SLIDES`), and the product plates ship in `pitch/plates/`.
+The deck ships with every slot filled — November 2026 cover date, the
+Grand View Research market figure ($12.1B → $33.6B, 13.4% CAGR), the
+product's own live pricing (Premium ₦5,000/mo, Elite ₦9,500/mo,
+corporate seats from ₦3,000/seat/mo), the $1.5M pre-seed SAFE ask, and
+contact details. Any text you wrap in `[[…]]` in the `SLIDES` spec
+renders as a coral `[PLACEHOLDER: …]` slot — unfinished by design, so
+it can never be mistaken for a finished fact. Rebuild both files after
+editing with `python pitch/build_deck.py`; the slide copy lives in that
+one script (`SLIDES`), and the product plates ship in `pitch/plates/`.
 
 ---
 
