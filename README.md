@@ -35,6 +35,21 @@ on its own. Its poster frame is
 
 ---
 
+## 📊 Investor pitch deck
+`pitch/gymbadge-investor-deck.pptx` (19 slides, editable) and
+`pitch/gymbadge-investor-deck.pdf` (email-ready) are the investor deck:
+problem, solution, product plates from the live app, demo with a QR to
+the narrated cut, market, business model, roadmap, the ask, contact,
+and an appendix. Every visual is approved artwork or real product
+photography; no statistic appears without a source.
+
+Any text in `[PLACEHOLDER: …]` (coral) is unfinished by design —
+replace it before sending. Rebuild both files after editing with
+`python pitch/build_deck.py`; the slide copy lives in that one script
+(`SLIDES`), and the product plates ship in `pitch/plates/`.
+
+---
+
 ## What is in here
 
 ```
