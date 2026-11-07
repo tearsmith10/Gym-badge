@@ -278,6 +278,28 @@ for (const f of FILES) {
   check("the download page has a route", /"\/download"/.test(routes));
 }
 
+/* --- 13b. the five first-of-its-kind features are wired in --- */
+{
+  const loop = fs.readFileSync(path.join(ROOT, "app/assets/js/loop.js"), "utf8");
+  check("the plate→program loop module exists", /GBLoop/.test(loop));
+  check("the loop computes a protein gap offline", /offlineAdjust/.test(loop));
+  const app = fs.readFileSync(path.join(ROOT, "app/assets/js/app.js"), "utf8");
+  check("the food screen shows the loop adjustment", /Plate → Program/.test(app));
+  check("the log screen shows coach notes between sets", /From your coach/.test(app));
+  check("sets can be signed as proof of work", /Sign as proof of work/.test(app));
+  const eq = fs.readFileSync(path.join(ROOT, "app/assets/js/equipment.js"), "utf8");
+  check("the floor screen shows live occupancy", /Live floor/.test(eq));
+  check("gym machines have tap in/out", /Tap in/.test(eq));
+  const index = fs.readFileSync(path.join(ROOT, "app/index.html"), "utf8");
+  check("the app loads the loop module", index.includes("/app/assets/js/loop.js"));
+  const core = fs.readFileSync(path.join(ROOT, "gymbadge_core.py"), "utf8");
+  check("proof signing exists on the server", /api_proof_sign/.test(core));
+  check("live floor exists on the server", /api_floor_live/.test(core));
+  check("the coach note route exists", /api_coach_note/.test(core));
+  check("the plate loop endpoint exists", /api_coach_adjust/.test(core));
+  check("the badge code endpoint exists", /api_badge_code/.test(core));
+}
+
 /* --- 14. the service worker does not serve stale API data --- */
 {
   const sw = fs.readFileSync(path.join(ROOT, "app/sw.js"), "utf8");

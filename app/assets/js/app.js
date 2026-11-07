@@ -385,6 +385,20 @@
   route("log", function () {
     var node = h("<div></div>");
     node.appendChild(h('<p class="sub mb">Pick an exercise — Gym Badge remembers your last number so you can beat it.</p>'));
+
+    /* Between-set coaching: latest notes from your trainer. */
+    if (window.GBCoach) {
+      var coachBox = h('<div class="card mt" style="display:none"></div>');
+      window.GBCoach.feed().then(function (d) {
+        if (!d || !d.ok || !d.notes || !d.notes.length) return;
+        var latest = d.notes[0];
+        coachBox.style.display = "";
+        coachBox.appendChild(h('<div class="eyebrow" style="margin-bottom:8px">From your coach</div>'));
+        coachBox.appendChild(h("<p>" + esc(latest.text) + "</p>"));
+        if (d.notes.length > 1) coachBox.appendChild(h('<p class="faint small">' + (d.notes.length - 1) + " more notes below.</p>"));
+      });
+      node.appendChild(coachBox);
+    }
     if (!S.isPremium() && S.trialsLeft() <= 5) node.appendChild(h('<div class="banner">' + S.trialsLeft() + ' free logs left today. <a href="#/pricing">Upgrade for unlimited →</a></div>'));
 
     /* With a catalogue this size, search is the fastest way in. */
@@ -488,6 +502,49 @@
       go("workout");
     };
     node.appendChild(save);
+
+    /* Proof-of-work: sign this set so it's verifiable */
+    var signBtn = h('<button class="btn btn-ghost mt">Sign as proof of work</button>');
+    var proofOut = h('<div class="faint small mt" style="display:none"></div>');
+    signBtn.onclick = function () {
+      var v = parseFloat($("#val", node).value);
+      if (!v || v <= 0) return toast("Enter what you did first");
+      if (!window.GBProof) return toast("Proof signing is unavailable");
+      signBtn.disabled = true;
+      signBtn.textContent = "Signing…";
+      window.GBProof.sign(ex.name, "", [{ reps: 1, kg: v }]).then(function (d) {
+        signBtn.disabled = false;
+        signBtn.textContent = "Sign as proof of work";
+        if (d && d.ok) {
+          proofOut.style.display = "";
+          proofOut.textContent = "Proof signed · ID " + d.id + " · " + new Date(d.ts * 1000).toLocaleTimeString() + " — anyone can verify it with the ID in Settings.";
+          toast("Proof of work signed ✓");
+        } else {
+          toast((d && d.error) || "Could not sign — are you signed in?");
+        }
+      }).catch(function () { toast("Offline — signing needs a connection."); });
+    };
+    node.appendChild(signBtn);
+    node.appendChild(proofOut);
+
+    /* Verify any proof by ID */
+    var vIn = h('<div class="field mt"><label>Verify a proof of work (paste ID)</label><input id="proofId" placeholder="pf…" autocomplete="off"></div>');
+    var vBtn = h('<button class="btn btn-ghost">Verify</button>');
+    var vOut = h('<div class="faint small mt" style="display:none"></div>');
+    vBtn.onclick = function () {
+      var id = ($("#proofId", node).value || "").trim();
+      if (!id) return toast("Paste a proof ID");
+      window.GBProof.verify(id).then(function (d) {
+        vOut.style.display = "";
+        vOut.textContent = d && d.ok
+          ? (d.valid ? "✓ Valid proof — " + d.exercise + (" · " + d.sets.length + " set(s)") : "✗ Signature does not match — this record was altered.")
+          : ((d && d.error) || "Proof not found.");
+      }).catch(function () { vOut.style.display = ""; vOut.textContent = "Offline — cannot verify."; });
+    };
+    node.appendChild(vIn);
+    node.appendChild(vBtn);
+    node.appendChild(vOut);
+
     shell("workout", ex.name, node, { back: true, backTo: "log" });
   });
 
@@ -901,6 +958,21 @@
         render();
       };
       panel.appendChild(log);
+
+      /* Plate → Program loop: this meal adjusts your next session. */
+      var loopBox = h('<div class="card mt" style="display:none"></div>');
+      log.addEventListener("click", function () {
+        if (!window.GBLoop) return;
+        window.GBLoop.recordMeal(f).then(function (adj) {
+          if (!adj || !adj.ok) return;
+          loopBox.style.display = "";
+          loopBox.innerHTML = "";
+          loopBox.appendChild(h('<div class="eyebrow" style="margin-bottom:8px">Plate → Program</div>'));
+          loopBox.appendChild(h("<p>" + esc(adj.advice) + "</p>"));
+          loopBox.appendChild(h('<p class="faint small">Intensity for your next session: ' + esc(adj.intensity) + (adj.proteinGap ? " · " + esc(adj.proteinGap) + "g protein to go" : "") + "</p>"));
+        });
+      });
+      panel.appendChild(loopBox);
 
       /* Star it, so the food you eat often is always one tap away. */
       var favBtn = h('<button class="btn btn-ghost mt">★ Add to favourites</button>');

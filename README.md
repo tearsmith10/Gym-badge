@@ -36,10 +36,11 @@ on its own. Its poster frame is
 ---
 
 ## 📊 Investor pitch deck
-`pitch/gymbadge-investor-deck.pptx` (21 slides, editable) and
+`pitch/gymbadge-investor-deck.pptx` (22 slides, editable) and
 `pitch/gymbadge-investor-deck.pdf` (email-ready, ~3.5 MB) are the
 investor deck: problem, solution, product plates from the live app,
 demo with a QR to the narrated cut, market, competitive landscape,
+the loop (plate → program, badge, live floor, proof of work),
 business model (USD-first), where it stands, roadmap, team, the ask
 with 12-month milestones, contact, and an appendix. Every visual is
 approved artwork or real product photography; no statistic appears

@@ -128,7 +128,7 @@ SLIDES = [
      "cards": [
          ("EAT", "My Plate Truth. Photograph any plate: what it is, what it does for you, and ask it anything right there."),
          ("TRAIN", "148 guided disciplines, a routine built in four taps, and a log that remembers every rep."),
-         ("BADGE", "Progress charted week after week. Real trainers a tap away. Works offline, anywhere."),
+         ("BADGE", "Every set signed as proof of work. Real trainers a tap away. Works offline, anywhere."),
      ]},
 
     {"kind": "image", "image": img("scan")},
@@ -170,6 +170,16 @@ SLIDES = [
      ],
      "footline": "**Why now:** 858M fitness-app downloads in 2023 (Business of Apps) - none of them own the floor."},
 
+    {"kind": "text", "eyebrow": "THE LOOP",
+     "headline": ["Four engines. **One loop.**"],
+     "bullets": [
+         "**The plate tells the program.** My Plate Truth computes today's fuel gap and adjusts tomorrow's session intensity — food and training stop being separate tabs.",
+         "**The badge is the product.** Your QR badge and machine tags tap you in; sets log to you without touching your phone. NFC wristbands pilot at the flagship house.",
+         "**The floor is live.** Member taps feed anonymized machine occupancy — free or in use, right now — the read side of the gym floor dashboard already in the ask.",
+         "**The proof is signed.** Every set can be signed as HMAC proof of work and verified by anyone, no data fabricated, no PII exposed.",
+         "**Nobody else runs all four in one system.** Bundle-level first: token + plate + floor + proof. Buy the loop, not a tracker.",
+     ]},
+
     {"kind": "text", "eyebrow": "BUSINESS MODEL",
      "headline": ["Grow on trust, **not traps.**"],
      "cards": [
@@ -183,7 +193,7 @@ SLIDES = [
      "headline": ["Shipped. **Not slideware.**"],
      "bullets": [
          "**In production.** gymbadge.vercel.app - live, branded, current; offline-first PWA installs from a link.",
-         "**Gated by tests.** 181 UI wiring checks and 166 behaviour checks gate every push; human support within one business day.",
+         "**Gated by tests.** 194 UI wiring checks and 182 behaviour checks gate every push; human support within one business day.",
          "**Traction so far.** 3,000+ on the waitlist · 100+ gym trainers in conversation · 2,000 views of the narrated ad in its first 36 hours.",
          "**First-12-month targets (targets, not results):** flagship gym house open · 10 gyms on NFC tags · weekly conversion tracking · trainer marketplace beta.",
          "**Channels are users.** Link-install means 0% store cut and instant updates; every gym in the product is a distribution point.",
@@ -192,8 +202,8 @@ SLIDES = [
     {"kind": "text", "eyebrow": "ROADMAP",
      "headline": ["Three moves **from here.**"],
      "cards": [
-         ("NOW", "Flagship gym house buildout. Gym partnerships for equipment tags."),
-         ("NEXT", "Clubs, streaks and public badges. Trainer marketplace beta."),
+         ("NOW", "Plate to program loop + badge QR live. Flagship gym house buildout. Gym partnerships for equipment tags."),
+         ("NEXT", "Live floor on the flagship pilot, between-set coaching loop, NFC badge v2 pilot at the house, trainer marketplace beta."),
          ("THEN", "Floor dashboard for gyms, B2B pilots. Months 6-12 post-close."),
      ]},
 
@@ -201,7 +211,7 @@ SLIDES = [
      "headline": ["One founder. **Team-grade shipping.**"],
      "name": "Tearsmith",
      "role": "Founder & CEO",
-     "bio": "Self-taught engineer and lifelong fitness builder - background across engineering, hands-on training and prior startup work. Designs, builds and operates Gym Badge end to end: product, the AI food engine, 148 exercise guides, payments across 16 currencies, and a pipeline that gates every push on 342 automated checks. One person already ships what normally takes a team.",
+     "bio": "Self-taught engineer and lifelong fitness builder - background across engineering, hands-on training and prior startup work. Designs, builds and operates Gym Badge end to end: product, the AI food engine, 148 exercise guides, payments across 16 currencies, and a pipeline that gates every push on 376 automated checks. One person already ships what normally takes a team.",
      "hires": "First hires on this round: two engineers, one growth & partnerships lead, one gym-ops lead for the flagship house."},
 
     {"kind": "ask", "eyebrow": "THE ASK",

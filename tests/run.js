@@ -172,6 +172,45 @@ function analyseLogo(buf) {
   check("a non-object JSON body answers 400, never 500",
     r.status === 400 && r.j && r.j.ok === false, r.j);
 
+  section("FEATURES — LOOP, PROOF, FLOOR, COACH, BADGE");
+  // The ACCOUNTS section logged the original session out — sign back in.
+  r = await api("/api/auth/login", { email, password: "newpass4567" });
+  check("re-login for the feature checks", r.status === 200 && r.j.ok, r.j);
+  const fSession = r.j && r.j.token;
+  // Plate → Program loop
+  r = await api("/api/coach/adjust", { protein: 60, proteinTarget: 120, kcal: 1200, kcalTarget: 2400 }, "POST", fSession);
+  check("the plate loop computes a protein gap", r.status === 200 && r.j.ok && r.j.proteinGap > 0, r.j);
+  check("the plate loop reduces intensity under fuelled", r.j && r.j.intensity === "reduced", r.j);
+  r = await api("/api/coach/adjust", { protein: "x", proteinTarget: 120, kcal: 1200, kcalTarget: 2400 }, "POST", fSession);
+  check("the plate loop rejects non-numeric input", r.status === 400, r.j);
+  // Proof-of-work
+  r = await api("/api/proof/sign", { exercise: "Bench Press", machine: "Bench A", sets: [{ reps: 8, kg: 60 }] }, "POST", fSession);
+  check("a workout can be signed as proof", r.status === 200 && r.j.ok && !!r.j.id, r.j);
+  const proofId = r.j && r.j.id;
+  r = await api("/api/proof/sign", { exercise: "Bench Press", sets: [] }, "POST", fSession);
+  check("signing with no sets is rejected", r.status === 400, r.j);
+  r = await api("/api/proof/verify", { id: proofId });
+  check("a signed proof verifies", r.status === 200 && r.j.valid === true, r.j);
+  check("verify leaks no email", r.j && !JSON.stringify(r.j).includes("@gymbadge.test"), r.j);
+  r = await api("/api/proof/verify", { id: "pf-does-not-exist" });
+  check("unknown proof id -> 404", r.status === 404 && r.j.valid === false, r.j);
+  // Live floor
+  r = await api("/api/floor/tap", { machine: "bench-a", phase: "start" }, "POST", fSession);
+  check("a floor tap is recorded", r.status === 200 && r.j.ok, r.j);
+  r = await api("/api/floor/live", undefined, "GET", fSession);
+  check("live floor reports occupancy anonymized", r.status === 200 && r.j.ok && r.j.machines && r.j.machines["bench-a"] && r.j.machines["bench-a"].inUse === true, r.j);
+  check("live floor leaks no email", r.j && !JSON.stringify(r.j).includes("@gymbadge.test"), r.j);
+  // Between-set coaching
+  r = await api("/api/coach/note", { member: email, text: "Great depth." }, "POST", fSession);
+  check("a non-trainer cannot send coaching notes", r.status === 403, r.j);
+  r = await api("/api/coach/feed", undefined, "GET", fSession);
+  check("the coach feed answers for a member", r.status === 200 && r.j.ok && Array.isArray(r.j.notes), r.j);
+  // Badge QR v1
+  r = await api("/api/badge/code", {}, "POST", fSession);
+  check("badge code is issued for a member", r.status === 200 && r.j.ok && /^GB-/.test(r.j.code), r.j);
+  r = await api("/api/badge/code", {}, "POST", undefined);
+  check("badge code requires sign-in", r.status === 401, r.j);
+
   section("AI ASSISTANT");
   r = await api("/api/chat", { message: "How do I reset my password?", lang: "en" });
   check("answers a password question", r.status === 200 && r.j.answer.length > 40, r.j);

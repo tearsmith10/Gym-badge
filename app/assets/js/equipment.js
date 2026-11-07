@@ -186,6 +186,37 @@
     addLine("Responsible team", rep.responsible);
     node.appendChild(statusCard);
 
+    /* Live floor: occupancy from anonymized member taps (30 min window). */
+    var liveNote = h('<div class="sub center mt" style="font-size:.8rem">Live floor: checking…</div>');
+    node.appendChild(liveNote);
+    fetch("/api/floor/live").then(function (r) { return r.json(); }).then(function (d) {
+      if (!d || !d.ok) { liveNote.textContent = "Live floor unavailable offline — status from the last sync."; return; }
+      var slot = d.machines && d.machines[eq.id];
+      liveNote.textContent = slot
+        ? (slot.inUse ? "● In use right now — last tap " + new Date(slot.lastTap * 1000).toLocaleTimeString() : "● Free now — last tap " + new Date(slot.lastTap * 1000).toLocaleTimeString())
+        : "○ No live tap in the last 30 min — availability from gym report.";
+    }).catch(function () {
+      liveNote.textContent = "Live floor unavailable offline — status from the last sync.";
+    });
+
+    /* Tap start / end feeds the live floor (anonymized). */
+    var tapRow = h('<div class="row mt" style="gap:10px"><button class="btn btn-primary" style="flex:1">Tap in — start</button><button class="btn btn-ghost" style="flex:1">Tap out — done</button></div>');
+    var tapBtns = tapRow.querySelectorAll("button");
+    function tap(phase) {
+      var token = (window.GBAuth && GBAuth.token) ? GBAuth.token() : "";
+      fetch("/api/floor/tap", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+        body: JSON.stringify({ machine: eq.id, phase: phase })
+      }).then(function (r) { return r.json(); }).then(function (d) {
+        if (d.ok) toast(phase === "start" ? "Tapped in — live floor knows you're here." : "Tapped out. Nice work.");
+        else toast(d.error || "Could not record the tap.");
+      }).catch(function () { toast("Offline — tap not recorded."); });
+    }
+    tapBtns[0].onclick = function () { tap("start"); };
+    tapBtns[1].onclick = function () { tap("end"); };
+    node.appendChild(tapRow);
+
     var reported = S().reported().indexOf(eq.id) >= 0;
     var btn = h('<button class="btn ' + (reported ? "btn-primary" : "btn-ghost") + ' mt">' +
       (reported ? "Reported ✓ — gym notified" : "Report an issue") + "</button>");

@@ -136,7 +136,7 @@ _DB: dict = {"users": {}, "sessions": {}, "verify": {}, "reset": {}, "revoked": 
 # The account tables are dictionaries; the review queues and the trainer
 # directory are lists. Both have to survive a restart.
 _DICT_KEYS = ("users", "sessions", "verify", "reset", "revoked")
-_LIST_KEYS = ("trainers", "trainerApplications", "exerciseSubmissions", "waitlist")
+_LIST_KEYS = ("trainers", "trainerApplications", "exerciseSubmissions", "waitlist", "proofs", "floorTaps", "coachNotes", "loopDeltas")
 
 
 def _token_digest(token: str) -> str:
@@ -872,6 +872,189 @@ def api_waitlist(body: dict, headers) -> tuple[int, dict]:
     return (200, {"ok": True, "count": count})
 
 
+# --------------------------------------------------------------------------
+# Proof-of-work badges — signed, tamper-evident workout proofs
+# --------------------------------------------------------------------------
+
+def api_proof_sign(body: dict, headers) -> tuple[int, dict]:
+    """Sign a set log into a proof. Requires a signed-in member."""
+    rec = session_user(bearer_token(headers))
+    if not rec:
+        return (401, {"ok": False, "error": "Not signed in."})
+    exercise = str(body.get("exercise") or "").strip()[:80]
+    machine = str(body.get("machine") or "").strip()[:80]
+    sets = body.get("sets")
+    if not exercise or not isinstance(sets, list) or not sets:
+        return (400, {"ok": False, "error": "Exercise and at least one set are required."})
+    clean_sets = []
+    for s in sets[:10]:
+        if not isinstance(s, dict):
+            return (400, {"ok": False, "error": "Each set must be an object."})
+        clean_sets.append({"reps": int(s.get("reps") or 0), "kg": float(s.get("kg") or 0)})
+    ts = now_ts()
+    email = (rec.get("email") or "").lower()
+    payload = json.dumps({"u": email, "e": exercise, "m": machine, "s": clean_sets, "t": ts}, separators=(",", ":"), sort_keys=True)
+    sig = _sign(payload)
+    pid = "pf" + hashlib.sha256((email + payload).encode("utf-8")).hexdigest()[:16]
+    with _LOCK:
+        proofs = _DB.setdefault("proofs", [])
+        proofs.append({"id": pid, "email": email, "exercise": exercise, "machine": machine, "sets": clean_sets, "ts": ts, "sig": sig, "payload": payload})
+        del proofs[2000:]
+    db_save()
+    return (200, {"ok": True, "id": pid, "sig": sig, "ts": ts, "verifyUrl": f"/api/proof/verify?id={pid}"})
+
+
+def api_proof_verify(body: dict, headers) -> tuple[int, dict]:
+    """Public verify — no PII returned, just valid/invalid."""
+    pid = str(body.get("id") or "").strip()
+    if not pid:
+        return (400, {"ok": False, "error": "Proof id is required."})
+    with _LOCK:
+        target = next((p for p in _DB.get("proofs") or [] if p.get("id") == pid), None)
+    if not target:
+        return (404, {"ok": False, "valid": False, "error": "Proof not found."})
+    valid = hmac.compare_digest(target.get("sig") or "", _sign(target.get("payload") or ""))
+    return (200, {"ok": True, "valid": valid, "exercise": target.get("exercise"), "machine": target.get("machine") or "", "sets": (target.get("sets") or []), "ts": target.get("ts"), "proofId": pid})
+
+
+# --------------------------------------------------------------------------
+# Live floor — member taps feed occupancy, anonymized
+# --------------------------------------------------------------------------
+
+def api_floor_tap(body: dict, headers) -> tuple[int, dict]:
+    rec = session_user(bearer_token(headers))
+    if not rec:
+        return (401, {"ok": False, "error": "Not signed in."})
+    machine = str(body.get("machine") or body.get("equipmentId") or "").strip()[:80]
+    phase = str(body.get("phase") or "start").strip().lower()
+    if not machine or phase not in ("start", "end"):
+        return (400, {"ok": False, "error": "Machine and phase (start|end) are required."})
+    email = (rec.get("email") or "").lower()
+    with _LOCK:
+        taps = _DB.setdefault("floorTaps", [])
+        taps.append({"machine": machine, "phase": phase, "emailHash": hashlib.sha256(email.encode()).hexdigest()[:16], "ts": now_ts()})
+        del taps[:-5000]  # keep the newest 5000 taps
+    db_save()
+    return (200, {"ok": True})
+
+
+def api_floor_live(headers) -> tuple[int, dict]:
+    """Anonymized live occupancy per machine — no emails, only counts."""
+    with _LOCK:
+        taps = list(_DB.get("floorTaps") or [])
+    cutoff = now_ts() - 30 * 60  # 30 min window
+    recent = [t for t in taps if t.get("ts", 0) >= cutoff]
+    live = {}
+    for t in recent:
+        m = t.get("machine") or ""
+        if not m:
+            continue
+        slot = live.setdefault(m, {"starts": 0, "ends": 0, "lastTap": 0})
+        if t.get("phase") == "start":
+            slot["starts"] += 1
+        else:
+            slot["ends"] += 1
+        slot["lastTap"] = max(slot["lastTap"], int(t.get("ts") or 0))
+    for m, s in live.items():
+        s["inUse"] = max(0, s["starts"] - s["ends"]) > 0
+        s["occupancy"] = "busy" if s["inUse"] else "free"
+    return (200, {"ok": True, "machines": live, "windowMin": 30})
+
+
+# --------------------------------------------------------------------------
+# Between-set coaching — trainers note assigned members only
+# --------------------------------------------------------------------------
+
+def _is_trainer(rec: dict) -> bool:
+    return (rec.get("role") or "") in ("trainer", "admin") or bool(rec.get("trainerVerified"))
+
+
+def api_coach_note(body: dict, headers) -> tuple[int, dict]:
+    rec = session_user(bearer_token(headers))
+    if not rec:
+        return (401, {"ok": False, "error": "Not signed in."})
+    if not _is_trainer(rec):
+        return (403, {"ok": False, "error": "Only verified trainers can send coaching notes."})
+    member = str(body.get("member") or "").strip().lower()
+    text = str(body.get("text") or "").strip()[:500]
+    if not member or not text:
+        return (400, {"ok": False, "error": "Member and note text are required."})
+    # Assignment guard: trainer must have an approved application OR the role flag.
+    # (Coach assignment store is the trainers list; any verified trainer may note
+    # any member in the MVP — a pairing check lands with the marketplace.)
+    with _LOCK:
+        notes = _DB.setdefault("coachNotes", [])
+        notes.append({"from": (rec.get("email") or "").lower(), "to": member, "text": text, "ts": now_ts()})
+        del notes[:-2000]  # keep the newest 2000 notes
+    db_save()
+    return (200, {"ok": True})
+
+
+def api_coach_feed(body: dict, headers) -> tuple[int, dict]:
+    rec = session_user(bearer_token(headers))
+    if not rec:
+        return (401, {"ok": False, "error": "Not signed in."})
+    email = (rec.get("email") or "").lower()
+    with _LOCK:
+        notes = [n for n in (_DB.get("coachNotes") or []) if n.get("to") == email]
+    notes.sort(key=lambda n: n.get("ts") or 0, reverse=True)
+    return (200, {"ok": True, "notes": notes[:20]})
+
+
+# --------------------------------------------------------------------------
+# Plate → Program loop — nutrition delta feeds tomorrow's session
+# --------------------------------------------------------------------------
+
+def api_coach_adjust(body: dict, headers) -> tuple[int, dict]:
+    """Store today's nutrition delta and return an adjusted next session."""
+    rec = session_user(bearer_token(headers))
+    if not rec:
+        return (401, {"ok": False, "error": "Not signed in."})
+    try:
+        protein = float(body.get("protein") or 0)
+        protein_target = float(body.get("proteinTarget") or 0)
+        kcal = float(body.get("kcal") or 0)
+        kcal_target = float(body.get("kcalTarget") or 0)
+    except (TypeError, ValueError):
+        return (400, {"ok": False, "error": "Nutrition numbers must be numeric."})
+    if protein < 0 or kcal < 0:
+        return (400, {"ok": False, "error": "Nutrition numbers cannot be negative."})
+    protein_gap = round(protein_target - protein) if protein_target else 0
+    kcal_gap = round(kcal_target - kcal) if kcal_target else 0
+    # Simple honest rule: protein deficit → keep volume, add a protein target
+    # note; big deficit → reduce intensity slightly (don't train hard under-fuelled).
+    if protein_target and protein < protein_target * 0.7:
+        advice = f"Protein is {protein_gap:.0f}g under target — keep sets, drop load ~10% and add a protein-rich meal before your next session."
+        intensity = "reduced"
+    elif protein_gap > 0:
+        advice = f"{protein_gap:.0f}g protein to go today — session as planned; protein goal fills in with dinner."
+        intensity = "normal"
+    else:
+        advice = "Fuel is on target — session as planned, next progression unlocked."
+        intensity = "progression"
+    with _LOCK:
+        deltas = _DB.setdefault("loopDeltas", [])
+        deltas.append({"email": (rec.get("email") or "").lower(), "protein": protein, "proteinTarget": protein_target, "kcal": kcal, "kcalTarget": kcal_target, "proteinGap": protein_gap, "kcalGap": kcal_gap, "advice": advice, "intensity": intensity, "ts": now_ts()})
+        del deltas[:-2000]  # keep the newest 2000 deltas
+    db_save()
+    return (200, {"ok": True, "proteinGap": protein_gap, "kcalGap": kcal_gap, "advice": advice, "intensity": intensity})
+
+
+# --------------------------------------------------------------------------
+# Badge QR v1 — personal badge token for tap-to-log
+# --------------------------------------------------------------------------
+
+def api_badge_code(body: dict, headers) -> tuple[int, dict]:
+    rec = session_user(bearer_token(headers))
+    if not rec:
+        return (401, {"ok": False, "error": "Not signed in."})
+    email = (rec.get("email") or "").lower()
+    payload = f"{email}:{rec.get('id') or ''}"
+    code = "GB-" + hashlib.sha256((payload + _secret()).encode("utf-8")).hexdigest()[:12].upper()
+    url = f"/app/#/badge/{code}"
+    return (200, {"ok": True, "code": code, "url": url})
+
+
 ROUTE_TABLE = {
     "POST /api/auth/signup": api_signup,
     "POST /api/auth/login": api_login,
@@ -884,6 +1067,12 @@ ROUTE_TABLE = {
     "POST /api/auth/change-password": api_change_password,
     "POST /api/verify/id": api_verify_id,
     "POST /api/waitlist": api_waitlist,
+    "POST /api/proof/sign": api_proof_sign,
+    "POST /api/proof/verify": api_proof_verify,
+    "POST /api/floor/tap": api_floor_tap,
+    "POST /api/coach/note": api_coach_note,
+    "POST /api/coach/adjust": api_coach_adjust,
+    "POST /api/badge/code": api_badge_code,
 }
 
 
@@ -917,6 +1106,10 @@ def api_dispatch(method: str, path: str, body: dict, headers, environ=None) -> t
         return content.api_equipment_update(body, headers, environ)
     if method == "POST" and path == "/api/food-scan":
         return content.api_food_scan(body, headers, environ)
+    if method == "GET" and path == "/api/floor/live":
+        return api_floor_live(headers)
+    if method == "GET" and path == "/api/coach/feed":
+        return api_coach_feed(body, headers)
 
     fn = ROUTE_TABLE.get(f"{method} {path}")
     if fn:

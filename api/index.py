@@ -24,6 +24,14 @@ Routes
     POST /api/auth/logout         revoke the session
     POST /api/verify/id           optional masked identity verification
     POST /api/waitlist            public waitlist capture (footer + /demo)
+    POST /api/proof/sign          sign a set as proof of work (auth)
+    POST /api/proof/verify        verify a proof by id (public, no PII)
+    POST /api/floor/tap           record a tap in/out at a machine (auth)
+    GET  /api/floor/live          anonymized live machine occupancy
+    POST /api/coach/note          trainer note between sets (trainer only)
+    GET  /api/coach/feed          latest coach notes for a member (auth)
+    POST /api/coach/adjust       plate → program adjustment (auth)
+    POST /api/badge/code          personal badge QR token (auth)
 
 Environment variables
 ---------------------
